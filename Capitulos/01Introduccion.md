@@ -1,5 +1,5 @@
 \chapter{Introducción}
-
+<!-- En castellano y en inglés --->
 # Introducción
 Nuestro proyecto consiste en ampliar la herramienta PMCtrack con tres nuevas características: (1) dotar a la herramienta de un frontend
 gráfico (GUI) que simplifique la configuración de eventos hardware y permita visualizar los datos obtenidos, (2) incluir soporte para aplicaciones multihilo y (3) diseñar una librería que provea de una API para monitorizar fragmentos de código con PMCTrack.
@@ -13,8 +13,3 @@ Esta herramienta soporta la captura de métricas como el número de instruccione
 ## Objetivos
 
 ## Plan de trabajo
-
-## Aportaciones a PMCTrack
-### PMCTrackGUI
-### libpmctrack
-### Multithreaded
