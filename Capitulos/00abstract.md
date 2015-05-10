@@ -5,7 +5,12 @@ Su extensión es proporcional a la del trabajo, pero lo habitual es que esté co
 Se redacta en pasado y no debe incluir abreviaturas, referencias a figuras o tablas ni citas bibliográficas. Tampoco se debe incluir información que no aparezca en el proyecto.-->
 
 ## Resumen
+Nuestro proyecto consiste en ampliar la herramienta PMCtrack, cuyo fin es monitorizar el rendimiento de un programa mediante el uso de contadores hardware integrados en el procesador.  
 
+Esta ampliación añade tres nuevas características:
+1. Dotar a la herramienta de una Interfaz Gráfica de Usuario o *Graphical User Interface*, que simplifique la configuración de eventos hardware y permita visualizar gráficas de los datos obtenidos en tiempo real.
+2. Una librería, libpmctrack, que provee de una API para monitorizar fragmentos de código con PMCTrack o para que otros programas hagan uso de forma sencilla de la monitorización de contadores integrada en el kernel.
+3. Incluir soporte para programas multihilo.
 
 <!--- Las palabras clave son los términos o frases que describen de forma completa y concreta el contenido principal del trabajo. Conviene hacer la selección de estos términos de forma cuidadosa. Todas deben aparecer en el resumen, ser de uso común en el área de investigación de que se trate y evitar los conceptos demasiado generales.
 Normalmente son entre 5 y 8 palabras (es conveniente que no sean más de 10), se mencionan en orden alfabético y cada una de ellas comenzará con mayúsculas.
