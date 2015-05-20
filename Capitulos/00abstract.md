@@ -16,10 +16,10 @@ Esta ampliación añade tres nuevas características:
 Normalmente son entre 5 y 8 palabras (es conveniente que no sean más de 10), se mencionan en orden alfabético y cada una de ellas comenzará con mayúsculas.
 Se sitúan inmediatamente después del resumen.
 Ejemplo: 
-Palabras clave: Agentes inteligentes, Autómatas matemáticos,  Reconocimiento de formas, Sistemas expertos, Visión por ordenador. -->
+*Palabras clave*: Agentes inteligentes, Autómatas matemáticos,  Reconocimiento de formas, Sistemas expertos, Visión por ordenador. -->
 
 *Palabras clave*: , Kernel Linux, Monitorización rendimiento,
 
 ## Abstract
 
-*Keywords*: , Kernel Linux, Performance monitoring counters, Profiling, 
+*Keywords*: , Linux Kernel, Performance monitoring counters, Profiling, 
