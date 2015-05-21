@@ -1,74 +1,44 @@
 %---------------------------------------------------------------------
 %
-%                          configCover.tex
+%                          cover.tex - portada
 %
 %---------------------------------------------------------------------
 %
-% cover.tex
-% Copyright 2009 Marco Antonio Gomez-Martin, Pedro Pablo Gomez-Martin
-%
-% This file belongs to the TeXiS manual, a LaTeX template for writting
-% Thesis and other documents. The complete last TeXiS package can
-% be obtained from http://gaia.fdi.ucm.es/projects/texis/
-%
-% Although the TeXiS template itself is distributed under the 
-% conditions of the LaTeX Project Public License
-% (http://www.latex-project.org/lppl.txt), the manual content
-% uses the CC-BY-SA license that stays that you are free:
-%
-%    - to share & to copy, distribute and transmit the work
-%    - to remix and to adapt the work
-%
-% under the following conditions:
-%
-%    - Attribution: you must attribute the work in the manner
-%      specified by the author or licensor (but not in any way that
-%      suggests that they endorse you or your use of the work).
-%    - Share Alike: if you alter, transform, or build upon this
-%      work, you may distribute the resulting work only under the
-%      same, similar or a compatible license.
-%
-% The complete license is available in
-% http://creativecommons.org/licenses/by-sa/3.0/legalcode
+% Descripci√≥n de plantilla biblioteca:
+% Incluir√° una portada normalizada conteniendo la siguiente informaci√≥n: t√≠tulo, autores, profesor  director,  codirector  si  es  el  caso,  curso  acad√©mico  e  identificaci√≥n  de  la asignatura (Trabajo de fin de grado del Grado en nombre del grado correspondiente, 
+%Facultad de Inform√°tica, Universidad Complutense de Madrid).  Los datos referentes al t√≠tulo  y  director  (y  codirector  en  su  caso)  deben  corresponder  a  los  publicados  en  la lista indicada en los puntos 8 y 9 de la secci√≥n III de esta normativa.
 %
 %---------------------------------------------------------------------
 %
-% Fichero que contiene la configuraciÛn de la portada y de la 
-% primera hoja del documento.
-%
-%---------------------------------------------------------------------
-
-
 % Pueden configurarse todos los elementos del contenido de la portada
 % utilizando comandos.
-
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TÌtulo del documento:
+% T√≠tulo del documento:
 % \tituloPortada{titulo}
 % Nota:
 % Si no se define se utiliza el del \titulo. Este comando permite
-% cambiar el tÌtulo de forma que se especifiquen dÛnde se quieren
+% cambiar el t√≠tulo de forma que se especifiquen d√≥nde se quieren
 % los retornos de carro cuando se utilizan fuentes grandes.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tituloPortada{%
-\texis: Una plantilla de \LaTeX\\
-para Tesis y otros documentos%
+Interfaz de uso de contadores hardware multiarquitectura
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Autor del documento:
 % \autorPortada{Nombre}
 % Se utiliza en la portada y en el valor por defecto del
-% primer subtÌtulo de la segunda portada.
+% primer subt√≠tulo de la segunda portada.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\autorPortada{Marco Antonio GÛmez MartÌn\\Pedro Pablo GÛmez MartÌn}
+\autorPortada{Jorge Casas Hern√°n\\Abel Serrano Juste}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Fecha de publicaciÛn:
+% Fecha de publicaci√≥n:
 % \fechaPublicacion{Fecha}
-% Puede ser vacÌo. Aparece en la ˙ltima lÌnea de ambas portadas
+% Puede ser vac√≠o. Aparece en la √∫ltima l√≠nea de ambas portadas
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\fechaPublicacion{Noviembre 2009}
+\fechaPublicacion{Junio 2015}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Imagen de la portada (y escala)
@@ -85,71 +55,65 @@ para Tesis y otros documentos%
 % Para el texto justo debajo del escudo.
 % Si no se indica, se utiliza "TESIS DOCTORAL".
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\tipoDocumento{MANUAL DE USUARIO}
+\tipoDocumento{TRABAJO FIN DE GRADO EN INGENIER√çA INFORM√ÅTICA E INGENIER√çA DEL SOFTWARE}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% InstituciÛn/departamento asociado al documento.
+% Instituci√≥n/departamento asociado al documento.
 % \institucion{Nombre}
-% Puede tener varias lÌneas. Se utiliza en las dos portadas.
-% Si no se indica aparecer· vacÌo.
+% Puede tener varias l√≠neas. Se utiliza en las dos portadas.
+% Si no se indica aparecer√° vac√≠o.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\institucion{%
-Departamento de IngenierÌa del Software e Inteligencia Artificial\\[0.2em]
-Facultad de Inform·tica\\[0.2em]
+\institucion{
+Grado en Ingenier√≠a Inform√°tica y Grado en Ingenier√≠a del Software\\[0.2em]
+Departamento de Ingenier√≠a del Software e Inteligencia Artificial\\[0.2em]
+Facultad de Inform√°tica\\[0.2em]
 Universidad Complutense de Madrid
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Director del trabajo.
 % \directorPortada{Nombre}
-% Se utiliza para el valor por defecto del segundo subtÌtulo, donde
-% se indica quiÈn es el director del trabajo.
-% Si se fuerza un subtÌtulo distinto, no hace falta definirlo.
+% Se utiliza para el valor por defecto del segundo subt√≠tulo, donde
+% se indica qui√©n es el director del trabajo.
+% Si se fuerza un subt√≠tulo distinto, no hace falta definirlo.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\directorPortada{Walterio Malatesta}
+\directorPortada{Juan Carlos Saez Alcaide}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Texto del primer subtÌtulo de la segunda portada.
+% Texto del primer subt√≠tulo de la segunda portada.
 % \textoPrimerSubtituloPortada{Texto}
 % Para configurar el primer "texto libre" de la segunda portada.
 % Si no se especifica se indica "Memoria que presenta para optar al
-% tÌtulo de Doctor en Inform·tica" seguido del \autorPortada.
+% t√≠tulo de Doctor en Inform√°tica" seguido del \autorPortada.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textoPrimerSubtituloPortada{%
-\textit{Informe tÈcnico del departamento}  \\ [0.3em]
-\textbf{IngenierÌa del Software e Inteligencia Artificial} \\ [0.3em]
+\textit{Informe t√©cnico del departamento}  \\ [0.3em]
+\textbf{Ingenier√≠a del Software e Inteligencia Artificial} \\ [0.3em]
 \textbf{IT/2009/3}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Texto del segundo subtÌtulo de la segunda portada.
+% Texto del segundo subt√≠tulo de la segunda portada.
 % \textoSegundoSubtituloPortada{Texto}
 % Para configurar el segundo "texto libre" de la segunda portada.
 % Si no se especifica se indica "Dirigida por el Doctor" seguido
 % del \directorPortada.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \textoSegundoSubtituloPortada{%
-\textit{VersiÛn \texisVer}
+\textit{Versi√≥n \texisVer}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \explicacionDobleCara
-% Si se utiliza, se aclara que el documento est· preparado para la
-% impresiÛn a doble cara.
+% Si se utiliza, se aclara que el documento est√° preparado para la
+% impresi√≥n a doble cara.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \explicacionDobleCara
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \isbn
-% Si se utiliza, aparecer· el ISBN detr·s de la segunda portada.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\isbn{978-84-692-7109-4}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \copyrightInfo
-% Si se utiliza, aparecer· informaciÛn de los derechos de copyright
-% detr·s de la segunda portada.
+% Si se utiliza, aparecer√° informaci√≥n de los derechos de copyright
+% detr√°s de la segunda portada.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \copyrightInfo{\autor}
 
@@ -158,11 +122,3 @@ Universidad Complutense de Madrid
 %% Creamos las portadas
 %%
 \makeCover
-
-% Variable local para emacs, para que encuentre el fichero
-% maestro de compilaciÛn
-%%%
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "../Tesis.tex"
-%%% End:

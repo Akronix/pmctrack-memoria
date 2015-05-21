@@ -16,7 +16,7 @@
 ## Antecedentes: PMCTrack
 PMCtrack es una herramienta de línea de comandos integrada en el kernel Linux que permite monitorizar el rendimiento de las aplicaciones haciendo uso de los contadores hardware del procesador.
 
-La herramienta fue desarrollada inicialmente en un proyecto de sistemas informáticos por estudiantes de esta misma facultad en el año 2012 ~\cite{MSDTFG12}, y su uso y desarrollo se ha mantenido por el Grupo de Arquitectura y Tecnología de Sistemas Informáticos de esta universidad.
+La herramienta fue desarrollada inicialmente en un proyecto de sistemas informáticos por estudiantes de esta misma facultad en el año 2012 \cite{MSDTFG12}, y su uso y desarrollo se ha mantenido por el Grupo de Arquitectura y Tecnología de Sistemas Informáticos de esta universidad.
 
 Para que la herramienta pueda acceder a la configuración y datos de los contadores hardware, se necesita soporte del núcleo del sistema operativo. Es por eso que se usa una versión del kernel *ad hoc* que contiene las modificaciones necesarias para que esta herramienta funciones.
 
