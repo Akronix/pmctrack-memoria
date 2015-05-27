@@ -38,3 +38,11 @@ NF_00_WD=
 EX_00_LB=V_iew PDF File
 EX_00_CM=evince "%p/Memoria.pdf"
 EX_00_WD=
+
+[debugger]
+target=
+debugger=
+arguments=
+envvar_count=0
+watches_count=0
+breaks_count=0
