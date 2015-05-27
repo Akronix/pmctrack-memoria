@@ -20,7 +20,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainers of this work are Marco Antonio Gomez-Martin
 % and Pedro Pablo Gomez-Martin
 %
@@ -148,7 +148,7 @@
 % quieres (en una hoja impar, que son de las únicas que me he
 % preocupado) escribir por encima de la primera pulgada, o hacia la
 % izquierda, tienes que usar "márgenes" negativos.
-% 
+%
 % Para poder seguir esto un poco, lo mejor es que ejecutes \layout con
 % el paquete layout cargado, para ver una imagen...
 %
@@ -210,7 +210,7 @@
 % Para resumir, los valores usados en los márgenes eran:
 % 1 pulgada + hoffset + oddsidemargin +
 %          + textwidth +
-% + marginparsep + marginparwidth + AJUSTE 
+% + marginparsep + marginparwidth + AJUSTE
 %                                          = paperwidth
 %
 % Lo que necesitamos en crear un entorno cambiamargen pasando los
@@ -332,7 +332,7 @@
 \thispagestyle{empty}
 \mbox{ }
 \vfill%space*{4cm}
-\begin{small} 
+\begin{small}
 \begin{center}
 \ifx\noTeXiSCreditsVal\undefined
   Documento maquetado con \texis\ v.\texisVer.
@@ -342,7 +342,7 @@
 \end{center}
 \end{small}
 \vspace*{2cm}
-\begin{small} 
+\begin{small}
 \begin{center}
 \ifx\explicacionDobleCaraVal\undefined
 \mbox{ }
@@ -354,45 +354,16 @@ cara.
 \end{small}
 
 %%%
-% Segunda portada
+% Página autorización
 %%%
 
 \newpage
 
 \thispagestyle{empty}
 
-\mbox{ }
-
-\begin{Huge}
-\begin{center}
-\tituloPortadaVal
-\end{center}
-\end{Huge}
-
-\vfill
-
-\begin{large}
-\begin{center}
-\textoPrimerSubtituloPortadaVal
-\\ \mbox{ } \\ \mbox{ } \\ 
-\textoSegundoSubtituloPortadaVal \\ [0.3em]
-\end{center}
-\end{large}
-
-\vfill
-
-\begin{large}
-\begin{center}
-\textbf{\institucionVal}\\[0.2em]
-    \mbox{ }  \\
-\textbf{\fechaPublicacionVal}
-\end{center}
-\end{large}
-
-
-\newpage
-\thispagestyle{empty}
-\mbox{ }
+%\begin{left}
+  \Large \textbf{Autorización de difusión y utilización}
+%\end{left}
 
 % Información del ISBN y copyright
 \vskip 13cm
@@ -409,11 +380,3 @@ ISBN \isbnVal
 \fi
 
 } % \newcommand{\makeCover}
-
-% Variable local para emacs, para que encuentre el fichero
-% maestro de compilación
-%%%
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "../Tesis.tex"
-%%% End:
