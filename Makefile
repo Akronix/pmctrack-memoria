@@ -173,8 +173,8 @@ clean:
 	@rm -f $(NOMBRE_LATEX).zip
 	@echo Borrando los ficheros .tex generados a partir de .md
 	@rm -f $(TEXMD_FILES)
-	@echo "Borrando el pdf principal"	
-	@rm -f $(NOMBRE_LATEX).pdf 
+#	@echo "Borrando el pdf principal"	
+#	@rm -f $(NOMBRE_LATEX).pdf 
 #
 # Borra todos los ficheros intermedios, las copias de seguridad
 # y los ficheros generados

@@ -20,7 +20,7 @@
 % version 2005/12/01 or later.
 %
 % This work has the LPPL maintenance status `maintained'.
-% 
+%
 % The Current Maintainers of this work are Marco Antonio Gomez-Martin
 % and Pedro Pablo Gomez-Martin
 %
@@ -41,11 +41,11 @@
 
 % Pedimos que inserte todos los epígrafes hasta el nivel \subsection en
 % la tabla de contenidos.
-\setcounter{tocdepth}{2} 
+\setcounter{tocdepth}{2}
 
 % Le  pedimos  que nos  numere  todos  los  epígrafes hasta  el  nivel
 % \subsubsection en el cuerpo del documento.
-\setcounter{secnumdepth}{3} 
+\setcounter{secnumdepth}{3}
 
 
 % Creamos los diferentes índices.
@@ -78,7 +78,7 @@
 
 \tableofcontents
 
-\newpage 
+\newpage
 
 % Índice de figuras
 %
@@ -88,7 +88,7 @@
 \cabeceraEspecial{\'Indice de figuras}
 
 \ifpdf
-   \pdfbookmark[1]{Índice de figuras}{indice de figuras}
+  \pdfbookmark[1]{Índice de figuras}{indice de figuras}
 \fi
 
 \listoffigures
@@ -99,7 +99,7 @@
 % Como antes, pero ahora .lot (List Of Tables)
 
 \ifpdf
-   \pdfbookmark[1]{Índice de tablas}{indice de tablas}
+  \pdfbookmark[1]{Índice de tablas}{indice de tablas}
 \fi
 
 \cabeceraEspecial{\'Indice de tablas}
@@ -107,12 +107,3 @@
 \listoftables
 
 \newpage
-
-% Variable local para emacs, para  que encuentre el fichero maestro de
-% compilación y funcionen mejor algunas teclas rápidas de AucTeX
-
-%%%
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "../Tesis.tex"
-%%% End:
