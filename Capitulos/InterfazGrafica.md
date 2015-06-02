@@ -33,10 +33,10 @@ Frontend: Compuesto por todos los componentes gráficos de la aplicación. Para 
 
 Backend: Consta de todos los componentes que proveen información para ser mostrada en el frontend. Estos componentes son muy diferentes entre sí, proveyendo cada uno de ellos información muy diferente, por ello vamos a analizar cada uno de estos componentes por separado.
 
-- Modelos de objetos XML: Consta de varios objetos python relacionados entre sí encargados de obtener información de los XML, XML que almacenan información de los eventos hardware de las distintas arquitecturas soportadas.
+- Objetos de procesamiento: Consta de varios objetos python relacionados entre sí encargados de almacenar información de archivos en formato XML o en texto plano. Los XML almacenan información de los eventos hardware de las distintas arquitecturas soportadas (hay un XML para cada arquitectura), los archivos en texto plano contienen información acerca de la máquina, gracias a estos archivos los "Objectos de procesamiento" cargan de forma automática los contadores y eventosHW de la arquitectura de la máquina a monitorizar, almacenando estos datos en objetos python a los que el frontend puede acceder fácilmente.
 
-- PMC Connect:
+- PMC Connect: Se encarga de la lectura de archivos de una máquina así como proporcionar métodos que ayudan a realizar chequeos sobre el software instalado en la máquina. Algunos de estos métodos son determinar si existe un determinado archivo en la máquina indicada, determinar si tiene un determinado paquete instalado, o comprobar si se puede establecer conexión con la máquina. Este componente es usado por el frontend para chequear las dependencias software y por los Objetos de procesamiento para leer los archivos en texto plano (de esta manera se mantiene una independencia entre los Objetos de procesamiento y la máquina que se desea monitorizar, sea local o remota)
 
-- PMC Extract:
+- PMC Extract: Es el componente del backend encargado de crear el subproceso que lanzará el comando pmctrack generado por este mismo objeto a partir de la configuración del usuario. Un vez lanzado obtiene los datos devueltos por el comando pmctrack y los almacena de forma ordenada en un array de datos que será usado por el frontend para mostrar la información. Tiene atributos que indican al frontend el estado de la ejecución de pmctrack así como métodos que permiten al frontend enviar señales al benchmark (señal de parada, reanudación o matado)
 
-- User Config:
+- User Config: Es un conjunto de objetos python que almacenan toda la configuración que el usuario va generando al interactuar con la GUI. Estos objetos son transferidos de un frame a otro hasta que acaban siendo enviados al PMC Extract, donde son procesados generando el comando pmctrack que será lanzado en la máquina en cuestión.
