@@ -6,6 +6,7 @@ Enlace 1-1 entre dos procesos. Enlace muy persistente.
 Modificaciones al campo en el struct task en sched.h:
 * void* pmc = monitorizar
 * bool prof_enable = empieza a usar los contadores
+
 ## Funcionamiento
 1. Se "casan" los dos hilos.
 2. El hijo escribe nuevos datos en su memoria interna (dentro del task struct) y deja una marca en una entrada /proc para que el padre sepa que tiene que leer. (El padre está bloqueado en la lectura de esa entrada /proc)
