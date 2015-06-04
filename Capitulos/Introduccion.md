@@ -20,7 +20,12 @@ Para que la herramienta pueda acceder a la configuración y datos de los contado
 
 La herramienta tiene un diseño modular, de modo que por un lado están las modificaciones al código del kernel y por otro el código en modo usuario  que es el que realmente implementa la funcionalidad de la herramienta. De esta manera, se permite independencia de la versión del kernel mientras que se mantiene facilidad para el desarrollo y el mantenimiento.
 
- > copiar esquema pmctrack?<
+\begin{figure}[tbp]
+\centering
+\selectlanguage{english}
+\input{Imagenes/Fuentes/architecture}
+\selectlanguage{spanish}
+\end{figure}
 
 # Otras herramientas para la monitorización mediante contadores hardware
 Además de PMCTrack, existen muchas otras herramientas que hacen uso de estos contadores para dar información de rendimiento al usuario.

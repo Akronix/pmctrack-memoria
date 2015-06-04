@@ -1,0 +1,69 @@
+\begin{tikzpicture}[scale=0.63,transform shape]
+\def\wlbox{9.5cm}
+\def\ggap{1pt}
+\def\sgap{0.1cm}
+\def\levelpadding{2pt}
+\def\boxgap{0.18cm}
+\def\levelgap{2.5*\boxgap}
+
+\begin{scope}[%
+cbox/.style={draw,thick,rounded corners,text=black,fill=white,minimum width=\wlbox,minimum height=1cm,align=center},
+pmcbox/.style={cbox,fill=green!30,text=black},
+backendbox/.style={pmcbox,minimum width=0.15*\wlbox},
+bgbox/.style={draw=black,fill=gray!15,inner sep=4pt,thick,rectangle},
+flecha/.style={>=stealth',black,semithick,solid}]
+
+
+%% User mode
+\node (ap) [cbox] {User applications};
+\node (cmdtools) at ($(ap.south west) + (0,-3*\boxgap)$)  [below right,pmcbox,minimum width=0.49*\wlbox] {PMCTrack \\ Command-Line Tools};
+\node (libpmctrack) at ($(ap.south east) + (0,-3*\boxgap)$)  [below left,pmcbox,minimum width=0.49*\wlbox] {libpmctrack};
+
+
+%% Kernel mode
+\node (proc) at ($(cmdtools.south west) + (0,-\levelgap)$)  [below right,pmcbox] {\texttt{/proc/pmc/*} entries};
+\node (sched) at ($(proc.south east) + (0,-\boxgap)$)  [below left,cbox,minimum width=0.8*\wlbox] {Linux Core  Scheduler};
+\node (kernelAPI) at ($(sched.south east) + (0,-3*\boxgap)$)  [below left,pmcbox,minimum width=0.8*\wlbox] {PMCTrack kernel API};
+
+
+%% Kernel Module
+\node (archIndep) at ($(kernelAPI.south east) + (0,-\levelgap)$)  [below left,pmcbox] {PMCTrack architecture-independent core};
+\node (intel) at ($(archIndep.south east) + (0,-\boxgap)$)  [below left,backendbox] {Intel \\ Backend};
+\node (amd) at ($(intel.south west) + (-\boxgap,0)$)  [above left,backendbox] {AMD \\ Backend};
+\node (arm) at ($(amd.south west) + (-\boxgap,0)$)  [above left,backendbox] {ARM \\ Backend};
+\node (phi) at ($(arm.south west) + (-\boxgap,0)$)  [above left,backendbox] {Xeon-Phi \\ Backend};
+\node (monmod) at ($(archIndep.south west) + (0,-\boxgap)$)  [below right,pmcbox,minimum width=0.25*\wlbox] {Monitoring \\ modules};
+
+%% Hardware
+\node (hardware) at ($(monmod.south west) + (0,-\levelgap)$)  [below right,cbox] {Hardware Monitoring Facillities};
+
+
+%% Associated Backgrounds
+\begin{pgfonlayer}{background}
+\node (user) [bgbox,fit=(ap) (cmdtools) (libpmctrack)] {}; 
+\node (kernel) [bgbox,fit=(proc) (kernelAPI)] {}; 
+\node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {}; 
+\end{pgfonlayer}
+
+
+%% Per level tags...
+\draw [<->,thick] ($(user.north west)  +(-0.3cm,0)$) -- ($(user.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {user space};
+%
+
+\draw [<->,thick] ($(kernel.north west)  +(-0.3cm,0)$) -- ($(kernel.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {Linux kernel};
+
+\draw [<->,thick] ($(kernelModule.north west)  +(-0.3cm,0)$) -- ($(kernelModule.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90,align=center] {PMCTrack \\ kernel module};
+
+
+
+%%% Flechas entre nodos
+\draw let \p1=(libpmctrack.north),\p2=(ap.south) in  [flecha,<->] (\x1,\y2) -- (\x1,\y1);
+\draw let \p1=(cmdtools.north),\p2=(ap.south) in  [flecha,<->] (\x1,\y2) -- (\x1,\y1);
+\draw let \p1=(libpmctrack.south),\p2=(proc.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
+\draw let \p1=(cmdtools.south),\p2=(proc.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
+\draw let \p1=(proc.south west),\p2=(archIndep.north west) in  [flecha,<->] ($(\x1,\y1)+(1cm,0)$) -- ($(\x1,\y2)+(1cm,0)$);
+\draw let \p1=(sched.south),\p2=(kernelAPI.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
+\draw let \p1=(kernelAPI.south),\p2=(archIndep.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
+
+\end{scope}
+\end{tikzpicture}
