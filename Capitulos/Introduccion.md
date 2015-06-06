@@ -40,3 +40,18 @@ A continuación destacaremos las más conocidas.
 # Objetivos
 
 # Plan de trabajo
+## Etapas de desarrollo del proyecto
+1. Planificación
+2. Lectura de documentación
+3. *Mockups* de la GUI
+4. Comienzo implementación *backend* de la GUI
+5. Implementación multithreading
+6. Implementación frontend de la GUI
+7. Implementación libpmctrack y refactorización código pmctrack línea de comandos
+
+## Contribuciones
+% Al menos dos páginas de cada uno!
+
+### Abel Serrano Juste
+
+### Jorge Casas
