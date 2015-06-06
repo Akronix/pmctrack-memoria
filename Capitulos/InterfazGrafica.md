@@ -8,9 +8,9 @@ $PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayuda
 
 # PMCTrack GUI, una herramienta única
 
-Como ya hemos visto, PMCTrack posee limitaciones importantes al usarse por un usuario final. Estas limitaciones han sido nuestra motivación para desarrollar PMCTrack GUI, y el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
+Como ya hemos visto, PMCTrack posee limitaciones importantes al usarse por un usuario final. Estas limitaciones han sido nuestra motivación para desarrollar PMCTrack GUI, y el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.\newline
 
-A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los siguientes motivos:
+A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los siguientes dos motivos:
 
 * Única aplicación que permite visualizar la monitorización de benchmarks siendo multiarquitectura. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de $Intel$ o el *Streamline Performance Analyzer* de $ARM$.
 
@@ -39,17 +39,17 @@ A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los s
 
 # Diseño de PMCTrack GUI
 
-PMCTrack GUI ha sido desarrollada en *Python*, eligiéndose este lenguaje principalmente por ser multiplataforma, pudiendo ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python, además de que cuenta con una biblioteca muy potente para la generación de gráficas a partir de datos contenidos en listas o arrays, la biblioteca *Matplotlib*. Gran parte de la culpa del atractivo visual que tiene PMCTrack GUI la tiene esta biblioteca.
+PMCTrack GUI ha sido desarrollada en *Python*, eligiéndose este lenguaje principalmente por ser multiplataforma, pudiendo ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python, además de que cuenta con una biblioteca muy potente para la generación de gráficas a partir de datos contenidos en listas o arrays, la biblioteca *Matplotlib*. Gran parte de la culpa del atractivo visual que tiene PMCTrack GUI la tiene esta biblioteca. \newline
 
 Ha sido diseñada para ser fácilmente escalable y sostenible. Consta de diversos componentes que podemos dividir en dos grandes grupos: Frontend y backend.
 
 ## Frontend
 
-Compuesto por todos los componentes gráficos de la aplicación.
+Está compuesto por todos los componentes gráficos de la aplicación.\newline
 
-Para el desarrollo de los frames y diálogos se ha utilizado la biblioteca *WX* de Python. El desarrollo se inició sobre $WX-2.8$ aunque hoy en día la aplicación también es compatible con la última versión, la 3.0, esto ha hecho posible que PMCTrack GUI pueda ser ejecutada sobre la interfaz gráfica nativa de $MacOS X$.
+Para el desarrollo de los frames y diálogos se ha utilizado la biblioteca *WX* de Python. El desarrollo se inició sobre la versión 2.8 de WX aunque hoy en día la aplicación también es compatible con la última versión, la 3.0, esto ha hecho posible que PMCTrack GUI pueda ser ejecutada sobre la interfaz gráfica nativa de $MacOS X$.\newline
 
-Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, como ya se ha comentado antes.
+Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, que como ya se ha comentado antes, permite la generación de gráficos de alta calidad y precisión a partir de datos contenidos en listas o arrays, todo esto consumiendo pocos recursos y utilizando una notación muy parecida a la de $MATLAB$.
 
 \todo{Incluir captura de GUI en MacOS y Linux}
 
@@ -79,15 +79,15 @@ Es un conjunto de objetos Python que almacenan toda la configuración que el usu
 
 # Modo de uso
 
-Al iniciar PMCTrack GUI se inicia con el idioma que hay configurado en la máquina que lo arranca (español si la máquina está en español e inglés en otro caso). El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack GUI u otra máquina remota. En cualquiera de los casos PMCTrack GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requerimiento se informará debidamente al usuario.
+Al iniciar PMCTrack GUI se inicia con el idioma que hay configurado en la máquina que lo arranca (español si la máquina está en español e inglés en otro caso). El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack GUI u otra máquina remota. En cualquiera de los casos PMCTrack GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requerimiento se informará debidamente al usuario.\newline
 
-Si todas las dependencias software están resueltas (y hay conectividad con la máquina remota si la hubiera), aparecerá una nueva ventana donde el usuario podrá configurar muy fácilmente los contadores hardware con los que cuenta la máquina a monitorizar, asignando eventos de la arquitectura de la máquina a contadores de propósito general, todo de una manera muy sencilla (aunque se permiten hacer configuraciones avanzadas pudiéndose asignar manualmente parámetros como el Umask, Cmask o EBS).
+Si todas las dependencias software están resueltas (y hay conectividad con la máquina remota si la hubiera), aparecerá una nueva ventana donde el usuario podrá configurar muy fácilmente los contadores hardware con los que cuenta la máquina a monitorizar, asignando eventos de la arquitectura de la máquina a contadores de propósito general, todo de una manera muy sencilla (aunque se permiten hacer configuraciones avanzadas pudiéndose asignar manualmente parámetros como el Umask, Cmask o EBS).\newline
 
-Una vez configurados los contadores que se quieren utilizar, debajo de la sección de configuración de contadores el usuario se encontrará con la configuración de métricas. Esta sección permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1... etcétera). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como quiera (por ejemplo $(pmc0^2)/pmc1\\*1000)\\*pmc4$)
+Una vez configurados los contadores que se quieren utilizar, debajo de la sección de configuración de contadores el usuario se encontrará con la configuración de métricas. Esta sección permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1... etcétera). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como quiera, como por ejemplo $(pmc0 ^ 2) / pmc1 * 1000) * pmc4$\newline
 
-Cabe destacar que es posible crear más de un experimento, esto es, más de un conjunto de contadores y métricas, de tal manera que es posible configurar un contador con un determinado evento y usarlo en una métrica y, en otro experimento, configurar el mismo contador con otro evento distinto y usarlo en otra métrica distinta.
+Cabe destacar que es posible crear más de un experimento, esto es, más de un conjunto de contadores y métricas, de tal manera que es posible configurar un contador con un determinado evento y usarlo en una métrica y, en otro experimento, configurar el mismo contador con otro evento distinto y usarlo en otra métrica distinta.\newline
 
-Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón Siguiente aparecerá una nueva ventana, esta ventana permite realizar las últimas configuraciones antes de iniciar la monitorización. Permite elegir el benchmark que se desea monitorizar, el tiempo entre cada muestra, la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo), y la personalización de las gráficas, pudiéndose elegir un modo ya configurado (modo por defecto, modo hacker, modo aqua... etcétera) o personalizar uno.
+Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón Siguiente aparecerá una nueva ventana, esta ventana permite realizar las últimas configuraciones antes de iniciar la monitorización. Permite elegir el benchmark que se desea monitorizar, el tiempo entre cada muestra, la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo), y la personalización de las gráficas, pudiéndose elegir un modo ya configurado (modo por defecto, modo hacker, modo aqua... etcétera) o personalizar uno.\newline
 
 Una vez esté todo configurado y el usuario esté listo para iniciar la monitorización, pinchará en el botón "Iniciar monitorización" de la última ventana de configuración. Al pinchar se abrirá una nueva ventana donde se visualizará la gráfica en tiempo real de la primera métrica del primer experimento configurado (si el benchmark fuera multihilo se mostrará la gráfica del hilo principal). En cualquier momento podemos realizar las siguientes acciones:
 
@@ -101,6 +101,6 @@ Una vez esté todo configurado y el usuario esté listo para iniciar la monitori
 
 * *Parar el benchmark.* El usuario puede parar la ejecución del benchmark cuando lo desee, pudiéndolo reanudar posteriormente. Esto puede servir para sacar capturas de gráfica más precisas.
 
-Cabe destacar que mientras se está realizando la monitorización, el usuario puede seguir desplazándose por las ventanas de configuración para preparar una nueva monitorización. Cuando tenga lista la nueva configuración (se permite incluso monitorizar otra máquina distinta a la que se está monitorizando) el usuario pinchará en el botón "Cancelar monitorización" (en el caso de que se esté llevando a cabo una monitorización) para matar el proceso de monitorización en la máquina, el botón pasará a llamarse "Iniciar monitorización" y al pincharse se pondrá en marcha la nueva monitorización.
+Cabe destacar que mientras se está realizando la monitorización, el usuario puede seguir desplazándose por las ventanas de configuración para preparar una nueva monitorización. Cuando tenga lista la nueva configuración (se permite incluso monitorizar otra máquina distinta a la que se está monitorizando) el usuario pinchará en el botón "Cancelar monitorización" (en el caso de que se esté llevando a cabo una monitorización) para matar el proceso de monitorización en la máquina, el botón pasará a llamarse "Iniciar monitorización" y al pincharse se pondrá en marcha la nueva monitorización.\newline
 
 Cuando el benchmark termina se le notifica al usuario mediante un pop-up, pero en ningún caso se cierran las gráficas, pudiéndo el usuario seguir realizando las acciones que hemos visto anteriormente.
