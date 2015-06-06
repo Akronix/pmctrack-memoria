@@ -22,10 +22,12 @@ La segunda viene definida en el fichero \texttt{pmctrack\_internal.h} y contiene
 Pasamos a desarrollar cada una de ellas individualmente.
 
 \subsection{pmctrack.h}
-El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Dicho código puede verse en la figura \ref{fig:pmctrackh}.
+Como hemos dicho anteriormente, pmctrack.h correspondería a la interfaz básica para monitorizar rendimiento desde el código fuente.
+
+El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Todas estas funciones comienzan con el prefijo \texttt{pmctrack_*}. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackh}. A continuación, pasamos a explicar brevemente cada función.
 
 \begin{figure}[!h]
-\caption{Interfaz estándar pmctrack}
+\caption{Interfaz básica libpmctrack}
 \label{fig:pmctrackh}
 \begin{lstlisting}[language=C]
 typedef struct {
@@ -68,8 +70,76 @@ Los datos leídos de esta manera se habran guardado en el campo \texttt{samples}.
 Finalmente, la función \texttt{pmctrack_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
 
 \subsection{pmctrack_internal.h}
+La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada puesto que permite usar las funciones de las que provee el kernel modificado con pmctrack, de forma que la abstracción en esta interfaz para el usuario es mucho menor.
 
+Así pues, ahora tenemos el fichero pmctrack_internal.h que provee de nuevas funciones, todas ellas precedidas por la palabra \texttt{pmct_*}. Además, incluye al fichero \texttt{pmctrack.h} con lo cual basta con incluir la interfaz internal para tener toda la API de libpmctrack. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackinternalh}. Igual que con la interfaz anterior, explicamos brevemente cada función.
+
+\begin{figure}[!h]
+\caption{Interfaz avanzada libpmctrack}
+\label{fig:pmctrackinternalh}
+\begin{lstlisting}[language=C]
+int pmct_check_counter_config(char* userpmccfg[],
+                              unsigned int* nr_counters,
+                              unsigned int* counter_mask,
+                              unsigned int* ebs,
+                              unsigned int* nr_experiments);
+int pmct_check_vcounter_config(char* virtcfg, unsigned int* nr_virtual_counters, unsigned int* virtual_mask);
+int pmct_config_counters(char* strcfg[]);
+int pmct_config_virtual_counters(char* virtcfg);
+int pmct_config_timeout(int msecs, int kernel_control);
+int pmct_start_counting( void );
+void pmct_print_header (FILE* fo, unsigned nr_experiments,
+                        unsigned pmcmask,
+                        unsigned virtual_mask,
+                        int extended_output);
+void pmct_print_sample (FILE* fo, unsigned nr_experiments,
+                        unsigned pmcmask,
+                        unsigned virtual_mask,
+                        unsigned extended_output,
+                        int nsample,
+                        pmc_sample_t* sample);
+int pmct_attach_process (pid_t pid);
+int pmct_open_monitor_entry(void);
+int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
+\end{lstlisting}
+\end{figure}
+
+\begin{description}
+  \item[pmct_check_counter_config()] \hfill \\
+  Comprueba que el string de configuración para los \ac{PMC} y para ebs es correcto, y devuelve los valores que haya extraído así en: \texttt{nr_counters, counter_mask, ebs, nr_experiments.}. En caso de que no se le pasase un string de configuración, esta función permite obtener dichos valores de configuración del fichero /proc/pmc/properties.
+
+  \item[pmct_check_vcounter_config()] \hfill \\
+  Comprueba que el string de configuración para contadores virtuales es válido y devuelve los valores extraídos en: \texttt{virtual_mask y nr_virtual_counters}
+
+  \item[pmct_config_counters()] \hfill \\
+  Dado un string de configuración, registra directamente en la entrada /proc/pmc/config, la cual usará el kernel para saber cómo tiene que configurar la monitorización. Imprescindible para poder monitorizar un proceso.
+
+  \item[pmct_config_virtual_counters()] \hfill \\
+  Similar al anterior, registra la configuración de los contadores virtuales pasada como párametro en la entrada /proc/pmc/config.
+
+  \item[pmct_config_timeout()] \hfill \\
+  Registra los valores de tiempo en la entrada /proc/pmc/config.
+
+  \item[pmct_start_counting()] \hfill \\
+  Avisa al kernel de que se quiere empezar la monitorización.
+
+  \item[pmct_print_header()] \hfill \\
+  Escribe \"una cabecera\" con las columnas correspondientes a la configuración pasada por parámetro.
+
+  \item[pmct_print_sample()] \hfill \\
+  Dado un \textit{sample}, escribe las muestras obtenidas para cada \ac{PMC} y contador virtual configurado.
+
+  \item[pmct_open_monitor_entry()] \hfill \\
+  Abre fichero /proc/pmc/monitor para lectura.
+
+  \item[pmct_print_sample] \hfill \\
+  \item[pmct_print_sample] \hfill \\
+  \item[pmct_print_sample] \hfill \\
+
+
+
+\end{description}
 
 \section{Ejemplo de uso}
-
+% añadir ejemplos de uso de pmctrack.h con mis dos heaps: williams y fibonacci
 
