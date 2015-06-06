@@ -1,29 +1,41 @@
 \chapter{PMCTrack GUI: Algo más que un interfaz gráfico}
 # Motivación
-PMCTrack es una herramienta muy potente desarrollada principalmente para ayudar al *planificador* del sistema operativo, por lo que aunque da soporte para ser usada por un usuario final, tiene grandes limitaciones en este sentido.
+$PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayudar al *planificador* del sistema operativo, por lo que aunque da soporte para ser usada por un usuario final, tiene grandes limitaciones en este sentido:
 
-Por ejemplo, para poder interpretar conjuntamente los datos que provee hace falta realizar un procesamiento de la información obtenida, generando de forma "manual" los resultados en forma de gráfica. Además, para una persona es imposible interpretar los datos globalmente en tiempo real (mientras que se está ejecutando el benchmark).
+* Proporciona al usuario el valor de cada contador configurado en determinados instantes de tiempo, por lo que para que el usuario pueda interpretar esos datos es necesario que realice de forma "manual" gráficas con herramientas como $Gnuplot$, teniéndolas que generar una vez PMCTrack ha terminado de extraer toda la información de los contadores.
 
-PMCTrack GUI ha surgido para superar estas limitaciones de $PMCTrack$, pero el resultado final es una herramienta con una extraordinaria funcionalidad a la altura de otras alternativas de alto coste económico de grandes empresas como $IBM$.
+* Para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al PMCTrack cuáles son sus valores de configuración (Código del evento, Umask, Cmask... etcétera). 
+
+# PMCTrack GUI, una herramienta única
+
+Como ya hemos visto, PMCTrack posee limitaciones importantes al usarse por un usuario final. Estas limitaciones han sido nuestra motivación para desarrollar PMCTrack GUI, y el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
+
+A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los siguientes motivos:
+
+* Única aplicación que permite visualizar la monitorización de benchmarks siendo multiarquitectura. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de $Intel$ o el *Streamline Performance Analyzer* de $ARM$.
+
+* Única aplicación de código libre y completamente gratuita. Las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
 
 # Características de PMCTrack GUI
 
 * Visualización de gráficas de monitorización en tiempo real.
+* Multiarquitectura, pudiendo monitorizar benchmarks en máquinas Intel, AMD y ARM.
+* Multiplataforma, pudiéndose ejecutar en GNU/Linux y MacOS X.
+* Selección de eventos sin necesidad de usar ningún manual de arquitectura (aunque se puede usar para especificar opciones avanzadas)
 * Asignación amigable de eventos a los contadores hardware.
 * Generación sencilla de métricas a partir de fórmulas de alto nivel.
 * Posibilidad de monitorización de máquinas remotas, desacoplando la GUI de la propia monitorización.
 * Detección de las dependencias software no satisfechas.
 * Detección automática de la arquitectura de la máquina a monitorizar, cargando los contadores y eventos propios de dicha arquitectura.
 * Permite observar simultáneamente y en tiempo real 2 o más gráficas.
-* Soporta la monitorización de aplicaciones multihilo, pudiendo observar gráficas propias de un hilo concreto de la aplicación a monitorizar.
+* Soporta la monitorización de aplicaciones multihilo, pudiendo observar gráficas propias de un hilo concreto de la aplicación.
 * Permite parar y reanudar la ejecución del benchmark que se está monitorizando.
 * Permite realizar una nueva configuración a partir de otra anterior cuya monitorización se está llevando a cabo.
 * Permite personalizar las gráficas a gusto del usuario.
 * Permite realizar capturas de las gráficas.
 * Permite redimensionar las gráficas en tiempo real.
 * Ajuste automático de los ejes de las gráficas en función de los valores y del tamaño de la ventana.
-* Soporte multilenguaje (disponible por ahora en inglés y español)
-* Multiplataforma, pudiéndose ejecutar en GNU/Linux y MacOS X.
+* Multilenguaje, soportando actualmente los idiomas inglés y español.
 
 # Diseño de PMCTrack GUI
 
@@ -65,7 +77,7 @@ Es un conjunto de objetos Python que almacenan toda la configuración que el usu
 
 \todo{Incluir captura de UML}
 
-## Modo de uso
+# Modo de uso
 
 Al iniciar PMCTrack GUI se inicia con el idioma que hay configurado en la máquina que lo arranca (español si la máquina está en español e inglés en otro caso). El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack GUI u otra máquina remota. En cualquiera de los casos PMCTrack GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requerimiento se informará debidamente al usuario.
 
