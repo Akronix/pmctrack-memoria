@@ -109,7 +109,7 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
   Comprueba que el string de configuración para los \ac{PMC} y para ebs es correcto, y devuelve los valores que haya extraído así en: \texttt{nr_counters, counter_mask, ebs, nr_experiments.}. En caso de que no se le pasase un string de configuración, esta función permite obtener dichos valores de configuración del fichero /proc/pmc/properties.
 
   \item[pmct_check_vcounter_config()] \hfill \\
-  Comprueba que el string de configuración para contadores virtuales es válido y devuelve los valores extraídos en: \texttt{virtual_mask y nr_virtual_counters}
+  Comprueba que el string de configuración para contadores virtuales es válido y devuelve los valores extraídos en: \texttt{virtual_mask y nr_virtual_counters}.
 
   \item[pmct_config_counters()] \hfill \\
   Dado un string de configuración, registra directamente en la entrada /proc/pmc/config, la cual usará el kernel para saber cómo tiene que configurar la monitorización. Imprescindible para poder monitorizar un proceso.
@@ -129,14 +129,14 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
   \item[pmct_print_sample()] \hfill \\
   Dado un \textit{sample}, escribe las muestras obtenidas para cada \ac{PMC} y contador virtual configurado.
 
+  \item[pmct_attach_process()] \hfill \\
+  Registra el pid pasado como argumento para que se monitorice el proceso con ese pid.
+
   \item[pmct_open_monitor_entry()] \hfill \\
-  Abre fichero /proc/pmc/monitor para lectura.
+  Abre fichero /proc/pmc/monitor para lectura. Necesario hacerlo si se quiere empezar a configurar una monitorización.
 
-  \item[pmct_print_sample] \hfill \\
-  \item[pmct_print_sample] \hfill \\
-  \item[pmct_print_sample] \hfill \\
-
-
+  \item[pmct_read_samples()] \hfill \\
+  Lee el máximo de muestras ---o hasta la máxima capacidad del buffer si no se ha definido un máximo--- desde el fichero pasado como argumento. Las muestras se devuelven en el parámetro \texttt{samples} y el número de muestras leídas es el valor de retorno de la función.
 
 \end{description}
 
