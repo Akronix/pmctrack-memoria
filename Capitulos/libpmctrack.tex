@@ -11,7 +11,8 @@ La implementación interna de la librería difiere ligeramente del usado para la h
 Para usar esta librería, el programador solo tiene que incluir nuestra librería libpmctrack, configurar qué monitorizar y encerrar el código que quiera monitorizar con llamadas a las funciones \texttt{pmctrack\_start\_count()} y \texttt{pmctrack\_stop\_count()}.
 La configuración para la monitorización se hace pasando un string con la configuración para cada \ac{PMC} o contador hardware y, opcionalmente, los \glosstex{contadores virtuales} que se quieren utilizar.
 
-La libpmctrack también soporta la monitorización de programas \textit{multithreading}. Para permitir que fragmentos de código independientes sean monitorizados de manera simultánea, el módulo del kernel de PMCTrack mantiene un buffer separado para cada uno de los hilos.
+La libpmctrack también soporta la monitorización de programas \textit{multithreading}. Para permitir que fragmentos de código independientes sean monitorizados de manera simultánea, el módulo del kernel de PMCTrack mantiene un buffer separado para cada uno de los hilos. Esta propiedad es especialmente interesante en entornos de programación paralela.\\
+Por ejemplo OpenMP o Cilk, aplican el patrón de diseño \textit{fork-join}, donde se divide el problema en subtareas, se crea un nuevo hilo para solucionar cada una de las subtareas y se rejuntan de nuevo una vez que cada una ha terminado su subtarea. Con libpmctrack se podría evaluar que desempeño tiene cada uno de los los hilos creados de esta manera y averiguar el umbral a partir del cual conviene dividir una tarea en dos subtareas más pequeñas.
 
 \section{API}
 La API está separada en dos interfaces.\\
@@ -19,6 +20,45 @@ La primera viene definida en el fichero \texttt{pmctrack.h} y en ella se proveen
 La segunda viene definida en el fichero \texttt{pmctrack\_internal.h} y contiene otra serie de funciones para acceso de más bajo nivel a las funcionalidades que provee el kernel modificado para PMCTrack. Es este segunda interfaz la que usa el programa de línea de comandos.
 
 Pasamos a desarrollar cada una de ellas individualmente.
+
+\subsection{pmctrack.h}
+El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Dicho código puede verse en la figura \ref{fig:pmctrackh}.
+
+\begin{figure}[!h]
+\caption{Interfaz estándar pmctrack}
+\label{fig:pmctrackh}
+\begin{lstlisting}[language=C]
+typedef struct {
+	/* File descriptors */
+	int fd_monitor;
+	/* Buffer (pre-allocated) */
+	pmc_sample_t* samples;
+	unsigned int pmcmask;
+	unsigned int kern_pmcmask;
+	unsigned int nr_pmcs;
+	unsigned int nr_virtual_counters;
+	unsigned int virtual_mask;
+	unsigned int nr_experiments; // Multiplexation...
+	unsigned int ebs_on;
+	unsigned int nr_samples;
+	unsigned int max_nr_samples;
+}pmctrack_desc_t;
+
+/* Connect with the performance tool */
+int pmctrack_init(pmctrack_desc_t* desc, unsigned max_nr_samples);
+int pmctrack_destroy(pmctrack_desc_t* desc);
+int pmctrack_clone_descriptor(pmctrack_desc_t* dest, pmctrack_desc_t* orig);
+int pmctrack_config_counters(pmctrack_desc_t* desc, char* strcfg[], char* virtcfg, int mux_timeout_ms);
+int pmctrack_start_counters(pmctrack_desc_t* desc);
+int pmctrack_stop_counters(pmctrack_desc_t* desc);
+void pmctrack_print_counts(pmctrack_desc_t* desc, FILE* outfile, int extended_output);
+\end{lstlisting}
+\end{figure}
+
+
+
+\subsection{pmctrack\_internal.h}
+
 
 \section{Ejemplo de uso}
 

@@ -80,6 +80,7 @@ constantes,guionado,Cascaras/bibliografia,config%
 %inclusiones de paquetes fuera de TeXiS
 \usepackage{tikz}
 \usetikzlibrary{calc,backgrounds,arrows,shapes,matrix,fit,patterns,trees,positioning,decorations.pathreplacing,automata}
+\usepackage{listings}
 
 % Incluimos el fichero con comandos de constantes
 \include{constantes}
@@ -115,6 +116,9 @@ constantes,guionado,Cascaras/bibliografia,config%
 % (usando números romanos para esta primera fase).
 \frontmatter
 
+% añado espacio entre párrafos.
+%\setlength{\parskip}{2ex plus 0.5ex minus 0.2ex}
+
 \include{Cascaras/cover}
 
 \include{Cascaras/dedicatoria}
@@ -136,8 +140,8 @@ constantes,guionado,Cascaras/bibliografia,config%
 \include{Capitulos/Introduccion}
 \include{Capitulos/InterfazGrafica}
 \include{Capitulos/Multithreading}
+\include{Capitulos/libpmctrack}
 
-%\include{...}
 %\include{...}
 %\include{...}
 %\include{...}
