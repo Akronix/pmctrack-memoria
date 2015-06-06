@@ -55,9 +55,19 @@ void pmctrack_print_counts(pmctrack_desc_t* desc, FILE* outfile, int extended_ou
 \end{lstlisting}
 \end{figure}
 
+El struct \texttt{pmctrack_desc_t} no se debe modificar directamente por el usuario y sirve para que libpmctrack deposite allí la configuración de monitorización a realizar. De este modo se consigue de una forma elegante, sencilla y transparente al usuario el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
 
+Para usar esta librería, el usuario lo primero que tendrá que hacer es declarar un \texttt{struct pmctrack_desc_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando.
 
-\subsection{pmctrack\_internal.h}
+A continuación, se ha de definir los strings con la definición de los contadores que se quieren usar y los eventos que se quiere que se cuenten, asícomo con los contadores virtuales si se quisiese usar alguno. Estos strings se han de pasar como argumento a la función \texttt{pmctrack_config_counters()}.
+
+Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando con \texttt{pmctrack_start_counters()} y acabando con \texttt{pmctrack_stop_counters()}. Obsérvese que se puede llamar multiples veces a estas dos funciones mientras el máximo de muestras no se vaya a superar. Si se superase dicho tamaño no habría ningún error en ejecución del programa pero sí se perderían algunos datos.
+
+Los datos leídos de esta manera se habran guardado en el campo \texttt{samples}. Para pedirle a libpmctrack que itere sobre ellos y nos los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
+
+Finalmente, la función \texttt{pmctrack_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
+
+\subsection{pmctrack_internal.h}
 
 
 \section{Ejemplo de uso}
