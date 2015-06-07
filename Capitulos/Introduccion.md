@@ -2,7 +2,7 @@
 <!-- En castellano y en inglés --->
 
 # Contadores Hardware para monitorización
- Los contadores hardware para monitorización (o \ac{GPL} por sus siglas en inglés) son registros con contador localizados dentro de los microprocesadores modernos y que cuentan ciertos eventos que ocurren en la CPU.
+ Los contadores hardware para monitorización (o \ac{PMC} por sus siglas en inglés) son registros con contador localizados dentro de los microprocesadores modernos y que cuentan ciertos eventos que ocurren en la CPU.
  Así pues, ejemplos de eventos que se podrían monitorizar de esta manera son: aciertos/fallos en accesos a memoria caché de distintos niveles, fallos en la predicción de saltos, instrucciones en coma flotante ejecutadas, etc.
 
  Estos contadores pueden ser de dos tipos: fijos, si siempre cuentan los mismos eventos; o configurables, si se puede elegir qué eventos, entre los proveídos por el fabricante, se quiere que el contador cuente.
