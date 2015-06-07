@@ -41,11 +41,11 @@ A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los s
 
 PMCTrack GUI ha sido desarrollada en *Python*, eligiéndose este lenguaje principalmente por ser multiplataforma, pudiendo ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python, además de que cuenta con una biblioteca muy potente para la generación de gráficas a partir de datos contenidos en listas o arrays, la biblioteca *Matplotlib*. Esta biblioteca es la que ha permitido en gran parte que PMCTrack GUI cuente con un indudable atractivo visual.
 
-Ha sido diseñada para ser fácilmente escalable y sostenible. Consta de diversos componentes que podemos dividir en dos grandes grupos según la función que desempeñan: *Frontend* y *Backend*.
+Ha sido diseñada para ser fácilmente escalable y mantenible. Consta de diversos componentes que podemos dividir en dos grandes grupos según la función que desempeñan: *Frontend* y *Backend*. El Frontend comprende todos los componentes puramente gráficos de la aplicación para su interacción con el usuario; el Backend consta de todos los componentes que proveen de la información para ser mostrada en el Frontend. Los componentes del Backend son muy diferentes entre sí, proveyendo cada uno de ellos información muy diferente, por ello analizaremos cada uno de ellos por separado.
 
 ## Frontend
 
-Está compuesto por todos los componentes gráficos de la aplicación.
+Está compuesto por todos los componentes eminentemente gráficos de la aplicación.
 
 Para el desarrollo de los frames y diálogos se ha utilizado la biblioteca *WX* de Python. El desarrollo se inició sobre la versión 2.8 aunque hoy en día la aplicación también es compatible con la última versión, la 3.0, esto ha hecho posible que PMCTrack GUI pueda ser ejecutada sobre la interfaz gráfica nativa de $MacOS X$.
 
@@ -53,11 +53,7 @@ Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, que com
 
 \todo{Incluir captura de GUI en MacOS y Linux}
 
-## Backend
-
-Consta de todos los componentes que proveen información para ser mostrada en el frontend. Estos componentes son muy diferentes entre sí, proveyendo cada uno de ellos información muy diferente, por ello vamos a analizar cada uno de estos componentes por separado.
-
-### Objetos de procesamiento
+## Backend - Objetos de procesamiento
 
 Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} podrá encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
 
@@ -79,7 +75,7 @@ Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
 2.)Texto plano: tienen información más general de la máquina, proveída por el kernel de Linux.\newline
 En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
 
-#### XML
+### XML
 Los xml son ficheros escritos con la información organizada por etiquetas y permiten el almacenaje y procesado de la información de una manera sencilla y rápida. Además, son fáciles de leer y de editar manualmente. Por estas razones, hemos escogido almacenar toda la información sobre los eventos y los \ac{PMC} que necesitábamos para la interfaz en este formato.\newline
 Para mantener una definición formal del formato de XML que queremos leer como entrada y así también poder verificar que los datos del xml son sintácticamente correctos, hemos creado un fichero \ac{DTD} para cada tipo de XML que queremos usar.
 
@@ -130,21 +126,21 @@ version CDATA #IMPLIED>
 \end{figure}
 
 
-#### Texto plano
+### Texto plano
 Además de los xml, existen dos ficheros proveídos por el kernel modificado para PMCTrack que resultan relevantes para nuestra interfaz y que son procesados por esta parte de ella. Procedemos a explicarlos brevemente a continuación:
 * `/proc/pmc/info`: Este fichero es proveído por el kernel modificado para pmctrack. De este fichero se obtiene información relativa al número de contadores que ofrece la máquina, el nombre del modelo (o nombres de los modelos si se tratase de una arquitectura híbrida) y alguna otra información que pudiera se necesaria en un futuro.
 * `/proc/cpuinfo`: Este fichero está disponible en cualquier versión del kernel Linux. De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar.
 
 
-### PMC Connect
+## Backend - PMC Connect
 
 Se encarga de la lectura de archivos de una máquina así como proporcionar métodos que ayudan a realizar chequeos sobre el software instalado en la máquina. Algunos de estos métodos son determinar si existe un determinado archivo en la máquina indicada, determinar si tiene un determinado paquete instalado, o comprobar si se puede establecer conexión con la máquina. Este componente es usado por el frontend para chequear las dependencias software y por los *Objetos de procesamiento* para leer los archivos en texto plano (de esta manera se mantiene una independencia entre los *Objetos de procesamiento* y la máquina que se desea monitorizar, sea local o remota)
 
-### PMC Extract
+## Backend - PMC Extract
 
 Es el componente del backend encargado de crear el subproceso que lanzará el comando pmctrack generado por este mismo objeto a partir de la configuración del usuario. Un vez lanzado obtiene los datos devueltos por el comando PMCTrack y los almacena de forma ordenada en un array de datos que será usado por el frontend para mostrar la información. Tiene atributos que indican al frontend el estado de la ejecución de PMCTrack así como métodos que permiten al frontend enviar señales al benchmark (señal de parada, reanudación o muerte).
 
-### User Config
+## Backend - User Config
 
 Es un conjunto de objetos Python que almacenan toda la configuración que el usuario va generando al interactuar con la GUI. Estos objetos son transferidos de un frame a otro hasta que acaban siendo enviados al PMC Extract, donde son procesados generando el comando PMCTrack que será lanzado en la máquina en cuestión.
 
