@@ -72,6 +72,9 @@ Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
 2.)**Texto plano**: tienen información más general de la máquina, proveída por el kernel de Linux.\newline
 En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
 
+#### XML
+
+#### Texto plano
 
 ### PMC Connect
 
