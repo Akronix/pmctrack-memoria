@@ -12,7 +12,7 @@
  Entre otras, la monitorización a través de los PMC permite obtener métricas muy cercanas al hardware; asímismo, la monitorización por software puede ser errónea o poco exacta debido a particularidades tecnológicas del procesador como la ejecución en desorden o las arquitecturas de memoria distribuida.
 
 # Antecedentes: PMCTrack
-PMCtrack es una herramienta de línea de comandos integrada en el kernel Linux que permite monitorizar el rendimiento de las aplicaciones haciendo uso de los contadores hardware del procesador.
+PMCTrack es una herramienta de línea de comandos integrada en el kernel Linux que permite monitorizar el rendimiento de las aplicaciones haciendo uso de los contadores hardware del procesador.
 
 La herramienta fue desarrollada inicialmente en un proyecto de sistemas informáticos por estudiantes de esta misma facultad en el año 2012 \cite{MSDTFG12}, y su uso y desarrollo se ha mantenido por el Grupo de Arquitectura y Tecnología de Sistemas Informáticos de esta universidad.
 
