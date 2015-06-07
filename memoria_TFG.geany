@@ -23,25 +23,21 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=5
-FILE_NAME_0=3477;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FMemoria.tex;0;2
-FILE_NAME_1=108;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCascaras%2Fresumen.tex;0;2
-FILE_NAME_2=6389;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FTeXiS%2FTeXiS_cab.tex;0;2
-FILE_NAME_3=2933;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fsrc%2Fothers%2FTOASK.md;0;2
-FILE_NAME_4=202;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Fbibliografia.bib;0;2
-FILE_NAME_5=10284;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FTeXiS%2FTeXiS_pream.tex;0;2
-FILE_NAME_6=191;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2FMultithreading.md;0;2
-FILE_NAME_7=195;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Festructura.md;0;2
-FILE_NAME_8=543;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2F01Capitulo1.tex;0;2
-FILE_NAME_9=2056;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Fconfig.tex;0;2
-FILE_NAME_10=14926;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FTeXiS%2FTeXiS.sty;0;2
-FILE_NAME_11=2594;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2FIntroduccion.md;0;2
-FILE_NAME_12=2289;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Farchitecture.tex;0;2
-FILE_NAME_13=2382;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCascaras%2Fcover.tex;0;2
-FILE_NAME_14=11752;None;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2F.ssh%2Fknown_hosts;0;2
+current_page=10
+FILE_NAME_0=250;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Festructura.md;0;2
+FILE_NAME_1=2963;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2Flibpmctrack.tex;0;2
+FILE_NAME_2=6355;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2FInterfazGrafica.md;0;2
+FILE_NAME_3=33;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Fbibliografia.bib;0;2
+FILE_NAME_4=1635;LaTeX;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2FInsync_abeserra%2FTFG_PMCTRACK%2Fmemoria%2Fbiblio-pmctrack.bib;0;2
+FILE_NAME_5=3033;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2Fguionado.tex;0;2
+FILE_NAME_6=3681;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FCapitulos%2FIntroduccion.md;0;2
+FILE_NAME_7=114;Markdown;0;EUTF-8;0;1;1;%2Fhome%2Fakronix%2FInsync_abeserra%2FTFG_PMCTRACK%2Fmemoria%2Fdescripcion_multithreaded.md;0;2
+FILE_NAME_8=3511;LaTeX;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FMemoria.tex;0;2
+FILE_NAME_9=0;Make;0;EISO-8859-1;1;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FImagenes%2FBitmap%2FMakefile;0;2
+FILE_NAME_10=0;Sh;0;EISO-8859-1;0;1;1;%2Fhome%2Fakronix%2Fworkspace%2FTFG%2Fmemoria%2FImagenes%2FBitmap%2Fupdate-eps.sh;0;2
 
 [VTE]
-last_dir=/home/akronix/workspace/TFG/memoria/TeXiS
+last_dir=/home/akronix/workspace/TFG/memoria/Imagenes/Bitmap
 
 [build-menu]
 NF_00_LB=_Make
