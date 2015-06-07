@@ -4,7 +4,7 @@ $PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayuda
 
 * Proporciona al usuario el valor de cada contador configurado en determinados instantes de tiempo, por lo que para que el usuario pueda interpretar esos datos es necesario que realice de forma "manual" gráficas con herramientas como $Gnuplot$, teniéndolas que generar una vez PMCTrack ha terminado de extraer toda la información de los contadores.
 
-* Para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al PMCTrack cuáles son sus valores de configuración (Código del evento, Umask, Cmask... etcétera).
+* Para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al comando PMCTrack los valores de configuración para los contadores.
 
 # PMCTrack GUI, una herramienta única
 
