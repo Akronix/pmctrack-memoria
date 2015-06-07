@@ -61,19 +61,17 @@ Consta de todos los componentes que proveen información para ser mostrada en el
 
 Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} podrá encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
 
-La información a procesar está repartida en dos formatos posibles:
+Para obtener la información servida por la fachada, en primer lugar, el frontend necesitará construir un objeto fachada y a través de ese objeto podrá obtener la información que quiera haciendo uso de las funciones que dicho objeto provee. La fachada es suficientemente inteligente para obtener la información del modelo que se está usando automáticamente y devolver sus eventos, sin que el frontend tenga que especificar el modelo, si bien éste podría ser especificado si así se desease. Además, la fachada también detectará si estamos en una arquitectura híbrida en la cual las \ac{CPU} que podemos tener pueden disponer de eventos diferentes y también necesitar de configuraciones diferentes.
+
+Muchas veces, los valores de retorno serán objetos python que encapsulan todos los datos necesarios. Por ejemplo, la fachada provee de la función `getAvailableEvents` que devuelve una lista de objetos `Event` los cuales contienen todos los campos para describir a un evento y ser usado desde la parte gráfica: nombre, descripción, código, flags y subeventos.
+
+Internamente, cuando se le solicita información a la fachada, ésta crea las estructuras de datos necesarias, procesa los argumentos, hace diversas llamadas a las funciones necesarias para obtener la información deseada y devuelve la información procesada como valores de retorno. En particular, disponemos de una clase Parser que es la encargada de tratar con los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los DTD.
+
+Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
 1.)**XML**: Dependientes de cada modelo, contienen la información de eventos e información de ese modelo de máquina en particular necesaria para la \ac{GUI};
 2.)**Texto plano**: tienen información más general de la máquina, proveída por el kernel de Linux.\newline
 En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
 
-Disponemos de una clase Parser que es la encargada de procesar los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los DTD.
-
-
-
-####
-
-
-Consta de varios objetos Python relacionados entre sí encargados de almacenar información de archivos en formato XML o en texto plano. Los XML almacenan información de los eventos hardware de las distintas arquitecturas soportadas (hay un XML para cada arquitectura), los archivos en texto plano contienen información acerca de la máquina, gracias a estos archivos los *Objectos de procesamiento* cargan de forma automática los contadores y eventosHW de la arquitectura de la máquina a monitorizar, almacenando estos datos en objetos Python a los que el frontend puede acceder fácilmente.
 
 ### PMC Connect
 
