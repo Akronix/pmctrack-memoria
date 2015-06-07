@@ -29,7 +29,7 @@ El fichero pmctrack.h define un struct para usar en el paso de opciones a las fu
 \begin{figure}[!h]
 \caption{Interfaz básica libpmctrack}
 \label{fig:pmctrackh}
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[frame=single,language=C]
 typedef struct {
 	/* File descriptors */
 	int fd_monitor;
@@ -77,7 +77,7 @@ Así pues, ahora tenemos el fichero pmctrack_internal.h que provee de nuevas func
 \begin{figure}[!h]
 \caption{Interfaz avanzada libpmctrack}
 \label{fig:pmctrackinternalh}
-\begin{lstlisting}[language=C]
+\begin{lstlisting}[frame=single,language=C]
 int pmct_check_counter_config(char* userpmccfg[],
                               unsigned int* nr_counters,
                               unsigned int* counter_mask,
