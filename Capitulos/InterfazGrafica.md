@@ -4,7 +4,7 @@ $PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayuda
 
 * Proporciona al usuario el valor de cada contador configurado en determinados instantes de tiempo, por lo que para que el usuario pueda interpretar esos datos es necesario que realice de forma "manual" gráficas con herramientas como $Gnuplot$, teniéndolas que generar una vez PMCTrack ha terminado de extraer toda la información de los contadores.
 
-* Para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al PMCTrack cuáles son sus valores de configuración (Código del evento, Umask, Cmask... etcétera). 
+* Para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al PMCTrack cuáles son sus valores de configuración (Código del evento, Umask, Cmask... etcétera).
 
 # PMCTrack GUI, una herramienta única
 
@@ -41,7 +41,7 @@ A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los s
 
 PMCTrack GUI ha sido desarrollada en *Python*, eligiéndose este lenguaje principalmente por ser multiplataforma, pudiendo ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python, además de que cuenta con una biblioteca muy potente para la generación de gráficas a partir de datos contenidos en listas o arrays, la biblioteca *Matplotlib*. Gran parte de la culpa del atractivo visual que tiene PMCTrack GUI la tiene esta biblioteca. \newline
 
-Ha sido diseñada para ser fácilmente escalable y sostenible. Consta de diversos componentes que podemos dividir en dos grandes grupos: Frontend y backend.
+Ha sido diseñada para ser fácilmente escalable y sostenible. Consta de diversos componentes que podemos dividir en dos grandes grupos según la función que desempeñan: *Frontend* y *Backend*.
 
 ## Frontend
 
@@ -58,6 +58,20 @@ Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, que com
 Consta de todos los componentes que proveen información para ser mostrada en el frontend. Estos componentes son muy diferentes entre sí, proveyendo cada uno de ellos información muy diferente, por ello vamos a analizar cada uno de estos componentes por separado.
 
 ### Objetos de procesamiento
+
+Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} Fachada, implementado en la clase `FacadeXML`.
+
+En la figura \ref{fig:UML_XML} se puede observar un diagrama UML de lo que correspondería a toda esta parte.\\
+Podemos observar como la información está repartida en dos formatos posibles:
+\begin{inparaenum}[(i)]
+\item XML: Dependientes de cada modelo, contienen la información de eventos e información de ese modelo de máquina en particular necesaria para la \ac{GUI};
+\item texto plano: tienen información más general de la máquina, proveída por el kernel de Linux.
+\end{inparaenum} En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
+
+
+
+####
+
 
 Consta de varios objetos Python relacionados entre sí encargados de almacenar información de archivos en formato XML o en texto plano. Los XML almacenan información de los eventos hardware de las distintas arquitecturas soportadas (hay un XML para cada arquitectura), los archivos en texto plano contienen información acerca de la máquina, gracias a estos archivos los *Objectos de procesamiento* cargan de forma automática los contadores y eventosHW de la arquitectura de la máquina a monitorizar, almacenando estos datos en objetos Python a los que el frontend puede acceder fácilmente.
 
