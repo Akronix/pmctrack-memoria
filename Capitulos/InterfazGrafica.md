@@ -67,7 +67,9 @@ Internamente, cuando se le solicita información a la fachada, ésta crea las es
 \centering
 \caption{Flujo de acceso a cada uno de los objetos de procesamiento}
 \label{fig:objproc}
+\begin{center}
 \includegraphics[scale=0.8]{Imagenes/Vectorial/parser-diagram.pdf}
+\end{center}
 \end{figure}
 
 Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
@@ -111,16 +113,29 @@ version CDATA #IMPLIED>
 \caption{Fichero de definición DTD para los XML que definen los contadores fijos y los eventos de cada modelo}
 \label{fig:dtdevents}
 \begin{lstlisting}[frame=single]
-<!ELEMENT layout (field*)>
-<!ATTLIST layout
-vendor (intel|amd|arm|undefined) #IMPLIED
-family CDATA #IMPLIED
-version CDATA #IMPLIED>
+<!ELEMENT pmcs_and_events (pmcs?,events)>
 
-<!ELEMENT field (name,nbits,default)>
+<!ELEMENT pmcs (pmc*)>
+<!ELEMENT pmc (pmc_name,pmc_type,pmc_number)>
+<!ELEMENT pmc_name (#PCDATA)>
+<!ELEMENT pmc_type (#PCDATA)>
+<!ELEMENT pmc_number (#PCDATA)>
+
+<!ELEMENT events (event+)>
+<!ELEMENT event (name,descp?,code,flags?,subevents?)>
 <!ELEMENT name (#PCDATA)>
-<!ELEMENT nbits (#PCDATA)>
-<!ELEMENT default (#PCDATA)>
+<!ELEMENT code (#PCDATA)>
+<!ELEMENT descp (#PCDATA)>
+<!ELEMENT flags (flag*)>
+<!ELEMENT subevents (subevent+)>
+
+<!ELEMENT subevent (subevt_name,subevt_descp?,flags)>
+<!ELEMENT subevt_name (#PCDATA)>
+<!ELEMENT subevt_descp (#PCDATA)>
+
+<!ELEMENT flag (flag_name,flag_value)>
+<!ELEMENT flag_name (#PCDATA)>
+<!ELEMENT flag_value (#PCDATA)>
 \end{lstlisting}
 
 \end{figure}
