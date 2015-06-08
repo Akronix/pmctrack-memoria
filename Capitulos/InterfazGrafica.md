@@ -10,11 +10,9 @@ $PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayuda
 
 Como ya hemos visto, PMCTrack posee limitaciones importantes al usarse por un usuario final. Estas limitaciones han sido nuestra motivación para desarrollar PMCTrack GUI, y el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
 
-A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, por los siguientes dos motivos:
+A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, ya que actualmente es la única aplicación que permite visualizar la monitorización de benchmarks siendo multiarquitectura. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de \cite{Intel} o el *Streamline Performance Analyzer* de \cite{ARM}.
 
-* Única aplicación que permite visualizar la monitorización de benchmarks siendo multiarquitectura. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de \cite{Intel} o el *Streamline Performance Analyzer* de \cite{ARM}.
-
-* Única aplicación de código libre y completamente gratuita. Las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
+Además, PMCTrack GUI es de código libre y completamente gratuita, mientras que las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
 
 # Características de PMCTrack GUI
 
@@ -146,20 +144,27 @@ Además de los xml, existen dos ficheros proveídos por el kernel modificado par
 * `/proc/pmc/info`: Este fichero es proveído por el kernel modificado para pmctrack. De este fichero se obtiene información relativa al número de contadores que ofrece la máquina, el nombre del modelo (o nombres de los modelos si se tratase de una arquitectura híbrida) y alguna otra información que pudiera se necesaria en un futuro.
 * `/proc/cpuinfo`: Este fichero está disponible en cualquier versión del kernel Linux. De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar.
 
-
 ## Backend - PMC Connect
 
-Se encarga de la lectura de archivos de una máquina así como proporcionar métodos que ayudan a realizar chequeos sobre el software instalado en la máquina. Algunos de estos métodos son determinar si existe un determinado archivo en la máquina indicada, determinar si tiene un determinado paquete instalado, o comprobar si se puede establecer conexión con la máquina. Este componente es usado por el frontend para chequear las dependencias software y por los *Objetos de procesamiento* para leer los archivos en texto plano (de esta manera se mantiene una independencia entre los *Objetos de procesamiento* y la máquina que se desea monitorizar, sea local o remota)
+Es un objeto que, dada una configuración de conexión a una máquina, provee métodos para obtener todo tipo de información de esa máquina. Permite comprobar la conectividad con esa máquina, comprobar la existencia de un fichero, leer contenido de ficheros y determinar si la máquina tiene un determinado paquete instalado.
 
-## Backend - PMC Extract
+Este objeto es usado por el frontend para chequear las dependencias software tanto en la máquina donde se está ejecutando la GUI como en la máquina donde se llevará a cabo la monitorización.
 
-Es el componente del backend encargado de crear el subproceso que lanzará el comando pmctrack generado por este mismo objeto a partir de la configuración del usuario. Un vez lanzado obtiene los datos devueltos por el comando PMCTrack y los almacena de forma ordenada en un array de datos que será usado por el frontend para mostrar la información. Tiene atributos que indican al frontend el estado de la ejecución de PMCTrack así como métodos que permiten al frontend enviar señales al benchmark (señal de parada, reanudación o muerte).
+Además, es usado por los *Objetos de procesamiento* para leer los archivos en texto plano. Usando este objeto conseguimos una total independencia entre los *Objetos de procesamiento* y la máquina donde se desea llevar a cabo la monitorización, no teniendo por tanto que hacer distinciones en estos objetos dependiendo de si se desea realizar la monitorización en una máquina remota o en la propia máquina en la cual se está ejecutando PMCTrack GUI.
 
 ## Backend - User Config
 
-Es un conjunto de objetos Python que almacenan toda la configuración que el usuario va generando al interactuar con la GUI. Estos objetos son transferidos de un frame a otro hasta que acaban siendo enviados al PMC Extract, donde son procesados generando el comando PMCTrack que será lanzado en la máquina en cuestión.
+Es un conjunto de objetos que almacenan toda la configuración del usuario. Son enviados de un frame de configuración a otro y cada uno de estos frames se encarga de almacenar en estos objetos la parte de configuración que le corresponde.
 
 \todo{Incluir captura de UML}
+
+## Backend - PMC Extract
+
+PMC Extract es el objeto encargado de llevar a cabo la comunicación con la herramienta PMCTrack de interfaz de comandos.
+
+En su inicialización, procesa los objetos de configuración del usuario generando el comando PMCTrack que lanza en la máquina que se haya configurado para monitorizar. Adicionalmente, crea un hilo encargado de extraer toda la información proveniente del comando PMCTrack, guardándola de forma organizada en un array de datos que será utilizado por el frontend para pintar las gráficas en tiempo real. Si durante la lectura el comando PMCTrack genera un error, PMC Extract lo capturará y almacenará, de tal manera que el frontend podrá leer ese error y mostrárselo al usuario mediante un pop-up.
+
+PMC Extract cuenta con atributos a los que puede acceder el frontend para saber en cualquier momento el estado del benchmark, así como métodos que permiten enviar señales a dicho benchmark (señal de parada *SIGSTOP*, señal de reanudación *SIGCONT* y señal de matar proceso *SIGKILL*).
 
 # Modo de uso
 
