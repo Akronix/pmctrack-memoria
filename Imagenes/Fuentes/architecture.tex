@@ -1,10 +1,10 @@
 \begin{tikzpicture}[scale=0.63,transform shape]
-\def\wlbox{9.5cm}
+\def\wlbox{11.5cm}
 \def\ggap{1pt}
 \def\sgap{0.1cm}
 \def\levelpadding{2pt}
 \def\boxgap{0.18cm}
-\def\levelgap{2.5*\boxgap}
+\def\levelgap{3.5*\boxgap}
 
 \begin{scope}[%
 cbox/.style={draw,thick,rounded corners,text=black,fill=white,minimum width=\wlbox,minimum height=1cm,align=center},
@@ -32,7 +32,7 @@ flecha/.style={>=stealth',black,semithick,solid}]
 \node (amd) at ($(intel.south west) + (-\boxgap,0)$)  [above left,backendbox] {AMD \\ Backend};
 \node (arm) at ($(amd.south west) + (-\boxgap,0)$)  [above left,backendbox] {ARM \\ Backend};
 \node (phi) at ($(arm.south west) + (-\boxgap,0)$)  [above left,backendbox] {Xeon-Phi \\ Backend};
-\node (monmod) at ($(archIndep.south west) + (0,-\boxgap)$)  [below right,pmcbox,minimum width=0.25*\wlbox] {Monitoring \\ modules};
+\node (monmod) at ($(archIndep.south west) + (0,-\boxgap)$)  [below right,pmcbox,minimum width=0.32*\wlbox] {Monitoring \\ modules};
 
 %% Hardware
 \node (hardware) at ($(monmod.south west) + (0,-\levelgap)$)  [below right,cbox] {Hardware Monitoring Facillities};
@@ -40,9 +40,9 @@ flecha/.style={>=stealth',black,semithick,solid}]
 
 %% Associated Backgrounds
 \begin{pgfonlayer}{background}
-\node (user) [bgbox,fit=(ap) (cmdtools) (libpmctrack)] {}; 
-\node (kernel) [bgbox,fit=(proc) (kernelAPI)] {}; 
-\node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {}; 
+\node (user) [bgbox,fit=(ap) (cmdtools) (libpmctrack)] {};
+\node (kernel) [bgbox,fit=(proc) (kernelAPI)] {};
+\node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {};
 \end{pgfonlayer}
 
 

@@ -48,6 +48,7 @@ TEXMD_FILES = $(addsuffix .tex, $(basename $(MD_FILES)))
 # 
 pdflatex: $(MAIN_TEX) $(TEXMD_FILES)
 	pdflatex $(NOMBRE_LATEX)
+	pdflatex $(NOMBRE_LATEX)
 	-bibtex $(NOMBRE_LATEX)
 #	-glosstex $(NOMBRE_LATEX) $(FICHEROS_GLOSARIO)
 #	-makeindex $(NOMBRE_LATEX).gxs -o $(NOMBRE_LATEX).glx -s glosstex.ist

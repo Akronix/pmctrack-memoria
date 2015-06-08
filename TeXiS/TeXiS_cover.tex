@@ -249,7 +249,7 @@
 % eso es una exageración, restamos a cada longitud el márgen real que
 % queremos dejar.
 \newlength{\margenPortada}
-\setlength{\margenPortada}{3.5cm}
+\setlength{\margenPortada}{3cm}
 
 \setlength{\cambioIzquierdo}{\cambioIzquierdo - \margenPortada}
 \setlength{\cambioDerecho}{\cambioDerecho - \margenPortada}
@@ -277,7 +277,7 @@
 \setlength{\oddsidemargin}{0cm}
 
 % Comienza el tex...
-\begin{huge}
+\begin{Huge}
 \mbox{ }
 \vfill
 
@@ -292,7 +292,7 @@
 \vskip 0.7cm
 \rule{\longTitulo}{.5mm}\\
 \end{center}
-\end{huge}
+\end{Huge}
 
 \vfill
 
@@ -311,7 +311,8 @@
 \begin{large}
 
 \begin{center}
-\textbf{\autorPortadaVal}\\[0.3cm]
+{\LARGE \textbf{\autorPortadaVal}}\\[0.3cm]
+\textbf{{\Large Dirigido por: \directorPortadaVal}}\\[1cm]
 
 \textbf{\institucionVal}\\[1em]
 \textbf{\fechaPublicacionVal}
