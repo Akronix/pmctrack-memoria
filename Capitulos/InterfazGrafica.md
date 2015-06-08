@@ -80,9 +80,9 @@ Los xml son ficheros escritos con la información organizada por etiquetas y per
 Para mantener una definición formal del formato de XML que queremos leer como entrada y así también poder verificar que los datos del xml son sintácticamente correctos, hemos creado un fichero \ac{DTD} para cada tipo de XML que queremos usar.
 
 En particular, los tipos de xml que necesitamos son dos:
-1. {nombre_fabricante}\_layout.xml: Este fichero suele ser común a todos los modelos de un mismo fabricante y sirve para definir los campos configurables de cada contador y sus valores por defecto. Su definición se puede ver en el dtd de la figura \ref{dtdlayout}.
+1. {nombre_fabricante}\_layout.xml: Este fichero suele ser común a todos los modelos de un mismo fabricante y sirve para definir los campos configurables de cada contador y sus valores por defecto. Su definición se puede ver en el dtd de la figura \ref{fig:dtdlayout}.
 
-2. {nombre_modelo}.xml: Este fichero contiene información relativa a los eventos, subeventos y contadores fijos de un modelo en particular. Aunque modelos del mismo fabricante tienen algunos eventos en común, sucede que muchos eventos cambian de modelo en modelo o de contadores fijos, de modo que se debe tener un xml por cada modelo de \ac{CPU} que queramos soportar en la interfaz gráfica. Su definición se puede ver en el dtd de la figura \ref{dtdevents}.
+2. {nombre_modelo}.xml: Este fichero contiene información relativa a los eventos, subeventos y contadores fijos de un modelo en particular. Aunque modelos del mismo fabricante tienen algunos eventos en común, sucede que muchos eventos cambian de modelo en modelo o de contadores fijos, de modo que se debe tener un xml por cada modelo de \ac{CPU} que queramos soportar en la interfaz gráfica. Su definición se puede ver en el dtd de la figura \ref{fig:dtdevents}.
 
 \lstset{
   language=XML,
