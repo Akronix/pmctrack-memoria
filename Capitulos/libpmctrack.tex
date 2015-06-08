@@ -24,7 +24,7 @@ Pasamos a desarrollar cada una de ellas individualmente.
 \subsection{pmctrack.h}
 Como hemos dicho anteriormente, pmctrack.h correspondería a la interfaz básica para monitorizar rendimiento desde el código fuente.
 
-El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Todas estas funciones comienzan con el prefijo \texttt{pmctrack_*}. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackh}. A continuación, pasamos a explicar brevemente cada función.
+El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Todas estas funciones comienzan con el prefijo \texttt{pmctrack\_*}. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackh}. A continuación, pasamos a explicar brevemente cada función.
 
 \begin{figure}[!h]
 \caption{Interfaz básica libpmctrack}
@@ -57,9 +57,9 @@ void pmctrack_print_counts(pmctrack_desc_t* desc, FILE* outfile, int extended_ou
 \end{lstlisting}
 \end{figure}
 
-El struct \texttt{pmctrack_desc_t} no se debe modificar directamente por el usuario y sirve para que libpmctrack deposite allí la configuración de monitorización a realizar. De este modo se consigue de una forma elegante, sencilla y transparente al usuario el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
+El struct \texttt{pmctrack\_desc\_t} no se debe modificar directamente por el usuario y sirve para que libpmctrack deposite allí la configuración de monitorización a realizar. De este modo se consigue de una forma elegante, sencilla y transparente al usuario el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
 
-Para usar esta librería, el usuario lo primero que tendrá que hacer es declarar un \texttt{struct pmctrack_desc_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando.
+Para usar esta librería, el usuario lo primero que tendrá que hacer es declarar un \texttt{struct pmctrack\_desc\_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando.
 
 A continuación, se ha de definir los strings con la definición de los contadores que se quieren usar y los eventos que se quiere que se cuenten, asícomo con los contadores virtuales si se quisiese usar alguno. Estos strings se han de pasar como argumento a la función \texttt{pmctrack_config_counters()}.
 
@@ -67,7 +67,7 @@ Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando
 
 Los datos leídos de esta manera se habran guardado en el campo \texttt{samples}. Para pedirle a libpmctrack que itere sobre ellos y nos los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
 
-Finalmente, la función \texttt{pmctrack_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
+Finalmente, la función \texttt{pmctrack\_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
 
 \subsection{pmctrack_internal.h}
 La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada puesto que permite usar las funciones de las que provee el kernel modificado con pmctrack, de forma que la abstracción en esta interfaz para el usuario es mucho menor.
@@ -142,4 +142,3 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
 
 \section{Ejemplo de uso}
 % añadir ejemplos de uso de pmctrack.h con mis dos heaps: williams y fibonacci
-
