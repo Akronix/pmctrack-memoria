@@ -49,7 +49,14 @@ Para el desarrollo de los frames y diálogos se ha utilizado la biblioteca *WX* 
 
 Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, que como ya se ha comentado antes, permite la generación de gráficos de alta calidad y precisión a partir de datos contenidos en listas o arrays, todo esto consumiendo pocos recursos y utilizando una notación muy parecida a la de $MATLAB$.
 
-\todo{Incluir captura de GUI en MacOS y Linux}
+En la figura \ref{fig:frontend} puede observar una vista del frontend en las dos plataformas soportadas por PMCTrack GUI.
+
+\begin{figure}
+\centering
+\subfloat[Interfaz GNOME]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfGnome}}\vspace{10mm}
+\subfloat[GUI nativa de MacOS X]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfMac}}
+\caption{PMCTrack GUI ejecutándose en GNU/Linux y MacOS X} \label{fig:frontend}
+\end{figure}
 
 ## Backend - Objetos de procesamiento
 
@@ -156,7 +163,7 @@ Además, es usado por los *Objetos de procesamiento* para leer los archivos en t
 
 Es un conjunto de objetos que almacenan toda la configuración del usuario. Son enviados de un frame de configuración a otro y cada uno de estos frames se encarga de almacenar en estos objetos la parte de configuración que le corresponde.
 
-\todo{Incluir captura de UML}
+En el apéndice \ref{app:UML.UserConfig} podrá encontrar un diagrama \ac{UML} de este conjunto de objetos.
 
 ## Backend - PMC Extract
 
@@ -170,13 +177,27 @@ PMC Extract cuenta con atributos a los que puede acceder el frontend para saber 
 
 Al iniciar PMCTrack GUI se inicia con el idioma que hay configurado en la máquina que lo arranca (español si la máquina está en español e inglés en otro caso). El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack GUI u otra máquina remota. En cualquiera de los casos PMCTrack GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requerimiento se informará debidamente al usuario.
 
-Si todas las dependencias software están resueltas (y hay conectividad con la máquina remota si la hubiera), aparecerá una nueva ventana donde el usuario podrá configurar muy fácilmente los contadores hardware con los que cuenta la máquina a monitorizar, asignando eventos de la arquitectura de la máquina a contadores de propósito general, todo de una manera muy sencilla (aunque se permiten hacer configuraciones avanzadas pudiéndose asignar manualmente parámetros como el Umask, Cmask o EBS).
+Si todas las dependencias software están resueltas (y hay conectividad con la máquina remota si la hubiera), aparecerá una nueva ventana donde el usuario podrá configurar muy fácilmente los contadores hardware con los que cuenta la máquina a monitorizar, asignando eventos de la arquitectura de la máquina a contadores de propósito general, todo de una manera muy sencilla (aunque se permiten hacer configuraciones avanzadas pudiéndose asignar manualmente parámetros como el Umask, Cmask o EBS). En la imagen *(b)* de la figura \ref{fig:countersConf} puede visualizar una ventana de configuración de un contador.
 
-Una vez configurados los contadores que se quieren utilizar, debajo de la sección de configuración de contadores el usuario se encontrará con la configuración de métricas. Esta sección permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1\ldots). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como quiera, como por ejemplo $(pmc0 ^ 2) / pmc1 * 1000) * pmc4$
+\begin{figure}
+\centering
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfMac}}\vspace{10mm}
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCounterConf}}
+\caption{Ventanas de configuración de contadores y métricas} \label{fig:countersConf}
+\end{figure}
+
+Una vez configurados los contadores que se quieren utilizar, debajo de la sección de configuración de contadores el usuario se encontrará con la configuración de métricas. Esta sección permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1\ldots). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como quiera, como por ejemplo $(pmc0 ^ 2) / pmc1 * 1000) * pmc4$. En la imagen *(a)* de la figura \ref{fig:countersConf} puede observar la ventana de configuración de contadores y métricas donde hay añadidos otros ejemplos de fórmulas.
 
 Cabe destacar que es posible crear más de un experimento, esto es, más de un conjunto de contadores y métricas, de tal manera que es posible configurar un contador con un determinado evento y usarlo en una métrica y, en otro experimento, configurar el mismo contador con otro evento distinto y usarlo en otra métrica distinta.
 
-Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón Siguiente aparecerá una nueva ventana, esta ventana permite realizar las últimas configuraciones antes de iniciar la monitorización. Permite elegir el benchmark que se desea monitorizar, el tiempo entre cada muestra, la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo), y la personalización de las gráficas, pudiéndose elegir un modo ya configurado (modo por defecto, modo hacker, modo aqua... etcétera) o personalizar uno.
+\begin{figure}
+\centering
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotFinalConf}}\vspace{10mm}
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotStyleGraphConf}}
+\caption{Fase final de la configuración} \label{fig:finalConf}
+\end{figure}
+
+Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón Siguiente aparecerá una nueva ventana, esta ventana permite realizar las últimas configuraciones antes de iniciar la monitorización. Permite elegir el benchmark que se desea monitorizar, el tiempo entre cada muestra, la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo), y la personalización de las gráficas, pudiéndose elegir un modo ya configurado (modo por defecto, modo hacker, modo aqua... etcétera) o personalizar uno. Véanse las dos imágenes de la figura \ref{fig:finalConf} para ver un ejemplo gráfico de lo comentado en este párrafo.
 
 Una vez esté todo configurado y el usuario esté listo para iniciar la monitorización, pinchará en el botón "Iniciar monitorización" de la última ventana de configuración. Al pinchar se abrirá una nueva ventana donde se visualizará la gráfica en tiempo real de la primera métrica del primer experimento configurado (si el benchmark fuera multihilo se mostrará la gráfica del hilo principal). En cualquier momento podemos realizar las siguientes acciones:
 
@@ -189,6 +210,14 @@ Una vez esté todo configurado y el usuario esté listo para iniciar la monitori
 * *Ocultar controles.* Para ver una gráfica lo mejor posible se le da la posibilidad al usuario de ocultar todos los controles de la ventana, de esta manera la gráfica ocupa el tamaño entero de la ventana.
 
 * *Parar el benchmark.* El usuario puede parar la ejecución del benchmark cuando lo desee, pudiéndolo reanudar posteriormente. Esto puede servir para sacar capturas de gráfica más precisas.
+
+En la figura \ref{fig:monitoring} puede ver un ejemplo gráfico de lo explicado anteriormente.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.27]{Imagenes/Bitmap/screenshotMonitoring}
+\caption{Monitorización de un benchmark, visualizándose simultáneamente en tiempo real dos métricas} \label{fig:monitoring}
+\end{figure}
 
 Cabe destacar que mientras se está realizando la monitorización, el usuario puede seguir desplazándose por las ventanas de configuración para preparar una nueva monitorización. Cuando tenga lista la nueva configuración (se permite incluso monitorizar otra máquina distinta a la que se está monitorizando) el usuario pinchará en el botón "Cancelar monitorización" (en el caso de que se esté llevando a cabo una monitorización) para matar el proceso de monitorización en la máquina, el botón pasará a llamarse "Iniciar monitorización" y al pincharse se pondrá en marcha la nueva monitorización.
 
