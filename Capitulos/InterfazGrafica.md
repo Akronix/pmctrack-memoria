@@ -60,13 +60,13 @@ En la figura \ref{fig:frontend} puede observar una vista del frontend en las dos
 
 ## Backend - Objetos de procesamiento
 
-Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} podrá encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
+Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases Python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} se puede encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
 
-Para obtener la información servida por la fachada, en primer lugar, el frontend necesitará construir un objeto fachada y a través de ese objeto podrá obtener la información que quiera haciendo uso de las funciones que dicho objeto provee. La fachada es suficientemente inteligente para obtener la información del modelo que se está usando automáticamente y devolver sus eventos, sin que el frontend tenga que especificar el modelo, si bien éste podría ser especificado si así se desease. Además, la fachada también detectará si estamos en una arquitectura híbrida en la cual las \ac{CPU} que podemos tener pueden disponer de eventos diferentes y también necesitar de configuraciones diferentes.
+Para obtener la información servida por la fachada, en primer lugar, el frontend necesitará construir un objeto fachada y a través de ese objeto podrá obtener la información que quiera haciendo uso de las funciones que dicho objeto provee. La fachada es suficientemente inteligente para obtener la información del modelo que se está usando automáticamente y devolver sus eventos, sin que el frontend tenga que especificar el modelo, si bien éste podría ser especificado si así se desease. Además, la fachada también detectará si estamos en una arquitectura asimétrica o heterogénea \cite{single-isa-perf} en la cual las \ac{CPU} que podemos tener pueden disponer de eventos diferentes y también necesitar de configuraciones diferentes.
 
-Muchas veces, los valores de retorno serán objetos python que encapsulan todos los datos necesarios. Por ejemplo, la fachada provee de la función `getAvailableEvents` que devuelve una lista de objetos `Event` los cuales contienen todos los campos para describir a un evento y ser usado desde la parte gráfica: nombre, descripción, código, flags y subeventos.
+Muchas veces, los valores de retorno serán objetos Python que encapsulan todos los datos necesarios. Por ejemplo, la fachada provee de la función `getAvailableEvents` que devuelve una lista de objetos `Event` los cuales contienen todos los campos para describir a un evento y ser usado desde la parte gráfica: nombre, descripción, código, flags y subeventos.
 
-Internamente, cuando se le solicita información a la fachada, ésta crea las estructuras de datos necesarias, procesa los argumentos, hace diversas llamadas a las funciones necesarias para obtener la información deseada y devuelve la información procesada como valores de retorno. En particular, disponemos de una clase Parser que es la encargada de tratar con los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los DTD. En la figura \ref{fig:objproc} puede encontrar un pequeño esquema que muestra el flujo de cómo se accede a los objetos de procesamiento.
+Internamente, cuando se le solicita información a la fachada, ésta crea las estructuras de datos necesarias, procesa los argumentos, hace diversas llamadas a las funciones necesarias para obtener la información deseada y devuelve la información procesada como valores de retorno. En particular, disponemos de una clase Parser que es la encargada de tratar con los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los ficheros \ac{DTD} (*Document Type Definition*). En la figura \ref{fig:objproc} se muestra un pequeño esquema que ilustra el flujo de acceso a los objetos de procesamiento.
 
 \begin{figure}
 \centering
@@ -77,16 +77,20 @@ Internamente, cuando se le solicita información a la fachada, ésta crea las es
 \end{center}
 \end{figure}
 
-Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
-1.)XML: Dependientes de cada modelo de \ac{CPU}, contienen la información de eventos e información de ese modelo de máquina en particular necesaria para la \ac{GUI};
-2.)Texto plano: tienen información más general de la máquina, proveída por el kernel de Linux.\newline
+Los objetos de procesamiento se pueden dividir según su formato, en dos grupos: XML y texto plano.
+
+1. XML: Dependientes de cada modelo de \ac{CPU}, contienen la información de eventos e información de ese modelo de máquina en particular necesaria para la \ac{GUI},
+
+2. Texto plano: tienen información más general de la máquina, proveída por el kernel Linux.
+
 En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
 
 ### XML
-Los xml son ficheros escritos con la información organizada por etiquetas y permiten el almacenaje y procesado de la información de una manera sencilla y rápida. Además, son fáciles de leer y de editar manualmente. Por estas razones, hemos escogido almacenar toda la información sobre los eventos y los \ac{PMC} que necesitábamos para la interfaz en este formato.\newline
-Para mantener una definición formal del formato de XML que queremos leer como entrada y así también poder verificar que los datos del xml son sintácticamente correctos, hemos creado un fichero \ac{DTD} para cada tipo de XML que queremos usar.
+Los ficheros xml son archivos escritos con la información organizada por etiquetas y permiten el almacenaje y procesado de la información de una manera sencilla y rápida. Además, son fáciles de leer y de editar manualmente. Por estas razones, hemos escogido almacenar toda la información sobre los eventos y los \ac{PMC} que necesitábamos para la interfaz en este formato.\newline
+Para mantener una definición formal del formato de XML que queremos leer como entrada y así también poder verificar que los datos del fichero XML son sintácticamente correctos, hemos creado un fichero \ac{DTD} para cada tipo de XML que queremos usar.\newline
 
-En particular, los tipos de xml que necesitamos son dos:
+En particular, los tipos de fichero XML que necesitamos son dos:
+
 1. {nombre_fabricante}\_layout.xml: Este fichero suele ser común a todos los modelos de un mismo fabricante y sirve para definir los campos configurables de cada contador y sus valores por defecto. Su definición se puede ver en el dtd de la figura \ref{fig:dtdlayout}.
 
 2. {nombre_modelo}.xml: Este fichero contiene información relativa a los eventos, subeventos y contadores fijos de un modelo en particular. Aunque modelos del mismo fabricante tienen algunos eventos en común, sucede que muchos eventos cambian de modelo en modelo o de contadores fijos, de modo que se debe tener un xml por cada modelo de \ac{CPU} que queramos soportar en la interfaz gráfica. Su definición se puede ver en el dtd de la figura \ref{fig:dtdevents}.
@@ -97,7 +101,7 @@ En particular, los tipos de xml que necesitamos son dos:
 }
 
 \begin{figure}
-\caption{Fichero de definición DTD para los XML que definen el layout de los PMC}
+\caption{Fichero de definición DTD para los ficheros XML que definen el layout de los PMC}
 \label{fig:dtdlayout}
 \begin{lstlisting}[frame=single]
 <!ELEMENT layout (field*)>
@@ -115,7 +119,7 @@ version CDATA #IMPLIED>
 \end{figure}
 
 \begin{figure}
-\caption{Fichero de definición DTD para los XML que definen los contadores fijos y los eventos de cada modelo}
+\caption{Fichero de definición DTD para los ficheros XML que definen los contadores fijos y los eventos de cada modelo}
 \label{fig:dtdevents}
 \begin{lstlisting}[frame=single]
 <!ELEMENT pmcs_and_events (pmcs?,events)>
@@ -145,11 +149,12 @@ version CDATA #IMPLIED>
 
 \end{figure}
 
-
 ### Texto plano
-Además de los xml, existen dos ficheros proveídos por el kernel modificado para PMCTrack que resultan relevantes para nuestra interfaz y que son procesados por esta parte de ella. Procedemos a explicarlos brevemente a continuación:
-* `/proc/pmc/info`: Este fichero es proveído por el kernel modificado para pmctrack. De este fichero se obtiene información relativa al número de contadores que ofrece la máquina, el nombre del modelo (o nombres de los modelos si se tratase de una arquitectura híbrida) y alguna otra información que pudiera se necesaria en un futuro.
-* `/proc/cpuinfo`: Este fichero está disponible en cualquier versión del kernel Linux. De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar.
+Además de los ficheros XML, existen dos ficheros proveídos por el kernel modificado para PMCTrack que resultan relevantes para nuestra interfaz y que son procesados por esta parte de ella. Procedemos a explicarlos brevemente a continuación:
+
+* `/proc/pmc/info`: De este fichero se obtiene información relativa al número de contadores que ofrece la máquina, el nombre del modelo (o nombres de los modelos si se tratase de una arquitectura heterogénea) y alguna otra información que pudiera se necesaria en un futuro. Este fichero es proveído por el módulo común a todas las arquitecturas del kernel de PMCTrack.
+
+* `/proc/cpuinfo`: De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar. Este fichero está disponible en cualquier versión del kernel Linux.
 
 ## Backend - PMC Connect
 

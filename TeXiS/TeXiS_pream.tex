@@ -132,8 +132,8 @@
 \ifx\generaacronimos\undefined
   % No queremos acrónimos. Como no incluiremos el paquete glosstex
   % redefinimos sus comandos para que no cruja si se han usado.
-  \newcommand{\glosstex}[1]{}
-  \newcommand{\acronym}[1]{}
+  \newcommand{\glosstex}[1]{#1}
+  \newcommand{\acronym}[1]{#1}
   \newcommand{\ac}[1]{#1}
   \newcommand{\acs}[1]{#1}
   \newcommand{\acl}[1]{#1}
