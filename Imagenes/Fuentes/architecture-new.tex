@@ -16,7 +16,9 @@ flecha/.style={>=stealth',black,semithick,solid}]
 
 %% User mode
 \node (ap) [cbox] {User applications};
-\node (cmdtools) at ($(ap.south west) + (0,-3*\boxgap)$)  [below right,pmcbox,minimum width=\wlbox] {PMCTrack Command-Line Tools};
+\node (cmdtools) at ($(ap.south west) + (0,-3*\boxgap)$)  [below right,pmcbox,minimum width=0.49*\wlbox] {PMCTrack \\ Command-Line Tools};
+\node (libpmctrack) at ($(ap.south east) + (0,-3*\boxgap)$)  [below left,pmcbox,minimum width=0.49*\wlbox] {libpmctrack};
+
 
 %% Kernel mode
 \node (proc) at ($(cmdtools.south west) + (0,-\levelgap)$)  [below right,pmcbox] {\texttt{/proc/pmc/*} entries};
@@ -38,7 +40,7 @@ flecha/.style={>=stealth',black,semithick,solid}]
 
 %% Associated Backgrounds
 \begin{pgfonlayer}{background}
-\node (user) [bgbox,fit=(ap) (cmdtools)] {};
+\node (user) [bgbox,fit=(ap) (cmdtools) (libpmctrack)] {};
 \node (kernel) [bgbox,fit=(proc) (kernelAPI)] {};
 \node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {};
 \end{pgfonlayer}
@@ -55,7 +57,9 @@ flecha/.style={>=stealth',black,semithick,solid}]
 
 
 %%% Flechas entre nodos
+\draw let \p1=(libpmctrack.north),\p2=(ap.south) in  [flecha,<->] (\x1,\y2) -- (\x1,\y1);
 \draw let \p1=(cmdtools.north),\p2=(ap.south) in  [flecha,<->] (\x1,\y2) -- (\x1,\y1);
+\draw let \p1=(libpmctrack.south),\p2=(proc.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
 \draw let \p1=(cmdtools.south),\p2=(proc.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
 \draw let \p1=(proc.south west),\p2=(archIndep.north west) in  [flecha,<->] ($(\x1,\y1)+(1cm,0)$) -- ($(\x1,\y2)+(1cm,0)$);
 \draw let \p1=(sched.south),\p2=(kernelAPI.north) in  [flecha,<->] (\x1,\y1) -- (\x1,\y2);
