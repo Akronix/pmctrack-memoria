@@ -3,7 +3,7 @@
 Una parte transcendental del proyecto ha sido la implementación de una librería llamada \textbf{libpmctrack}, que provee a los programadores de la funcionalidad de monitorización que brinda PMCTrack. De esta forma, un programador puede obtener información de cómo se comporta el hardware mientras se está ejecutando su programa haciendo simplemente llamadas a la API de libpmctrack, e incluso hacer uso de dicha información para otras funciones más allá de la pura monitorización.
 \end{resumen}
 
-
+\section{Motivación}
 Mientras que la herramienta de línea de comandos \texttt{pmctrack} hace una gran labor para monitorizar el comportamiento global de un programa dado, carece de la posibilidad de permitir la monitorización de líneas específicas del código. Así pues, el usuario disponía de una herramienta para poder monitorizar programas, pero el programador no disponía de una forma de acceder a la herramienta dentro de su programa bajo demanda.
 
 La aproximación más cercana que podría tomar un desarrollador consistía en ejecutar el propio comando \texttt{pmctrack} desde su programa y capturar su salida para procesarla, este proceso, como veremos, no es muy conveniente.
