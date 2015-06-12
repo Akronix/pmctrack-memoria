@@ -199,7 +199,8 @@ A continuación destacaremos las más conocidas.
 7. Implementación libpmctrack y refactorización código pmctrack línea de comandos
 
 ## Contribuciones
-% Al menos dos páginas de cada uno!
+
+Al menos dos páginas de cada uno
 
 ### Abel Serrano Juste
 

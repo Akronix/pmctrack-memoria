@@ -1,3 +1,5 @@
 # TODO List
 1. Arreglar cabecera apéndices horizontales
-2. cambiar orden capítulos
+2. Rehacer Resumen y traducir.
+3. Quitar hojas en blanco al principio.
+5. Motivación + Ejemplo de uso en multithreading

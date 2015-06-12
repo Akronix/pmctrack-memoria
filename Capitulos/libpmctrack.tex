@@ -1,30 +1,55 @@
 \chapter{libpmctrack}
-% traducir párrafo paper jc
+\begin{resumen}
+Una parte transcendental del proyecto ha sido la implementación de una librería llamada \textbf{libpmctrack}, que provee a los programadores de la funcionalidad de monitorización que brinda PMCTrack. De esta forma, un programador puede obtener información de cómo se comporta el hardware mientras se está ejecutando su programa haciendo simplemente llamadas a la API de libpmctrack, e incluso hacer uso de dicha información para otras funciones más allá de la pura monitorización.
+\end{resumen}
+
+\section{Motivación}
+Mientras que la herramienta de línea de comandos \texttt{pmctrack} hace una gran labor para monitorizar el comportamiento global de un programa dado, carece de la posibilidad de permitir la monitorización de líneas específicas del código. Así pues, el usuario disponía de una herramienta para poder monitorizar programas, pero el programador no disponía de una forma de acceder a la herramienta dentro de su programa bajo demanda.
+
+La aproximación más cercana que podría tomar un desarrollador consistía en ejecutar el propio comando \texttt{pmctrack} desde su programa y capturar su salida para procesarla, este proceso, como veremos, no es muy conveniente.
+
+En primer lugar, \texttt{pmctrack} estaba pensado para usarse desde una consola interactiva directamente con el usuario, y observamos que a la ahora de monitorizar código, las necesidades son diferentes a las que podemos tener desde la consola. Por ejemplo, no queremos especificar la localización un programa externo a monitorizar, si no las líneas de código que queremos nos interesan. Del mismo modo, tampoco queremos recibir la salida por pantalla, si no que nos interesará tenerla accesible desde dentro de nuestro propio programa para trabajar con ella.
+
+En segundo lugar, la existencia de una librería permitiría la desencapsulación de las tareas de comunicación e intercambio de información con el kernel; de las tareas que se refieren puramente al programa que se quiere monitorizar. Generando código mucho más adaptable a diferentes contextos y más fácil de utilizar.
+
+En tercer lugar, para poder utilizar \texttt{pmctrack} necesitaremos tenerlo compilado, instalado y accesible desde el path. Lo cual genera una dependencia y dificultades de instalación a la hora de usar la suite PMCTrack, que, en realidad, carece de sentido propio.
+
+Por todo esto, con la creación de libpmctrack pretendemos solucionar este problema proporcionando al programador de una herramienta que pueda obtener información sobre los eventos hardware de los PMC desde su propio código. Para ello, el programador solo tiene que hacer llamadas a la librería directamente desde su código y libpmctrack se encarga de tratar con el kernel y con las particularidades de PMCTrack.
+
 \section{Descripción libpmctrack}
-Hemos implementado una librería llamada \textit{libpmctrack}, que provee a los programadores de una manera sencilla de acceder a la funcionalidad del kernel de PMCTrack en sus programas. De esta forma, un programador puede obtener información de cómo evoluciona el rendimiento y cómo se comporta el hardware mientras se está ejecutando su programa haciendo simplemente llamadas a la API de libpmctrack.
-De este modo, libpmctrack proporciona al programador del acceso directo a la información obtenida desde los \ac{PMC}, sin tener que preocuparse de la implementación de dichos contadores en cada arquitectura. Además, libpmctrack permite el uso de los \glosstex{contadores virtuales} proveídos por los módulos de PMCTrack para cada arquitectura, lo cual es una gran ventaja frente a otras herramientas con fines similares como PAPI-C \cite{papiC}.
 
-De hecho, parte del proyecto también ha sido la refactorización del código antiguo del programa de línea de comandos PMCTrack a uno nuevo que hiciese uso de la libpmctrack. Con esta nueva versión, el código de la parte de modo usuario de PMCTrack se redujo de casi novecescientas líneas de código a apenas quinientas ---una disminución de casi la mitad---, mejorando también significativamente en cuanto a claridad. Al mismo tiempo, esta refactorización nos sirvió para comprobar y depurar la librería.
+libpmctrack es una librería escrita en C, al igual que el resto de los componentes de PMCTrack, y que encapsula las funcionalidades de monitorización que tiene PMCTrack en una API de funciones disponibles al programador. De este modo, libpmctrack proporciona al programador del acceso directo a la información obtenida desde los \ac{PMC}, sin tener que preocuparse de la implementación de dichos contadores en cada arquitectura. Además, libpmctrack permite el uso de los \glosstex{contadores virtuales} proveídos por los módulos de PMCTrack para cada arquitectura, lo cual es una gran ventaja frente a otras herramientas con fines similares como PAPI-C \cite{papiC}.
 
-La implementación interna de la librería difiere ligeramente del usado para la herramienta de línea de comandos PMCTrack. En este caso, no se trata de un proceso padre que se encarga de lanzar y monitorizar un proceso hijo; si no de un proceso que, mediante llamadas a la librería libpmctrack, obtiene sus propios datos de monitorización de los \ac{PMC} y es el programador quién debe decidir qué hacer con estos datos de retorno. Este modo de uso permite que los programas sean capaces incluso de tomar decisiones en tiempo de ejecución según los datos hardware que estén obteniendo.
+La funcionalidad más evidente que permite esta librería es hacer observaciones de rendimiento, ya sea de un programa software que hayamos escrito; o bien de uno o varios procesadores hardware para un cierto código software dado.\newline
+Pero además, existen otros usos potenciales que se pueden hacer con esta librería. Dado que hay muchos programas que se ejecutan dentro del contexto de otros contenedores, tales como máquinas virtuales o librerias en tiempo de ejecución (*Run-Time Libraries*), dichos programas contenedores se podrían beneficiar ampliamente de disponer de información de los hilos que están corriendo dentro de ellos en tiempo de ejecución. Esto, al fin y al cabo, es una generalización de la mejora que aporta PMCTrack al planificador de Linux ---como comentamos en el primer capitulo de Introducción---, ahora generalizada a cualquier programa que ejecute en su contexto a otros programas; y esta potencialidad ha sido solo posible gracias a libpmctrack.
+
+La implementación interna de la librería difiere ligeramente del usado para la herramienta de línea de comandos PMCTrack. En este caso, no se trata de un proceso padre que se encarga de lanzar y monitorizar un proceso hijo; si no de un proceso que, mediante llamadas a la librería libpmctrack, obtiene sus propios datos de monitorización de los \ac{PMC} y es el programador quién debe decidir qué hacer con estos datos de retorno. Este modo de uso es el que permite que los programas sean capaces incluso de tomar decisiones en tiempo de ejecución, tal y como contábamos antes, según la información de rendimiento proporcionada por el hardware.
 
 Para usar esta librería, el programador solo tiene que incluir nuestra librería libpmctrack, configurar qué monitorizar y encerrar el código que quiera monitorizar con llamadas a las funciones \texttt{pmctrack\_start\_count()} y \texttt{pmctrack\_stop\_count()}.
 La configuración para la monitorización se hace pasando un string con la configuración para cada \ac{PMC} o contador hardware y, opcionalmente, los \glosstex{contadores virtuales} que se quieren utilizar.
 
 La libpmctrack también soporta la monitorización de programas \textit{multithreading}. Para permitir que fragmentos de código independientes sean monitorizados de manera simultánea, el módulo del kernel de PMCTrack mantiene un buffer separado para cada uno de los hilos. Esta propiedad es especialmente interesante en entornos de programación paralela.\\
-Por ejemplo OpenMP o Cilk, aplican el \glosstex{patrón de diseño} \textit{fork-join}, donde se divide el problema en subtareas, se crea un nuevo hilo para solucionar cada una de las subtareas y se rejuntan de nuevo una vez que cada una ha terminado su subtarea. Con libpmctrack se podría evaluar que desempeño tiene cada uno de los los hilos creados de esta manera y averiguar el umbral a partir del cual conviene dividir una tarea en dos subtareas más pequeñas.
+
+Por ejemplo, el *runtime* de OpenMP o de Cilk puede realizar optimizaciones en tiempo de ejecución para equilibrar la carga entre hilos de procesamiento \cite{taco-runtime-amps}.
+
+\section{Refactorización \texttt{pmctrack} usando libpmctrack}
+Durante el transcurso del proyecto, y con la librería casi acabada, nos dimos cuenta de que había mucho código repetido entre ésta y la herramienta de comandos \texttt{pmctrack}. Fue entonces cuando pensamos que podríamos hacer uso de las funciones de la librería desde \texttt{pmctrack}. Hicimos, por tanto, una refactorización del código de \texttt{pmctrack}, haciendo llamadas a las funciones las cuales ya disponíamos en libpmctrack.
+
+En la refactorización, nos fijamos el objetivo de conseguir que \texttt{pmctrack} no se tuviese que comunicar directamente con el kernel en ningún momento, y se limitase a tener código únicamente sobre la interacción con el usuario, la creación de los procesos y estructuras para monitorizar, y las llamadas a las funciones de libpmctrack que hicieran el trabajo de bajo nivel.
+
+Gracias a esta refactorización, hemos conseguido reducir el código de \texttt{pmctrack} sustancialmente: inicialmente el código era de casi 900 líneas de código y después el código ha quedado a algo más de 500, en total una disminución del 40\%. Asímismo, el código ha quedado más desacoplado de la parte interna de PMCTrack, mejorando así notablemente en cuanto a claridad y sencillez.
+
+La refactorización también influyó positivamente en la librería, puesto que nos sirvió para verificar su funcionamiento y depurarla. Además, añadimos algunas funciones nuevas a la librería, que resultaron ser más relevantes tener en ésta en lugar de directamente desde el código del programa que la usase.
 
 \section{API}
-La API está separada en dos interfaces.\\
-La primera viene definida en el fichero \texttt{pmctrack.h} y en ella se proveen las funciones de alto nivel que se necesitan para un uso estándar de monitorización de un programa dentro del propio código.\\
-La segunda viene definida en el fichero \texttt{pmctrack\_internal.h} y contiene otra serie de funciones para acceso de más bajo nivel a las funcionalidades que provee el kernel modificado para PMCTrack. Es este segunda interfaz la que usa el programa de línea de comandos.
+La API de libpmctrack está separada en dos interfaces. La primera viene definida en el fichero \texttt{pmctrack.h} y en ella se proveen las funciones de alto nivel que se necesitan para un uso estándar de monitorización de un programa dentro del propio código.  La segunda viene definida en el fichero \texttt{pmctrack\_internal.h} y contiene otra serie de funciones para acceso de más bajo nivel a las funcionalidades que provee el kernel modificado para PMCTrack. Es este segunda interfaz la que usa el programa de línea de comandos.
 
 Pasamos a desarrollar cada una de ellas individualmente.
 
 \subsection{pmctrack.h}
-Como hemos dicho anteriormente, pmctrack.h correspondería a la interfaz básica para monitorizar rendimiento desde el código fuente.
+Como hemos dicho anteriormente, pmctrack.h correspondería a la interfaz básica para monitorizar rendimiento desde código fuente.
 
-El fichero pmctrack.h define un struct para usar en el paso de opciones a las funciones y también las funciones estándar de la API para libpmctrack. Todas estas funciones comienzan con el prefijo \texttt{pmctrack\_*}. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackh}. A continuación, pasamos a explicar brevemente cada función.
+El fichero pmctrack.h define un descriptor para usar en el paso de opciones a las funciones y también las funciones de la API básica de libpmctrack. Todas estas funciones comienzan con el prefijo \texttt{pmctrack\_*}. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackh}. A continuación, explicamos el uso de esta interfaz.
 
 \begin{figure}[!h]
 \caption{Interfaz básica libpmctrack}
@@ -57,20 +82,72 @@ void pmctrack_print_counts(pmctrack_desc_t* desc, FILE* outfile, int extended_ou
 \end{lstlisting}
 \end{figure}
 
-El struct \texttt{pmctrack\_desc\_t} no se debe modificar directamente por el usuario y sirve para que libpmctrack deposite allí la configuración de monitorización a realizar. De este modo se consigue de una forma elegante, sencilla y transparente al usuario el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
+El struct \texttt{pmctrack\_desc\_t} es un descriptor de los parámetros de configuración del usuario para PMCTrack y sirve como estrcuctura de comunicación entre el usuario y la librería. Este descriptor no se debe modificar directamente por el usuario, será libpmctrack quién depositará allí la configuración de monitorización a realizar a partir de los paramétros introducidos por el usuario. De este modo se consigue de una forma elegante, sencilla y transparente al usuario en el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
 
-Para usar esta librería, el usuario lo primero que tendrá que hacer es declarar un \texttt{struct pmctrack\_desc\_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando.
+Para usar esta librería, el usuario lo primero que tiene que hacer es declarar un \texttt{struct pmctrack\_desc\_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando. Si se superase dicho tamaño no habría ningún error en ejecución del programa pero sí se perderían algunos datos.
 
 A continuación, se ha de definir los strings con la definición de los contadores que se quieren usar y los eventos que se quiere que se cuenten, asícomo con los contadores virtuales si se quisiese usar alguno. Estos strings se han de pasar como argumento a la función \texttt{pmctrack_config_counters()}.
 
-Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando con \texttt{pmctrack_start_counters()} y acabando con \texttt{pmctrack_stop_counters()}. Obsérvese que se puede llamar multiples veces a estas dos funciones mientras el máximo de muestras no se vaya a superar. Si se superase dicho tamaño no habría ningún error en ejecución del programa pero sí se perderían algunos datos.
+Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando con \texttt{pmctrack_start_counters()} y acabando con \texttt{pmctrack_stop_counters()}. Los datos leídos de esta manera se almacenan en el campo \texttt{samples}. Para solicitar a libpmctrack que itere sobre ellos y los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
 
-Los datos leídos de esta manera se habran guardado en el campo \texttt{samples}. Para pedirle a libpmctrack que itere sobre ellos y nos los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
+Obsérvese que se puede llamar multiples veces a las funciones de comienzo y parada ---start y stop--- para monitorizar así varios fragmentos de código. Si bien, se debe hacer una llamada a \texttt{pmctrack_print_counts()} entre cada fragmento puesto que con la función \texttt{pmctrack_start_counters()} el contador de tamaño del buffer se inicializa a cero.
 
 Finalmente, la función \texttt{pmctrack\_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
 
+\subsubsection*{Esquema de uso libpmctrack}
+
+\begin{figure}
+\caption{Esquema de uso de la interfaz básica de libpmctrack}
+\label{fig:ejlibpmctrack}
+\begin{lstlisting}[frame=single,language=C]
+#include <pmctrack.h>
+
+#define MAX_SAMPLES 20
+#define TIMEOUT 100
+
+int main(int argc, char *argv[])
+{
+    pmctrack_desc_t desc;
+    char* strcfg[]={"pmc0,pmc3=0xc4",NULL};
+    char* virtual_cfg=NULL;
+
+    /* Initialize the thread descriptor */
+    if (pmctrack_init(&desc,MAX_SAMPLES))
+        exit(1);
+
+    /* Configure counters */
+    if (pmctrack_config_counters(&desc,strcfg,virtual_cfg,TIMEOUT))
+        exit(1);
+
+    /* Start counting */
+    if (pmctrack_start_counters(&desc))
+        exit(1);
+
+    /***** Code to monitor here *****/
+
+    /* Stop counting */
+    if (pmctrack_stop_counters(&desc))
+        exit(1);
+
+    /* Display information */
+    pmctrack_print_counts(&desc, stdout, 0);
+
+    /* Free up memory */
+    pmctrack_destroy(&desc);
+
+    exit(EXIT_SUCCESS);
+}
+\end{lstlisting}
+\end{figure}
+
+En la figura \ref{fig:ejlibpmctrack} se presenta un posible esquema, en código C, de cómo usar la librería siguiendo todos los pasos mencionados anteriormente. En este esquema, se ha inicializado el buffer con un tamaño máximo de 20 samples y se ha aplicado una frecuencia de muestreo de $100 ms$.
+
+La cadena de configuración de los contadores se ha definido en \texttt{strcfg} y depende fuertemente de la arquitectura y fabricante del procesador. En nuestro caso, hemos diseñado este esquema para un procesador Intel Core i7 de la microarquitectura Ivybridge, dicho procesador dispone de tres contadores fijos y cuatro configurables. En el esquema, a modo de ejemplo, se activa el contador fijo pmc0, el cual cuenta el número de instrucciones retiradas en el procesador; y se fija el contador configurable pmc3 con el evento con código \texttt{0xc4}, el cual cuenta las instrucciones de salto retiradas en el procesador.
+
+Finalmente, la salida de la información de monitorización obtenida se escribe por la salida estándar y se destruye el descriptor para libpmctrack.
+
 \subsection{pmctrack_internal.h}
-La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada puesto que permite usar las funciones de las que provee el kernel modificado con pmctrack, de forma que la abstracción en esta interfaz para el usuario es mucho menor.
+La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada y de más bajo nivel de abstracción para el usuario. Esta interfaz permite el uso de funciones para configurar valores que usa directamente el módulo del kernel de PMCTrack.
 
 Así pues, ahora tenemos el fichero pmctrack_internal.h que provee de nuevas funciones, todas ellas precedidas por la palabra \texttt{pmct_*}. Además, incluye al fichero \texttt{pmctrack.h} con lo cual basta con incluir la interfaz internal para tener toda la API de libpmctrack. El código de este fichero cabecera puede verse en la figura \ref{fig:pmctrackinternalh}. Igual que con la interfaz anterior, explicamos brevemente cada función.
 
@@ -112,10 +189,10 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
   Comprueba que el string de configuración para contadores virtuales es válido y devuelve los valores extraídos en: \texttt{virtual_mask y nr_virtual_counters}.
 
   \item[pmct_config_counters()] \hfill \\
-  Dado un string de configuración, registra directamente en la entrada /proc/pmc/config, la cual usará el kernel para saber cómo tiene que configurar la monitorización. Imprescindible para poder monitorizar un proceso.
+  Registra un string de configuración en la entrada /proc/pmc/config, la cual usará el kernel para saber cómo tiene que configurar la monitorización. Conviene haber comprobado antes el string de configuración con pmct_check_counter_config().
 
   \item[pmct_config_virtual_counters()] \hfill \\
-  Similar al anterior, registra la configuración de los contadores virtuales pasada como párametro en la entrada /proc/pmc/config.
+  Similar al anterior. Registra la configuración de los contadores virtuales pasada como párametro en la entrada /proc/pmc/config. Conviene haber comprobado antes el string de configuración de los contadores virtuales con pmct_check_vcounter_config().
 
   \item[pmct_config_timeout()] \hfill \\
   Registra los valores de tiempo en la entrada /proc/pmc/config.
@@ -124,13 +201,13 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
   Avisa al kernel de que se quiere empezar la monitorización.
 
   \item[pmct_print_header()] \hfill \\
-  Escribe \"una cabecera\" con las columnas correspondientes a la configuración pasada por parámetro.
+  Escribe ``una cabecera'' con las columnas correspondientes a la configuración pasada por parámetro.
 
   \item[pmct_print_sample()] \hfill \\
-  Dado un \textit{sample}, escribe las muestras obtenidas para cada \ac{PMC} y contador virtual configurado.
+  Dado un \textit{sample}, escribe en un descriptor de fichero las muestras obtenidas para cada \ac{PMC} y contador virtual configurado.
 
   \item[pmct_attach_process()] \hfill \\
-  Registra el pid pasado como argumento para que se monitorice el proceso con ese pid.
+  Con esta función se establece la relación entre el proceso monitorizado, cuyo pid se debe pasar como argumento a esta función, y el proceso monitor.
 
   \item[pmct_open_monitor_entry()] \hfill \\
   Abre fichero /proc/pmc/monitor para lectura. Necesario hacerlo si se quiere empezar a configurar una monitorización.
@@ -140,5 +217,5 @@ int pmct_read_samples (int fd, pmc_sample_t* samples, int max_samples);
 
 \end{description}
 
-\section{Ejemplo de uso}
+\section{Caso de estudio}
 % añadir ejemplos de uso de pmctrack.h con mis dos heaps: williams y fibonacci

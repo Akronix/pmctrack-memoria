@@ -1,0 +1,32 @@
+\chapter{Casos de estudio}
+
+En este capítulo evaluamos las nuevas extensiones de PMCTrack realizadas en este TFG, mediante tres casos de estudio. En el primer caso de estudio explotamos el potencial de PMCTrack-GUI para realizar el análisis de distintos _benchmarks_ en múltiples arquitecturas. El segundo caso de estudio ilustra las capacidades de PMCTrack-GUI para monitorizar el rendimiento de hilos individuales de las aplicaciones paralelas. Finalmente, este capítulo concluye con un caso de estudio que pone a prueba la librería libpmtrack para estudiar la efectividad de distintas soluciones de un mismo problema o implementaciones alternativas de una estructura de datos.
+
+
+# Monitorización del rendimiento con PMCTrack-GUI
+
+* Multiarquitectura: 
+	- Benchmarks seleccionados -> gobmk06, soplex06, astar06, gcc06, gamess06, sjeng06
+	- Métricas: IPC, LLC-miss-rate (LLC misses*1000)/instrucciones , Fallos de Predicción de Saltos (Branch mispredicions*1000)/instrucciones
+	- Máquinas:
+		* ARM64 (Big and Small)
+ 		* Haswell 
+ 		* AMD: Leviatan05 (Falta saltos...)
+  		* Intel ATom (QuickIA)
+
+* Que haga con Matplotlib histogramas (Una gráfica por Métrica, Un grupo de barras por benchmark, Una barra del grupo por máquina)
+
+# Análisis de aplicaciones multihilo con PMCTrack-GUI
+
+
+La idea sería hacer un análisis de dos aplicaciones paralelas. Una (`rnaseq`) en la que los hilos hagan lo mismo con distintos datos, y otra en la que los hilos cooperen realizando tareas diferentes.
+
+	$ pmctrack -T 1 -c instr,cycles,llc_misses ./benchmarks/solaris-x86/parsec3/ferret_p3 2
+		- Mirar LLCMR y IPC de hilos 1 y 4 de la lista
+ 	
+ 	$ pmctrack -T 1 -c instr,cycles,llc_misses ./benchmarks/solaris-x86/misc/rnaseq 4
+
+
+# Análisis de fragmentos de código con _libpmctrack_
+
+TODO (Abel)

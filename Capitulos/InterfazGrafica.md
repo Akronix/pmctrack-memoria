@@ -95,6 +95,8 @@ En particular, los tipos de fichero XML que necesitamos son dos:
 
 2. {nombre_modelo}.xml: Este fichero contiene información relativa a los eventos, subeventos y contadores fijos de un modelo en particular. Aunque modelos del mismo fabricante tienen algunos eventos en común, sucede que muchos eventos cambian de modelo en modelo o de contadores fijos, de modo que se debe tener un xml por cada modelo de \ac{CPU} que queramos soportar en la interfaz gráfica. Su definición se puede ver en el dtd de la figura \ref{fig:dtdevents}.
 
+Estos ficheros XML han sido generados de dos maneras diferentes. Los de tipo layout para cada fabricante y para algunos de los eventos de cada modelo han sido escritos manualmente. Para otros modelos de procesador, sobre los que el grupo \ac{ArTeCS} estaba investigando con la herramienta PMCTrack, ya existían unos ficheros \ac{CSV} que describían los eventos y PMC de esos modelos. Para reutilizar éstos ficheros, escribimos un script en lenguaje bash que genera automáticamente los XML equivalentes a esos ficheros CSV dados.
+
 \lstset{
   language=XML,
   deletekeywords={version,default}
