@@ -84,31 +84,26 @@ void pmctrack_print_counts(pmctrack_desc_t* desc, FILE* outfile, int extended_ou
 
 El struct \texttt{pmctrack\_desc\_t} es un descriptor de los parámetros de configuración del usuario para PMCTrack y sirve como estrcuctura de comunicación entre el usuario y la librería. Este descriptor no se debe modificar directamente por el usuario, será libpmctrack quién depositará allí la configuración de monitorización a realizar a partir de los paramétros introducidos por el usuario. De este modo se consigue de una forma elegante, sencilla y transparente al usuario en el paso de parámetros y de valores entre funciones de libpmctrack. Los diversos campos, por tanto, corresponden a valores de configuración y de resultados de monitorización obtenidos por libpmctrack.
 
-\todo{
+Para usar esta librería, el usuario lo primero que tiene que hacer es declarar un \texttt{struct pmctrack\_desc\_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando. Si se superase dicho tamaño no habría ningún error en ejecución del programa pero sí se perderían algunos datos.
+
+A continuación, se ha de definir los strings con la definición de los contadores que se quieren usar y los eventos que se quiere que se cuenten, asícomo con los contadores virtuales si se quisiese usar alguno. Estos strings se han de pasar como argumento a la función \texttt{pmctrack_config_counters()}.
+
+Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando con \texttt{pmctrack_start_counters()} y acabando con \texttt{pmctrack_stop_counters()}. Los datos leídos de esta manera se almacenan en el campo \texttt{samples}. Para solicitar a libpmctrack que itere sobre ellos y los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
+
+Obsérvese que se puede llamar multiples veces a las funciones de comienzo y parada ---start y stop--- para monitorizar así varios fragmentos de código. Si bien, se debe hacer una llamada a \texttt{pmctrack_print_counts()} entre cada fragmento puesto que con la función \texttt{pmctrack_start_counters()} el contador de tamaño del buffer se inicializa a cero.
+
+Finalmente, la función \texttt{pmctrack\_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
+
 \begin{figure}
-\caption{Ejemplo de uso de la interfaz básica de libpmctrack}
+\caption{Esquema de uso de la interfaz básica de libpmctrack}
 \label{fig:ejlibpmctrack}
 \begin{lstlisting}[frame=single,language=C]
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <pmctrack.h>
 
-#define N 60000
-
-/* MAIN */
 int main(int argc, char *argv[])
 {
-    int i=0;
-    int j=0;
-    int k=0;
-	int A[N],B[N],C[N];
     pmctrack_desc_t desc;
-#if defined(__arm__) || defined(__aarch64__)
-    char* strcfg[]={"pmc1=0x11,pmc2=0x08",NULL};
-#else
-    char* strcfg[]={"pmc0,pmc1,pmc2,pmc3=0x2e,umask3=0x4f,pmc4=0x2e,umask4=0x41",NULL};
-#endif
+    char* strcfg[]={"pmc0,pmc3=0xc4",NULL};
     char* virtual_cfg=NULL; //"virt0";
 
     /* Initialize the thread descriptor */
@@ -123,17 +118,11 @@ int main(int argc, char *argv[])
     if (pmctrack_start_counters(&desc))
         exit(1);
 
-    /* Do something */
-    for (k=0;k<1;k++)
-    for (i=0;i<N;i++)
-    for (j=i;j>=0;j--)
-            C[j]=A[i]+B[j];
+    /***** Code to monitor here *****/
 
     /* Stop counting */
     if (pmctrack_stop_counters(&desc))
         exit(1);
-
-    printf("Values(%d,%d)\n", C[N/2],C[N-1]);
 
     /* Display information */
     pmctrack_print_counts(&desc, stdout, 0);
@@ -141,23 +130,12 @@ int main(int argc, char *argv[])
     /* Free up memory */
     pmctrack_destroy(&desc);
 
-	exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
 \end{lstlisting}
 \end{figure}
-}
 
-Para usar esta librería, el usuario lo primero que tiene que hacer es declarar un \texttt{struct pmctrack\_desc\_t} y hacer que libpmctrack lo inicialice llamando a \texttt{pmctrack_init()} junto con un número máximo de muestras para definir un tamaño máximo al buffer intermedio que los va a ir almacenando. Si se superase dicho tamaño no habría ningún error en ejecución del programa pero sí se perderían algunos datos.
-
-A continuación, se ha de definir los strings con la definición de los contadores que se quieren usar y los eventos que se quiere que se cuenten, asícomo con los contadores virtuales si se quisiese usar alguno. Estos strings se han de pasar como argumento a la función \texttt{pmctrack_config_counters()}.
-
-Ahora ya podemos rodear las partes de código que queramos monitorizar comenzando con \texttt{pmctrack_start_counters()} y acabando con \texttt{pmctrack_stop_counters()}. Los datos leídos de esta manera se almacenan en el campo \texttt{samples}. Para solicitar a libpmctrack que itere sobre ellos y los muestre debemos usar la función \texttt{pmctrack_print_counts()}, que nos los escribirá en el fichero que le pasemos como argumento. El valor \texttt{extended_output} es un booleano con el cual indicamos si queremos la información básica o queremos también información más avanzada como el id del experimento mostrandose o el core del cual se ha extraído la muestra.
-
-Obsérvese que se puede llamar multiples veces a las funciones de comienzo y parada ---start y stop--- para monitorizar así varios fragmentos de código. Si bien, se debe hacer una llamada a \texttt{pmctrack_print_counts()} entre cada fragmento puesto que con la función \texttt{pmctrack_start_counters()} el contador de tamaño del buffer se inicializa a cero.
-
-Finalmente, la función \texttt{pmctrack\_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
-
-\todo{En la figura \ref{fig:ejlibpmctrack} podemos ver un pequeño ejemplo de uso de esta librería con todos los pasos mencionados previamente.}
+\todo{En la figura \ref{fig:ejlibpmctrack} podemos ver un pequeño ejemplo de uso de esta librería con todos los pasos mencionados previamente. "pmc0,pmc3=0xc4",NULL//instr + branch instr}
 
 \subsection{pmctrack_internal.h}
 La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada y de más bajo nivel de abstracción para el usuario. Esta interfaz permite el uso de funciones para configurar valores que usa directamente el módulo del kernel de PMCTrack.
