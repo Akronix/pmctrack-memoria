@@ -2,5 +2,4 @@
 1. Arreglar cabecera apéndices horizontales
 2. Rehacer Resumen y traducir.
 3. Quitar hojas en blanco al principio.
-4. Arreglar bloque código ejemplo libpmctrack y explicar cada evento
 5. Motivación + Ejemplo de uso en multithreading

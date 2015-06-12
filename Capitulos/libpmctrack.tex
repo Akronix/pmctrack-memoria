@@ -94,24 +94,29 @@ Obsérvese que se puede llamar multiples veces a las funciones de comienzo y para
 
 Finalmente, la función \texttt{pmctrack\_destroy()} cerrará los ficheros que quedasen abiertos y liberará la memoria reservada para el buffer.
 
+\subsubsection*{Esquema de uso libpmctrack}
+
 \begin{figure}
 \caption{Esquema de uso de la interfaz básica de libpmctrack}
 \label{fig:ejlibpmctrack}
 \begin{lstlisting}[frame=single,language=C]
 #include <pmctrack.h>
 
+#define MAX_SAMPLES 20
+#define TIMEOUT 100
+
 int main(int argc, char *argv[])
 {
     pmctrack_desc_t desc;
     char* strcfg[]={"pmc0,pmc3=0xc4",NULL};
-    char* virtual_cfg=NULL; //"virt0";
+    char* virtual_cfg=NULL;
 
     /* Initialize the thread descriptor */
-    if (pmctrack_init(&desc,20))
+    if (pmctrack_init(&desc,MAX_SAMPLES))
         exit(1);
 
     /* Configure counters */
-    if (pmctrack_config_counters(&desc,strcfg,virtual_cfg,100))
+    if (pmctrack_config_counters(&desc,strcfg,virtual_cfg,TIMEOUT))
         exit(1);
 
     /* Start counting */
@@ -135,7 +140,11 @@ int main(int argc, char *argv[])
 \end{lstlisting}
 \end{figure}
 
-\todo{En la figura \ref{fig:ejlibpmctrack} podemos ver un pequeño ejemplo de uso de esta librería con todos los pasos mencionados previamente. "pmc0,pmc3=0xc4",NULL//instr + branch instr}
+En la figura \ref{fig:ejlibpmctrack} se presenta un posible esquema, en código C, de cómo usar la librería siguiendo todos los pasos mencionados anteriormente. En este esquema, se ha inicializado el buffer con un tamaño máximo de 20 samples y se ha aplicado una frecuencia de muestreo de $100 ms$.
+
+La cadena de configuración de los contadores se ha definido en \texttt{strcfg} y depende fuertemente de la arquitectura y fabricante del procesador. En nuestro caso, hemos diseñado este esquema para un procesador Intel Core i7 de la microarquitectura Ivybridge, dicho procesador dispone de tres contadores fijos y cuatro configurables. En el esquema, a modo de ejemplo, se activa el contador fijo pmc0, el cual cuenta el número de instrucciones retiradas en el procesador; y se fija el contador configurable pmc3 con el evento con código \texttt{0xc4}, el cual cuenta las instrucciones de salto retiradas en el procesador.
+
+Finalmente, la salida de la información de monitorización obtenida se escribe por la salida estándar y se destruye el descriptor para libpmctrack.
 
 \subsection{pmctrack_internal.h}
 La interfaz pmctrack_internal.h corresponde a una interfaz más avanzada y de más bajo nivel de abstracción para el usuario. Esta interfaz permite el uso de funciones para configurar valores que usa directamente el módulo del kernel de PMCTrack.
