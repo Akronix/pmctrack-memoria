@@ -47,6 +47,107 @@ Al igual que PMCTrack, algunas herramientas de *PMCs* requieren la realización 
 
 PMCTrack, por otra parte, hace posible que prácticamente cualquier clase de planificación creada en el kernel pueda obtener métricas de rendimiento a través de un mecanismo independiente de la arquitectura. Para este fin es necesario realizar pequeños cambios en el kernel, ya que como se muestra en la siguiente sección, la gran mayoría de la funcionalidad de PMCTrack se encapsula en módulos del kernel.
 
+# Diseño de PMCTrack
+
+Esta sección describe la arquitectura interna de PMCTrack tal y como era antes de iniciarse nuestro TFG, así como los distintos modos de uso que soportaba.
+
+\begin{figure}[tbp]
+\centering
+\selectlanguage{english}
+\input{Imagenes/Fuentes/architecture}
+\caption{Arquitectura de PMCTrack}
+\label{fig:arch}
+\end{figure}
+
+## Arquitectura
+
+La figura \ref{fig:arch} representa la arquitectura interna de PMCTrack antes de comenzar nuestro desarrollo del TFG. La herramienta consta de un conjunto de componentes en el espacio de usuario y del kernel. A un alto nivel, el usuario final interactúa con PMCTrack a través de las herramientas de línea de comandos disponibles. Estos componentes se comunican con el módulo del kernel de PMCTrack por medio de un conjunto de entradas */proc* del sistema de ficheros Linux exportadas por el módulo.
+
+El módulo del kernel implementa la gran mayoría de la funcionalidad de PMCTrack. Para recopilar los datos de los contadores de rendimiento de cada hilo es necesario que el módulo sea plenamente consciente de los eventos de planificación que suceden en todo momento, como por ejemplo los cambios de contexto. Además de exponer los datos de los *PMCs* de las aplicaciones a las herramientas del entorno de usuario, el módulo implementa una API sencilla para proporcionar datos de los *PMCs* a cualquier clase de planificación que requiera esa información para su correcto funcionamiento. Debido a que tanto el núcleo del planificador de Linux como las clases de planificación son implementadas en su totalidad en el kernel, para el módulo de PMCTrack del kernel pueda ser consciente de estos eventos y solicitudes es imprescindible la realización de pequeñas modificaciones en el propio kernel Linux. Estas modificaciones, representadas en la figura \ref{fig:arch} con el nombre de "PMCTrack kernel API", consisten en dar la funcionalidad al núcleo del planificador de enviar un conjunto de notificaciones al módulo. Para poder recibir estas notificaciones, el módulo PMCTrack del kernel implementa la siguiente interfaz:
+
+\begin{lstlisting}[backgroundcolor=,basicstyle=\tt\footnotesize]
+typedef struct pmc_ops{
+  /* invoked when a new thread is created */
+  void* (*pmcs_alloc_per_thread_data)(unsigned long,struct task_struct*);
+  /* invoked when thread leaves the CPU */
+  void (*pmcs_save_callback)(void*, int);
+  /* invoked when thread enters the CPU */
+  void (*pmcs_restore_callback)(void*, int);
+  /* invoked every clock tick on a per-thread basis */
+  void (*pmcs_tbs_tick)(void*, int);
+  /* invoked when a process invokes exec() */
+  void (*pmcs_exec_thread)(struct task_struct*);
+  /* invoked when a thread exists the system */
+  void (*pmcs_exit_thread)(struct task_struct*);
+  /* invoked when a thread's descriptor is freed up */
+  void(*pmcs_free_per_thread_data)(struct task_struct*);
+  /* invoked when the scheduler requests per-thread
+        monitoring information  */
+  int  (*pmcs_get_current_metric_value)(struct task_struct* task, int key, uint64_t* value);
+} pmc_ops_t;
+\end{lstlisting}
+
+La mayoría de estas notificaciones son enviadas únicamente cuando el módulo PMCTrack del kernel está cargado y el usuario (o el propio planificador) está usando la herramienta para monitorizar el rendimiento de una determinada aplicación.
+
+Tal y como se ilustra en la figura \ref{fig:arch}, el módulo PMCTrack del kernel consta de varios componentes. La capa del núcleo de PMCTrack independiente de la arquitectura implementa un interfaz llamado \texttt{pmc\_ops\_t} e interactúa con la herramienta PMCTrack de línea de comandos a través del sistema de ficheros */proc* de Linux. El componente independiente de la arquitectura se basa en una Unidad de Monitorización de Rendimiento del Backend (conocida como PMU BE por sus siglas en inglés) para llevar a cabo el acceso de bajo nivel a los *PMCs* y para realizar la traducción de los strings de configuración proporcionados por el usuario en estructuras de datos internas para la plataforma en cuestión. Actualmente existen cuatro backends compatibles con la mayoría de los procesadores modernos de Intel y AMD, así como con algunos modelos de procesador ARM Cortex. Además, se llevó a cabo el desarrollo de un backend compatible con las Intel Xeon Phi de forma simultánea al desarrollo de nuestro TFG. El módulo PMCTrack del kernel también incluye un conjunto de *módulos de monitorización* específicos de la plataforma. El propósito principal de un módulo de monitorización es proporcionar un algoritmo de planificación implementado en el kernel que use métricas de rendimiento de alto nivel.
+
+Dotar al kernel Linux de soporte a PMCTrack implica incluir dos nuevos ficheros en el propio kernel y añadir 18 líneas de código a las fuentes del núcleo del planificador. Estos cambios pueden ser aplicados fácilmente a diferentes versiones del kernel.
+
+## Modos de uso de PMCTrack
+
+Antes de iniciar nuestro desarrollo del TFG, PMCTrack soportaba tres modos de uso: modo de planificación, muestreo basado en tiempo y muestreo basado en eventos.
+
+\begin{figure}[tbp!]
+\centering
+\selectlanguage{english}
+\input{Imagenes/Fuentes/mmon}
+\caption{Módulos de monitorización de PMCTrack}
+\label{fig:mmon}
+\end{figure}
+
+### Modo de planificación
+
+Este modo permite que cualquier algoritmo de planificación en el kernel (es decir, clase de planificación) pueda obtener datos de monitorización de cada hilo, haciendo posible la toma de decisiones en función de estos datos. La activación de este modo en un determinado hilo desde el código del planificador se reduce a la activación del flag \texttt{prof\_enabled} en el descriptor del hilo. (Este flag es añadido a la estructura \texttt{task\_struct} de Linux cuando se aplica el parche del kernel)
+
+Para garantizar que la implementación del algoritmo de planificación que se beneficia de esta característica se mantiene independiente de la arquitectura, el propio planificador (implementado en el kernel) no configura ni se ocupa de los *PMCs* directamente. En lugar de eso, uno de los *módulos de monitorización* se encarga de proporcionar a la clase de planificación las métricas de monitorización de alto nivel necesarias para que pueda llevarse a cabo el algoritmo, como por ejemplo el ratio de instrucciones por ciclo o la tasa de fallos de cache.
+
+Como puede verse en la figura \ref{fig:mmon}, PMCTrack puede incluir varios *módulos de monitorización* compatibles con una plataforma dada. Sin embargo, sólo uno de ellos puede estar habilitado al mismo tiempo: el que proporciona al planificador la información de los *PMCs* para que pueda llevar a cabo su función. En el caso de que haya disponibles varios módulos de monitorización, el administrador del sistema puede indicar al sistema cual de ellos usar, escribiéndolo en el fichero \texttt{/proc/pmc/mmon\_manager}. De manera similar, el período de muestreo de datos de los *PMCs* utilizado en el módulo de monitorización se puede configurar a través del sistema de ficheros */proc*.
+
+El planificador puede comunicarse con el módulo de monitorización activo para obtener datos de monitorización de un hilo a través de la siguiente función de la API de PMCTrack del kernel:
+
+\begin{lstlisting}[backgroundcolor=,basicstyle=\tt\footnotesize]
+int pmcs_get_current_metric_value(struct task_struct*
+   task, int metric_id, uint64_t* value);
+\end{lstlisting}
+
+Por simplicidad, a cada métrica se le asigna un ID numérico, conocido por el planificador y el módulo de monitorización. Para poder obtener datos de métricas actualizados, la función mencionada podrá ser invocada desde la función de tratamiento de señal del planificador.
+
+Los módulos de monitorización hacen posible que una política de planificación que está basada en el uso de contadores de rendimiento pueda ser usada en nuevas arquitecturas o modelos de procesador que aparezcan en un futuro. Todo lo que hay que hacer es construir un módulo de monitorización o adaptar uno existente a la plataforma en cuestión. Desde el punto de vista del programador, la creación de un módulo de monitorización implica la implementación de una interfaz muy similar a \texttt{pmc\_ops\_t}. En concreto, se compone de varias llamadas a funciones que permiten notificar al módulo sobre activaciones y desactivaciones solicitadas por el administrador del sistema, cambios de contexto de hilos, salidas y entradas de un hilo del sistema, solicitudes de valores de métricas de *PMCs* por parte del planificador, etcétera. Sin embargo, el programador normalmente implementa el subconjunto de llamadas a funciones requeridas para llevar a cabo el proceso interno necesario.
+
+La creación de nuevos módulos de monitorización es una tarea bastante sencilla por varias razones. En primer lugar, el programador no necesita acceder directamente a los registros de los *PMCs*. En lugar de ello, el módulo PMCTrack del kernel ofrece una API independiente de la arquitectura que permite al módulo de monitorización especificar la configuración del contador a través de strings, para recibir muestras de *PMCs* periódicamente y controlar la multiplexación de eventos. En segundo lugar, debido a que se le notifica al módulo cuando se crea un nuevo hilo o sale del sistema, el módulo de monitorización puede asignar datos referentes a un hilo concreto para simplificar cualquier tipo de procesamiento de un hilo específico. En tercer lugar, porque el código de un módulo de monitorización "vive" en el módulo PMCTrack del kernel, la solución de la mayoría de los bugs no requieren reiniciar el sistema. En lugar de eso, el módulo del kernel puede descargarse y volverse a cargar una vez se hayan arreglado los errores.
+
+### Muestreo basado en tiempo (TBS)
+
+Esta característica permite al usuario recopilar datos de rendimiento de una aplicación de espacio de usuario a intervalos de tiempo regulares. La herramienta \texttt{pmctrack} de línea de comandos, cuya interfaz de usuario está inspirada en el programa \texttt{cputrack} de Solaris, hace posible esta función. Para ilustrar el funcionamiento de la herramienta consideremos el siguiente ejemplo:
+
+\begin{lstlisting}[language=bash,basicstyle=\tt\scriptsize]
+$ pmctrack -T 1 -c pmc0,pmc3=0x2e,umask3=0x41 ./mcf06
+nsample  event          pmc0          pmc3
+      1   tick    1961001132        110634
+      2   tick    1247853112          8323
+      3   tick    1230836405          3859
+      4   tick    1358134323        409386
+      5   tick    1280630906       1199270
+      6   tick    1231578609      15488307
+...
+\end{lstlisting}
+
+
+
+
+
+
+
 
 
 # Contadores Hardware para monitorización

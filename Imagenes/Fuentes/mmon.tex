@@ -1,0 +1,58 @@
+\begin{tikzpicture}[scale=0.73,transform shape]
+\def\wlbox{10cm}
+\def\ggap{1pt}
+\def\sgap{0.1cm}
+\def\levelpadding{2pt}
+\def\boxgap{0.18cm}
+\def\levelgap{2.5*\boxgap}
+
+\begin{scope}[%
+cbox/.style={draw,thick,rounded corners,text=black,fill=white,minimum width=\wlbox,minimum height=1cm,align=center},
+pmcbox/.style={cbox,fill=green!30,text=black},
+backendbox/.style={pmcbox,minimum width=0.23*\wlbox,fill=black!40,text=white},
+backendboxe/.style={pmcbox,minimum width=0.23*\wlbox,fill=white,text=black,font=\bf},
+bgbox/.style={draw=black,fill=gray!15,inner sep=4pt,thick,rectangle},
+flecha/.style={>=stealth',black,semithick,solid}]
+
+
+%% Kernel mode
+\node (sched)  [cbox] {Scheduler implementation};
+\node (kernelAPI) at ($(sched.south east) + (0,-3*\boxgap)$)  [below left,pmcbox,minimum width=\wlbox] {PMCTrack kernel API};
+
+%% Kernel Module
+\node (archIndep) at ($(kernelAPI.south east) + (0,-\levelgap)$)  [below left,pmcbox] {PMCTrack architecture-independent core};
+\node (mm1) at ($(archIndep.south west) + (0,-4*\boxgap)$)  [below right,backendbox] {Monitoring \\ Module 1 \\ (disabled)};
+\node (mm2) at ($(mm1.south east) + (\boxgap,0)$)  [above right,backendbox] {Monitoring \\ Module 2 \\ (disabled)};
+\node (mm3) at ($(mm2.south east) + (\boxgap,0)$)  [above right,backendboxe] {Monitoring \\ Module 3 \\ (enabled) };
+\node (mm4) at ($(mm3.south east) + (\boxgap,0)$)  [above right,backendbox] {Monitoring \\ Module 4 \\ (disabled)};
+
+
+%% Hardware
+%\node (hardware) at ($(mm1.south west) + (0,-\levelgap)$)  [below right,cbox] {Hardware};
+
+
+%% Associated Backgrounds
+\begin{pgfonlayer}{background}
+\node (kernel) [bgbox,fit=(sched) (kernelAPI)] {}; 
+\node (kernelModule) [bgbox,fit=(archIndep) (mm1) (mm4)] {}; 
+\end{pgfonlayer}
+
+
+%% Per level tags...
+
+\draw [<->,thick] ($(kernel.north west)  +(-0.3cm,0)$) -- ($(kernel.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {Linux kernel};
+
+\draw [<->,thick] ($(kernelModule.north west)  +(-0.3cm,0)$) -- ($(kernelModule.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90,align=center] {PMCTrack \\ kernel module};
+
+
+
+%%% Flechas entre nodos
+\draw let \p1=(sched.south),\p2=(kernelAPI.north) in  [flecha,->] (\x1,\y1) -- (\x1,\y2);
+\draw let \p1=(kernelAPI.south),\p2=(archIndep.north) in  [flecha,->] (\x1,\y1) -- (\x1,\y2);
+
+\draw let \p1=(archIndep.south),\p2=(mm3.north) in  [flecha,,dashed,thick,->] (\x1,\y1) -- +(0,-0.3cm) -| (\x2,\y2);
+
+
+
+\end{scope}
+\end{tikzpicture}
