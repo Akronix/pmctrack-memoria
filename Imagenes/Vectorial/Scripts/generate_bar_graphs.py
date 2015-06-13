@@ -2,9 +2,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 import math
 import os.path
 import sys
+
+
+rcParams['font.family'] = 'sans-serif'
+rcParams['font.sans-serif'] = ['Arial']
 
 def processFile(csvfile):
     data = {}
@@ -47,11 +52,22 @@ def printGraphs(data, benchs):
 
     for metric in data.keys():
     	fig, ax = plt.subplots()
-    	#fig.subplots_adjust(left=0.09, right=0.93, top=0.94, bottom=0.06)
+
+
         fig.subplots_adjust(left=0.08, right=0.90, top=0.73, bottom=0.10, wspace=0.2, hspace=0.2)
    
     	i=0
-    	for arch in data[metric].keys():
+        v=data[metric].keys()
+        ## Reorder the keys manually
+        #  ['AMD Opteron 6172', 'ARM Cortex A53', 'Intel Xeon E3-1225 v3 ', 'Intel Atom N330', 'ARM Cortex A57']
+        vp=[]
+        vp.append(v[3])
+        vp.append(v[1])
+        vp.append(v[4])
+        vp.append(v[0])
+        vp.append(v[2])
+
+    	for arch in vp:
     	    bars.append(ax.bar(ind+(i*width), data[metric][arch], width, color=colors[i]))
     	    i+=1
     	
@@ -60,9 +76,11 @@ def printGraphs(data, benchs):
         ax.yaxis.grid(True)
     	ax.set_xticks(ind+((i/2.0)*width))
     	ax.set_xticklabels(benchs)
-    	
-    	ax.legend( bars, data[metric].keys(), bbox_to_anchor=(0., 1.1, 1., .101) ,  ncol=3, mode="expand", borderaxespad=0)
-    	plt.show(block=(n_metric == len(data) - 1))
+
+    	ax.legend( bars, vp, bbox_to_anchor=(0., 1.1, 1., .101) ,  ncol=3, mode="expand", borderaxespad=0)
+        fig.set_size_inches(10, 5.5)
+        fig.savefig("metric_"+str(n_metric)+".pdf")
+    	#plt.show(block=(n_metric == len(data) - 1))
 	n_metric += 1
 
 if len(sys.argv) != 2:

@@ -98,39 +98,20 @@ http://ark.intel.com/products/75461/Intel-Xeon-Processor-E3-1225-v3-8M-Cache-3_2
 \caption{\label{tab:morcuera} Características de la plataforma que integra un procesador Intel Xeon ``Haswell''.}
 \end{table}
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_1.pdf}
+\caption{Número de instrucciones retiradas por ciclo (IPC) para los distintos \textit{benchmarks}.\label{img:ipc}}
+\end{figure}
 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_2.pdf}
+\caption{Número de fallos de último nivel de cache (LLC) por cada 1K instruciones retiradas para los distintos \textit{benchmarks}.\label{img:llcmr}}
+\end{figure}
 
-
-
-
-
-<!--
-\begin{table}[t]
-\footnotesize
-\vspace{-0.5cm}
-\begin{center}
-\begin{tabular}[]{|c|c|}\hline
-\textbf{Server Model}       & Dell PowerEdge 2950 \\ \hline
-\textbf{Processor}           &
-\begin{tabular*}{9.8 cm}[c]{p{9.5 cm}|p{9.5 cm}}
-\multicolumn{2}{c}{2 x Quad-Core Intel\textregistered{} Xeon\textregistered{} X5365 CPU @ 3.0GHz}                         
-\\ \hline
-\multicolumn{1}{c|}{Total cores}        &   \multicolumn{1}{c}{8} \\ \hline
-\multicolumn{1}{c|}{Topology}        &  \multicolumn{1}{c}{2 chips, 2 physical packages per chip} \\ 
-\multicolumn{1}{c|}{ }                   &  \multicolumn{1}{c}{2 cores per physical package sharing an L2 cache}      \\ \hline  
-\multicolumn{1}{c|}{L1 cache}        &  \multicolumn{1}{c}{32KB+32KB (data+instruction), private } \\  \hline
-\multicolumn{1}{c|}{L2 cache}    &  \multicolumn{1}{c}{4MB shared (unified), shared} \\ % 
-\end{tabular*}
-\\ \hline
-\textbf{Memory}    & 8 GBytes  (4x2GB)                                   \\
-							 & 	DDR2-667MHz SDRAM		\\
-             				 &   UMA architecture                              \\ \hline
-\textbf{DVFS capabilities}                & 4 DVFS Levels  \\                                           
-													   & 2000MHz, 2333MHz,  2667MHz and 3000MHz \\                                           
-				                   					   & Cores in the same physical package share DVFS domain                \\ \hline
-\end{tabular}
-\end{center}
-\caption{\label{tab:octavia} Main features of the Intel-8 target platform.}
-\end{table}
-
--->
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_2.pdf}
+\caption{Número de fallos de predicción de saltos por cada 1K instruciones retiradas para los distintos \textit{benchmarks}.\label{img:mispred}}
+\end{figure}
