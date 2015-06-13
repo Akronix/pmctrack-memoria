@@ -1,12 +1,17 @@
 
-En este caso de estudio se ilustra el potencial de PMCTRack-GUI y PMCTrack en su conjunto para recabar información de rendimiento en distintas arquitecturas y diversos modelos de procesador. Para llevar a cabo nuestro estudio, seleccionamos un subconjunto de 9 benchmarks diversos de la _suite_ SPEC CPU2006 \cite{henning-spec2006} y los ejecutamos en múltiples plataformas que integran procesadores multicore de ARM, Intel y AMD. En particular, experimentamos con la placa de desarrollo Juno de ARM, que integra un procesador big.LITTLE \cite{arm-big-little}; y con tres servidores con arquitectura x86 que integran procesadores Intel Atom, Intel Xeon "Haswell" y AMD Opteron "Magny-Cours", respectivamente. La especificación detallada de las cuatro plataformas multicore exploradas se  
-muestra en las tablas \ref{tab:quickia}-\ref{tab:morcuera}. Nótese que la plataforma de ARM integra un procesador asimétrico con 2 tipos de cores: Cortex-A57 ("big") y Cortex-A53 ("LITTLE"). En esta plataforma usamos PMCTrack para monitorizar el rendimiento en cada tipo de core.
+<!-- En este caso de estudio se ilustra el potencial de PMCTRack-GUI y PMCTrack en su conjunto para recabar información de rendimiento mediante contadores hardware en distintas arquitecturas y diversos modelos de procesador. -->
+
+
+
+Para llevar a cabo nuestro estudio, seleccionamos un subconjunto de 10 benchmarks diversos de la _suite_ SPEC CPU2006 \cite{henning-spec2006} y los ejecutamos en múltiples plataformas con procesadores multicore de ARM, Intel y AMD. En particular, experimentamos con la placa de desarrollo Juno de ARM, que integra un procesador big.LITTLE \cite{arm-big-little}; y con tres servidores con procesadores x86 (Intel Atom, Intel Xeon "Haswell" y AMD Opteron "Magny-Cours"). La especificación detallada de las cuatro plataformas multicore exploradas se muestra en las tablas \ref{tab:quickia}-\ref{tab:morcuera}. 
+
+
 
 <!--
 http://ark.intel.com/products/35641/Intel-Atom-Processor-330-1M-Cache-1_60-GHz-533-MHz-FSB
 -->
 
-\begin{table}[t]
+\begin{table}[tbp]
 \begin{center}
 \footnotesize
 \begin{tabular}[]{|c|c|}\hline
@@ -30,7 +35,7 @@ http://ark.intel.com/products/35641/Intel-Atom-Processor-330-1M-Cache-1_60-GHz-5
 http://www.arm.com/products/tools/development-boards/versatile-express/juno-arm-development-platform.php
 -->
 
-\begin{table}[t]
+\begin{table}[tbp]
 \begin{center}
 \footnotesize
 \begin{tabular}[]{|c|c|}\hline
@@ -55,7 +60,7 @@ http://www.arm.com/products/tools/development-boards/versatile-express/juno-arm-
 http://products.amd.com/en-us/OpteronCPUDetail.aspx?id=644&f1=&f2=&f3=Yes&f4=&f5=&f6=&f7=&f8=&f9=&f10=&f11=&
 -->
 
-\begin{table}[t]
+\begin{table}[tbp]
 \begin{center}
 \footnotesize
 \begin{tabular}[]{|c|c|}\hline
@@ -79,7 +84,7 @@ http://ark.intel.com/products/75461/Intel-Xeon-Processor-E3-1225-v3-8M-Cache-3_2
 -->	
 
 
-\begin{table}[t]
+\begin{table}[tbp]
 \begin{center}
 \footnotesize
 \begin{tabular}[]{|c|c|}\hline
@@ -98,11 +103,19 @@ http://ark.intel.com/products/75461/Intel-Xeon-Processor-E3-1225-v3-8M-Cache-3_2
 \caption{\label{tab:morcuera} Características de la plataforma que integra un procesador Intel Xeon ``Haswell''.}
 \end{table}
 
+
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_1.pdf}
 \caption{Número de instrucciones retiradas por ciclo (IPC) para los distintos \textit{benchmarks}.\label{img:ipc}}
 \end{figure}
+
+
+Las figuras \ref{img:ipc}, \ref{img:llcmr} y \ref{img:mispred} muestran respectivamente el número de instrucciones por ciclo (IPC) medio, el número de fallos de último nivel de cache (LLC) y el número de fallos de predicción de saltos por cada mil instrucciones retiradas para los *benchmarks* seleccionados en los distintos tipos de core\footnote{Nótese que la plataforma de ARM integra un procesador asimétrico con 2 tipos de cores: Cortex-A57 ("big") y Cortex-A53 ("LITTLE").} usados en nuestro estudio. El IPC constituye una métrica global del rendimiento de una aplicación secuencial en una determinada plataforma, mientras que las otras dos métricas pueden permitir explicar la disminución del rendimiento de una aplicación debido a paradas en el *pipeline* del procesador. Típicamente, a mayor número de fallos de cache o fallos de prediccion de saltos, menor rendimiento experimentará la aplicación en cuestión tanto en procesadores con *pipeline* con ejecución en orden, como el Intel Atom, o con ejecución fuera de orden, como el AMD Opteron.
+
+Para monitorizar las métricas de rendimiento consideradas, empleamos la herramienta PMCTrack-GUI desarrollada en este TFG. Esta herramienta no solo simplifica de forma sustancial la configuración de eventos hardware y automatiza la representación gráfica de métricas de rendimiento, sino que también permite almacenar los resultados obtenidos para su posterior procesamiento. En particular, después de la ejecución de cada benchmark en cada plataforma, PMCTRack-GUI genera un fichero de texto con los resultados con las cuentas de eventos hardware obtenidos a lo largo del tiempo. Los datos que se muestran en las figuras \ref{img:ipc}, \ref{img:llcmr} y \ref{img:mispred} se han obtenido procesando la información almacenada en esos ficheros de texto y capturando la media de cada métrica para la ejecución completa de cada aplicación.
+
+
 
 \begin{figure}[tbp]
 \centering
@@ -110,8 +123,20 @@ http://ark.intel.com/products/75461/Intel-Xeon-Processor-E3-1225-v3-8M-Cache-3_2
 \caption{Número de fallos de último nivel de cache (LLC) por cada 1K instruciones retiradas para los distintos \textit{benchmarks}.\label{img:llcmr}}
 \end{figure}
 
+Los resultados revelan que los programas `astar`, `gcc`, `mcf`, `soplex` y `xalancbmk` son intensivos en memoria. Como se observa en la figura \ref{img:llcmr} estos benchmarks realizan un número elevado de accesos a memoria (fallos de último nivel de cache) por cada mil instrucciones en todas las plataformas exploradas. En particular, `mcf`, la aplicación con mayor tasa de fallos de cache, es también la que obtiene un menor número de instrucciones por ciclo, seguida de cerca por otras dos aplicaciones intensivas en memoria como `astar` y `soplex`. 
+
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_0.pdf}
 \caption{Número de fallos de predicción de saltos por cada 1K instruciones retiradas para los distintos \textit{benchmarks}.\label{img:mispred}}
 \end{figure}
+ 
+Los datos obtenidos también revelan que otros benchmarks que podemos considerar *intensivos en CPU*, por su baja tasa de fallos de LLC, exhiben un IPC relativamente reducido, y comparable al de *benchmarks* intensivos en memoria. Este es el caso de las aplicaciones `bzip2` y `gobmk`. La figura \label{img:mispred} ilustra que estas aplicaciones sufren de numerosos fallos de predicción de saltos, lo cual puede derivar en frecuentes paradas del *pipeline* del procesador. Este efecto explica el bajo valor de IPC observado en todas las plataformas para estas aplicaciones. 
+
+Finalmente, cabe destacar que aquellas aplicaciones con mayores valores de IPC en todas las plataformas (`calculix`, `h264ref` y `hmmer`) tienen asociado, como cabía esperar, una baja tasa de fallos de cache de último nivel y un número reducido de fallos de predicción de saltos. 
+
+
+<!--
+- Métricas: IPC, LLC-miss-rate (LLC misses*1000)/instrucciones , Fallos de Predicción de Saltos (Branch mispredicions*1000)/instrucciones
+-->
+
