@@ -16,6 +16,8 @@ En este capítulo evaluamos las nuevas extensiones de PMCTrack realizadas en est
 
 * Que haga con Matplotlib histogramas (Una gráfica por Métrica, Un grupo de barras por benchmark, Una barra del grupo por máquina)
 
+\input{Capitulos/CasoDeEstudio-multiarch}
+
 # Análisis de aplicaciones multihilo con PMCTrack-GUI
 
 
