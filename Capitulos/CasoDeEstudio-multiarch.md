@@ -112,6 +112,6 @@ http://ark.intel.com/products/75461/Intel-Xeon-Processor-E3-1225-v3-8M-Cache-3_2
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_2.pdf}
+\includegraphics[width=0.85\textwidth]{Imagenes/Vectorial/metric_0.pdf}
 \caption{Número de fallos de predicción de saltos por cada 1K instruciones retiradas para los distintos \textit{benchmarks}.\label{img:mispred}}
 \end{figure}
