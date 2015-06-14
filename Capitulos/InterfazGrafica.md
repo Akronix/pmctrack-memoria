@@ -1,15 +1,19 @@
 \chapter{PMCTrack-GUI}
 
-En este capítulo hablaremos en detalle sobre PMCTrack-GUI, una aplicación que permite la visualización de gráficas de rendimiento en tiempo real de aplicaciones de usuario, usando la herramienta de línea de comandos \texttt{pmctrack} para obtener los datos de monitorización. Se empezará a hablar de la motivación del desarrollo de esta aplicación, pasando a describir sus ventajas y características, su modo de uso y finalmente, detalles de su diseño e implementación.
+Para ampliar el potencial de la herramienta PMCTrack para ser usada por usuarios finales hemos desarrollado PMCTrack-GUI, una aplicación que permite la visualización de gráficas de rendimiento en tiempo real de aplicaciones de usuario, usando la herramienta de línea de comandos \texttt{pmctrack} para obtener los datos de monitorización.
+
+Este capítulo se estructura como sigue. En la sección \ref{sec:motivacion} se justifica la necesidad del desarrollo de PMCTrack-GUI. La sección \ref{sec:caracteristicas} presenta las características principales de PMCTrack-GUI y se compara la aplicación con el resto de aplicaciones alternativas disponibles en el mercado. La sección \ref{sec:uso} describe detalladamente cómo se usa la aplicación. Finalmente, la sección \ref{sec:diseno} explica detalles del diseño de la aplicación, las tecnologías usadas y sus principales componentes internos.
 
 # Motivación
+\label{sec:motivacion}
 Ya hemos podido observar anteriormente que, a pesar del potencial de la herramienta, PMCTrack cuenta con limitaciones al ser usada por un usuario final para llevar a cabo la monitorización de aplicaciones en el espacio de usuario. El principal problema consiste en que la herramienta \texttt{pmctrack} de línea de comandos proporciona tanta información al usuario a través de los PMCs que este no puede interpretar toda esa cantidad de información, siendo necesaria procesarla a posteriori.
 
-Además, tal y como se explicó en el Capítulo 1 de esta memoria, el usuario no puede proporcionar al comando \texttt{pmctrack} el nombre del evento que desea contabilizar en un *PMC* ("Instrucciones retiradas" por ejemplo). En lugar de ello, debe proporcionar los códigos hexadecimales que se correspondan con el evento en cuestión, siendo estos códigos diferentes según la arquitectura que estemos usando. Esto obliga al usuario a utilizar un manual de la arquitectura que esté usando para buscar los códigos hexadecimales del evento que quiera contabilizar.
+Además, tal y como se explicó en el Capítulo 1 de esta memoria, el usuario no puede proporcionar al comando \texttt{pmctrack} el nombre del evento que desea contabilizar en un PMC ("Instrucciones retiradas" por ejemplo). En lugar de ello, debe proporcionar los códigos hexadecimales que se correspondan con el evento en cuestión, siendo estos códigos diferentes según la arquitectura que estemos usando. Esto obliga al usuario a utilizar un manual de la arquitectura que esté usando para buscar los códigos hexadecimales del evento que quiera contabilizar.
 
 Para solucionar estos dos problemas, es necesario el desarrollo de un interfaz gráfico que facilite al usuario la tarea de monitorización de aplicaciones usando PMCs.
 
 # Ventajas y características
+\label{sec:caracteristicas}
 
 PMCTrack-GUI ha sido desarrollado para superar las limitaciones comentadas en la sección anterior, pero el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
 
@@ -29,6 +33,7 @@ Aunque ya se han comentado las principales características con las que cuenta P
 * Permite realizar capturas de las gráficas.
 
 # Modo de uso
+\label{sec:uso}
 
 Al iniciar PMCTrack-GUI se inicia con el idioma que se encuentre configurado en el sistema operativo de la máquina que lo arranca, aunque actualmente se soportan los idiomas español e inglés únicamente, de modo que la aplicación se visualizará en español si el sistema operativo está configurado en español, o inglés en otro caso. El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack-GUI u otra máquina remota accesible por SSH. En cualquiera de los casos PMCTrack-GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requisito software se informará debidamente al usuario.
 
@@ -79,6 +84,7 @@ Cabe destacar que mientras se está realizando la monitorización, el usuario pu
 Cuando la aplicación que se está monitorizando termina, se le notifica al usuario mediante un cuadro de diálogo, pero en ningún caso se cierran las ventanas de monitorización, de tal modo que el usuario puede seguir realizando las acciones que hemos visto anteriormente.
 
 # Diseño y detalles de implementación
+\label{sec:diseno}
 
 La aplicación PMCTrack-GUI ha sido implementada en Python, eligiéndose este lenguaje principalmente por dos motivos. En primer lugar,  por ser multiplataforma, de tal manera que su código puede ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python. Y en segundo lugar, porque cuenta con una librería que permite la generación de gráficos de alta calidad y precisión a partir de datos contenidos en listas o arrays, la denominada librería *matplotlib*. El proceso de generación de gráficas con esta librería consume pocos recursos, de tal manera que aún realizando la monitorización de una aplicación en la misma máquina que ejecuta la GUI apenas se verán afectados los resultados de monitorización por la propia ejecución de PMCTrack-GUI.
 
