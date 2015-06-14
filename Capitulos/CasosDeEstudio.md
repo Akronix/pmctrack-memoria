@@ -9,14 +9,7 @@ En este capítulo evaluamos las nuevas extensiones de PMCTrack realizadas en est
 
 # Análisis de aplicaciones multihilo con PMCTrack-GUI
 
-
-La idea sería hacer un análisis de dos aplicaciones paralelas. Una (`rnaseq`) en la que los hilos hagan lo mismo con distintos datos, y otra en la que los hilos cooperen realizando tareas diferentes.
-
-	$ pmctrack -T 1 -c instr,cycles,llc_misses ./benchmarks/solaris-x86/parsec3/ferret_p3 2
-		- Mirar LLCMR y IPC de hilos 1 y 4 de la lista
- 	
- 	$ pmctrack -T 1 -c instr,cycles,llc_misses ./benchmarks/solaris-x86/misc/rnaseq 4
-
+\input{Capitulos/CasoDeEstudio-multihilo}
 
 # Análisis de fragmentos de código con _libpmctrack_
 
