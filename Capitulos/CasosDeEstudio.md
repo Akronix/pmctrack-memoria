@@ -18,9 +18,9 @@ La idea sería hacer un análisis de dos aplicaciones paralelas. Una (`rnaseq`) 
  	$ pmctrack -T 1 -c instr,cycles,llc_misses ./benchmarks/solaris-x86/misc/rnaseq 4
 
 
-# Análisis de fragmentos de código con _libpmctrack_
+# Análisis de fragmentos de código con libpmctrack
 
-En esta sección vamos a usar la librería libpmctrack para analizar el comportamiento del hardware en distintos fragmentos de código.
+En esta sección vamos a usar la librería *libpmctrack* para analizar el comportamiento del hardware en distintos fragmentos de código.
 
 ## Comportamiento de la memoria caché en estructuras de datos con memoria dinámica
 
@@ -38,46 +38,93 @@ La estructura debe mantener el invariante de que todos los nodos, excepto el nod
 
 Ahora vamos a comprobar si en la práctica se confirman los costes que predice la teoría. Para ello hemos realizado un sencillo benchmark que simplemente inserta y elimina un millón de números de un montículo, estos números son generados al azar en un rango que va de -5000 a 5000. El benchmark, al terminar, nos dice cuánto tiempo ha transcurrido desde que se empezó a ejecutar el benchmark hasta que acaba con precisión de microsegundos.
 
-La ejecución se realiza en un procesador intel core i7-3520M a 2.9GHz con 8GB de RAM. Después de ejecutar el benchmark una primera vez con cada montículo, obtenemos los siguientes tiempos: $232,859ms$ para el montículo binario y $1690.336ms$ para el montículo de fibonacci. Es decir, el montículo de fibonacci es siete veces más lento que el montículo binario.
+### Primer análisis
+
+La ejecución se realiza en un procesador intel core i7-3520M a 2.9GHz con 8GB de RAM. Después de ejecutar el benchmark una primera vez con cada montículo, obtenemos los siguientes tiempos: $232,859ms$ para el montículo binario y $1690.336ms$ para el montículo de Fibonacci. Es decir, el montículo de Fibonacci es siete veces más lento que el montículo binario.
 
 Para ver si esta gran diferencia de tiempo es debido a la memoria caché, necesitamos alguna forma de monitorizar directamente cómo se está comportando la memoria caché. Esta es una situación donde libpmctrack resulta tremendamente útil, ya que nos permite obtener información del hardware e incluso analizar diferentes fragmentos de código de forma aislada.
 
-De modo que ahora añadimos al benchmark anterior la librería pmctrack, inicializamos el descriptor, fijamos el tiempo para obtener samples en $50ms$ y configuramos los contadores. Nos interesa que los contadores nos den información acerca del número de instrucciones retiradas, y los accesos y los fallos de la caché de último nivel (Nivel 3 en nuestro caso). De modo que activamos el contadore fijo pmc0, que cuenta el número de instrucciones, y asignamos a los contadores configurables pmc3 y pmc4 los eventos de contar accesos a caché y fallos de caché respectivamente.
-
-Empezamos situando los start y stop count al principio y al final del benchmark y obtenemos los resultados de las tablas \ref{} y \ref{}. Lo primero que vemos es que el montículo de fibonacci tiene quince entradas o *ticks* y el binario solo cinco puesto que, como dijimos antes, el montículo binario es significativamente más lento. A continuación, sumamos  que los accesos a memoria caché son 7 millones y 15 millones aproximadamente 16.5 millones de accesos como los 1150 y 2025 millones de instrucciones.
-
-En el análisis anterior también observamos que no hay un equilibrio en los resultados que dan los contadores a lo largo de todo el ciclo del programa, lo que nos lleva a pensar que puede haber fases en las que se invierta más tiempo y más acceso a recursos que otra. Para comprobar esto, situamos tres bloques start y stop count entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción y un tercero para la eliminación del millón de números. Los resultados los podemos ver en las tablas \ref{} y \ref{}.
+De modo que ahora añadimos al benchmark anterior la librería pmctrack, inicializamos el descriptor con espacio para 15 samples, fijamos el intervalo para obtener samples en $250ms$ y configuramos los contadores. Nos interesa que los contadores nos den información acerca del número de instrucciones retiradas, y los accesos y los fallos de la caché de último nivel (Nivel 3 en nuestro caso). De modo que activamos el contadore fijo pmc0, que cuenta el número de instrucciones, y asignamos a los contadores configurables pmc3 y pmc4 los eventos de contar accesos a caché y fallos de caché respectivamente.
 
 \begin{figure}
 \caption{Resultados monitorización global montículo binario}
-Elapsed time: 232654 microseconds
-Profiling data extracted from PMCs:
+Elapsed time: 476022 microseconds
+Profiling data extracted from PMCs every 250ms:
 nsample    pid      event          pmc0          pmc3          pmc4
-      1  11263       tick     205108717        142359         43550
-      2  11263       tick     209954378       2251085        188136
-      3  11263       tick     231496240       2215010         36077
-      4  11263       tick     235018067       1859839         17076
-      5  11263       self     229336746        826241           153
+      1   7377       tick     561444260       3966742        339785
+      2   7377       self     549334613       4032294        151245
 \end{figure}
 
 \begin{figure}
 \caption{Resultados monitorización global montículo Fibonacci}
-Elapsed time: 1710817 microseconds
-Profiling data extracted from PMCs:
+Elapsed time: 3178255 microseconds
+Profiling data extracted from PMCs every 250ms:
 nsample    pid      event          pmc0          pmc3          pmc4
-      1  11474       tick     135446153       1099369        469118
-      2  11474       tick     134271027       1103214        468838
-      3  11474       tick     131887895       1109943        472052
-      4  11474       tick     134146252       1102410        463599
-      5  11474       tick     131120492       1089186        475294
-      6  11474       tick     121713433       1057953        443598
-      7  11474       tick     124896626       1086301        471523
-      8  11474       tick     130228897       1116927        468670
-      9  11474       tick     127860082       1095860        466143
-     10  11474       tick     129634236       1119603        465937
-     11  11474       tick     129913414       1129926        455680
-     12  11474       tick     125505644       1103817        464760
-     13  11474       tick     128672197       1126770        449822
-     14  11474       tick     133428551       1120849        443910
-     15  11474       tick     132818159       1136451        446575
+      1   7558       tick     629554817        555265        339547
+      2   7558       tick     365243640       2111969        967323
+      3   7558       tick     363263873       2174515        943288
+      4   7558       tick     366034887       2190378        888714
+      5   7558       tick     361822568       2208562        914895
+      6   7558       tick     361998147       2201110        893159
+      7   7558       tick     358977538       2206190        879025
+      8   7558       tick     376751462       2220617        815036
+      9   7558       tick     371586535       2229520        828087
+     10   7558       tick     371069310       2196560        795315
+     11   7558       tick     376280116       2186783        740499
+     12   7558       tick     388247900       2161197        641935
+     13   7558       self     341342501       1586504        322759
 \end{figure}
+
+Empezamos situando los start y stop counters al principio y al final del benchmark y obtenemos los resultados de las tablas \ref{} y \ref{}. Lo primero que vemos es que el montículo de Fibonacci tiene 13 entradas o *ticks* y el binario solo dos puesto que, como dijimos antes, el montículo binario es siete veces más rápido. Si sumamos los valores de todas las muestras, aproximadamente obtenemos los siguientes datos:
+
+* 1150 millones de instrucciones el montículo binario y 5000 el de Fibonacci (casi cinco veces más instrucciones el montículo de Fibonacci). Probablemente debido a la mayor complejidad de las operaciones que realiza el montículo de Fibonacci.
+
+* 7,5 millones de accesos a memoria caché en el binario y 25 millones en el de Fibonacci, por tanto, tres veces más accesos a caché por el montículo de Fibonacci. Como vemos, aunque la entrada es la misma: un millón de enteros, el montículo de Fibonacci tiene que acceder muchas más veces a memoria caché de último nivel.
+
+* 0.4 millones de fallos a memoria caché de último nivel por el montículo binario y 10.5 millones por el montículo de Fibonacci. Aquí podemos comprobar como, efectivamente, la diferencia de fallos de acceso a la memoria caché es abismal, más de 20 veces más fallos en la memoria caché tiene el montículo de Fibonacci frente al montículo binario.
+
+Resulta también de gran relevancia calcular la tasa de fallos por acceso a datos, esta sería de un 5,33\% en el caso del montículo binario, y de un 42\% en el caso del montículo de Fibonacci. De nuevo, una muy grande diferencia.
+
+Por tanto, todo apunta a que esta gran diferencia en la cantidad del acceso a memoria caché y, sobre todo, en sus porcentajes de aciertos, hace muy superior en la práctica al montículo binario frente al montículo de Fibonacci, a pesar de que la teoría predijera lo contrario.
+
+### Segundo análisis
+
+No obstante, podemos afinar aún más y obtener mayor información. Revisando el análisis anterior, observamos que la primera muestra del montículo de fibonacci no está equilibrada con el resto de muestras: ejecuta el doble de instrucciones que el resto, y, sin embargo, hace muchos menos accesos a memoria; lo que nos lleva a pensar que podría haber una fase inicial en las que el montículo invierta menos tiempo y menos acceso a recursos que el resto. Para comprobar esto, también mediante libpmctrack podemos monitorizar fragmentos de código aislados. Para ello, situamos tres bloques start y stop counters entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción del millón de números y un tercero para la eliminación de éstos. Los resultados los podemos ver en las tablas \ref{} y \ref{}.
+
+\begin{figure}
+\caption{Resultados monitorización por fases montículo binario}
+Profiling, through libpmctrack, cache behaviour when using a William's heap.
+Profiling data for initializing the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13464       self           833            10             7
+Profiling data for inserting into the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13464       self     194528249         19764         17205
+Profiling data for deleting from the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13464       self     916232599       7383241        467662
+Elapsed time: 229741 microseconds
+\end{figure}
+
+\begin{figure}
+\caption{Resultados monitorización por fases montículo Fibonacci}
+Profiling, through libpmctrack, cache behaviour when using a Fibonacci heap.
+Profiling data for initializing the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13271       self           835            11            10
+Profiling data for inserting into the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13271       self     377048052         15204          9962
+Profiling data for deleting from the heap:
+nsample    pid      event          pmc0          pmc3          pmc4
+      1  13271       self    4655118486      37307044      14266564
+Elapsed time: 1692031 microseconds
+\end{figure}
+
+Con estos nuevos datos, podemos ver claramente que la fase de inicialización y reserva inicial de memoria es prácticamente la misma para ambas estructuras en cuanto a número de instrucciones y acceso a memoria. En la fase de inserción, la diferencia tampoco es demasiado grande, de hecho, aunque el montículo de Fibonacci realiza más instrucciones, efectivamente cumple su teoría en cuanto a que realiza menos accesos a memoria y éstos son más exitosos que el montículo bibario. La gran diferencia llega en la última fase, la fase de borrado de elementos, en ésta el número de instrucciones ejecutadas es mucho mayor para ambos montículos. Es en esta fase cuando el montículo de Fibonacci se dispara en cuanto a número de accesos a memoria y la tasa de fallos es del tan alta como el 40\% mencionado anteriormente, eclipsando cualquier buen resultado que se podía haber obtenido en fases anteriores; mientras que el montículo binario, mantiene una buena tasa de fallos y un número de accesos relativamente mucho menor.
+
+### Conclusiones
+
+Después de un primer análisis global y, posteriormente, un segundo análisis pormenorizando el benchmark en tres fases clave. Hemos comprobado, gracias a la librería libpmctrack, que la teoría de la computación puede fallar a la hora de predecir los tiempos de computación de las estructuras de datos que hacen uso de la memoria dinámica, al pasar por alto la jerarquía en el acceso a memoria que existe en las computadoras actuales.
+
+En particular, hemos observado como la implementación del montículo de Fibonacci, que teóricamente tiene un coste amortizado constante en el borrado, se comporta peor en la práctica que una implementación con memoria estática como es el montículo binario, cuyo coste en tiempo en el borrado es siempre logarítmico.
