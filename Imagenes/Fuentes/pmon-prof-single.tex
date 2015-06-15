@@ -1,0 +1,55 @@
+
+\begin{tikzpicture}[transform shape,scale=0.85]
+\def\tshi{4cm}
+\def\tswi{2cm}
+\def\tsgap{5cm}
+\def\field{0.1*\tshi}
+\begin{scope}[draw=black,semithick,
+align=center, 
+ts/.style={rectangle,minimum width=\tswi,minimum height=\tshi,black,draw=black,font=\tt},
+tsf/.style={ts,minimum height=\field},
+utsf/.style={tsf,draw=black,fill=black!20},
+flecha/.style={black,o->,dashed,semithick,>=stealth'}]
+
+\foreach \x in {0,...,1}
+{
+   	\node (ts\x) at ($(\x*\tswi+\x*\tsgap,0)$) [ts,below] {};
+   	\node (parent\x) at ($(ts\x.north west)+(0,-1cm)$) [tsf,below right] {};
+   	\node (child\x) at  (parent\x.south west) [tsf,below right] {};
+	\node (cbuffer\x) at  (child\x.south west) [tsf,below right] {};
+   	\node (spinlock\x) at  (cbuffer\x.south west) [tsf,below right] {};
+	\node (semaphore\x) at  (spinlock\x.south west) [tsf,below right] {};
+	\node (msleep\x) at  (semaphore\x.south west) [tsf,below right] {};
+
+	\node at (parent\x.west) [left,font=\tt] {parent};
+	\node at (child\x.west) [left,font=\tt] {child};
+	\node at (cbuffer\x.west) [left,font=\tt] {cbuffer};
+	\node at (spinlock\x.west) [left,font=\tt] {spinlock};
+	\node at (semaphore\x.west) [left,font=\tt] {semaphore};	
+	\node at (msleep\x.west) [left,font=\tt] {monitor\_waiting};	
+}
+
+
+
+%% Top labels
+\node at (ts0.north) [above,align=center] {\texttt{pmon\_prof\_t} \\(pmctrack)};
+\node at (ts1.north) [above,align=center] {\texttt{pmon\_prof\_t} \\ (monitored application)};
+
+
+%% Unused fields...
+
+\node at (parent0.south west) [utsf,above right] {\tt NULL};
+\node at (cbuffer0.south west) [utsf,above right] {};
+\node at (spinlock0.south west) [utsf,above right] {};
+\node at (semaphore0.south west) [utsf,above right] {};
+\node at (msleep0.south west) [utsf,above right] {};
+\node at (child1.south west) [utsf,above right] {NULL};
+
+
+%% Arrows and all
+\draw[->,flecha] (child0.center) -- (ts1.north west);
+\draw[->,flecha] (parent1.center) -- (ts0.north east);
+
+\end{scope}
+ \end{tikzpicture}     
+

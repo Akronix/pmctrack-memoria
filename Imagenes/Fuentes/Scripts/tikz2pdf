@@ -1,0 +1,67 @@
+#!/bin/bash
+
+
+function generate_standalone_tex()
+{
+cat << LATEX
+\PassOptionsToPackage{usenames,dvipsnames,table}{xcolor}
+\documentclass[xcolor=table,10pt,letterpaper]{report}   
+%%Workaround to overcome the Tikz arrows issue -> change spanish-english in tikzpicture
+\usepackage[spanish,english]{babel} 
+\selectlanguage{english}
+\usepackage[utf8x]{inputenc}
+\usepackage{xcolor}
+\usepackage{tikz} 
+\usetikzlibrary{calc,backgrounds,arrows,trees,shapes,matrix,fit,patterns,positioning,automata,decorations.pathmorphing,decorations.pathreplacing}
+\usepackage{listings} 
+\usepackage{relsize}
+\usepackage{anyfontsize}
+\newcommand{\mathtext}[1]{\mathrm{\textit{#1}}}
+\def\pause{} % Para quitar animaciones
+\renewcommand{\rmdefault}{phv} % Arial
+\renewcommand{\sfdefault}{phv} % Arial
+%%Horizontal
+%% Uncomment this for landscape slides
+%\usepackage[paperwidth=12.81cm,paperheight=9.81cm,top=1cm, bottom=1cm, left=0.2cm, right=0.2cm]{geometry}
+\usepackage[pass]{geometry}
+%% Gantt hacks TIKZ
+%\usepackage{pgfgantt}
+%\input{../../common/gantt_settings}
+\usepackage{varwidth}
+
+
+\begin{document}
+\thispagestyle{empty}
+\begin{center}
+LATEX
+echo
+cat $1
+echo
+cat << LATEX
+\end{center}
+\end{document}
+LATEX
+}
+
+
+tikzfile=$1
+
+if [ "$tikzfile" == "" ]; then
+    printf "Usage: $0 <tikzfile>\n"
+    exit 1
+fi
+
+
+if [ ! -f "$tikzfile" ]; then
+    printf "File $tikzfile not found\n"
+    exit 1
+fi
+
+fileroot=${tikzfile%*.tex}
+previewtex=${fileroot}_preview.tex
+previewtpdf=${fileroot}_preview.tex
+
+
+generate_standalone_tex $tikzfile > $previewtex
+pdflatex $previewtex
+rm -f ${fileroot}_preview.{tex,log,aux}

@@ -1,0 +1,54 @@
+
+\begin{tikzpicture}[transform shape,scale=0.75]
+\def\tshi{3cm}
+\def\tswi{1.5cm}
+\def\tsgap{2cm}
+\def\field{0.1*\tshi}
+\begin{scope}[draw=black,semithick,
+align=center, 
+ts/.style={rectangle,minimum width=\tswi,minimum height=\tshi,black,draw=black,font=\tt},
+tsf/.style={ts,minimum height=\field},
+str/.style={ts,minimum width=1.75*\tswi},
+strf/.style={str,minimum height=0.195*\tshi},
+flecha/.style={black,o->,dashed,semithick,>=stealth'}]
+
+\foreach \x in {0,...,4}
+{
+   	\node (ts\x) at ($(\x*\tswi+\x*\tsgap,0)$) [ts,below] {};
+   	\node (sbuf\x) at ($(ts\x.north west)+(0,-1cm)$) [tsf,below right] {};
+   	
+   	\node at (sbuf\x.west) [left,font=\tt] {sbuf};
+}
+
+
+
+%% Top labels
+\node at (ts0.north) [above,align=center] {\texttt{pmon\_prof\_t} \\(pmctrack)};
+\node at (ts1.north) [above,align=center] {\texttt{pmon\_prof\_t} \\ (thread 0)};
+\node at (ts2.north) [above,align=center] {\texttt{pmon\_prof\_t} \\ (thread 1)};
+\node at (ts3.north) [above,align=center] {\texttt{pmon\_prof\_t} \\ (thread 2)};
+\node at (ts4.north) [above,align=center] {\texttt{pmon\_prof\_t} \\ (thread 3)};
+
+
+%% Shared structure
+\node (shared) at ($(ts2.south)+(0,-2cm)$) [below,str] {}; 
+\node (pmcs) at (shared.north west) [below right,strf] {} node at (pmcs.west) [left,font=\tt] {pmc\_samples};
+\node (lock) at (pmcs.south west) [below right,strf] {} node at (lock.west) [left,font=\tt] {lock};
+\node (sem) at (lock.south west) [below right,strf] {} node at (sem.west) [left,font=\tt] {sem\_queue};
+\node (mw) at (sem.south west) [below right,strf] {} node at (mw.west) [left,font=\tt] {monitor\_waiting};
+\node (rc) at (mw.south west) [below right,strf] {5} node at (rc.west) [left,font=\tt] {ref\_counter}; 
+\node at (shared.south) [below,align=center] {\texttt{pmc\_samples\_buffer\_t} \\(shared structure)};
+
+
+%% Arrows and all
+\foreach \x in {0,...,4}
+{
+	\draw[->,flecha] (sbuf\x.center) -- (shared.north west);
+}
+
+
+
+
+\end{scope}
+ \end{tikzpicture}     
+

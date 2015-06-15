@@ -1,68 +1,111 @@
-\chapter{PMCTrack GUI: Algo más que un interfaz gráfico}
+\chapter{PMCTrack-GUI}
+
+Para ampliar el potencial de la herramienta PMCTrack para ser usada por usuarios finales hemos desarrollado PMCTrack-GUI, una aplicación que permite la visualización de gráficas de rendimiento en tiempo real de aplicaciones de usuario, usando la herramienta de línea de comandos \texttt{pmctrack} para obtener los datos de monitorización.
+
+Este capítulo se estructura como sigue. En la sección \ref{sec:motivacion} se justifica la necesidad del desarrollo de PMCTrack-GUI. La sección \ref{sec:caracteristicas} presenta las características principales de PMCTrack-GUI y se compara la aplicación con el resto de aplicaciones alternativas disponibles en el mercado. La sección \ref{sec:uso} describe detalladamente cómo se usa la aplicación. Finalmente, la sección \ref{sec:diseno} explica detalles del diseño de la aplicación, las tecnologías usadas y sus principales componentes internos.
+
 # Motivación
-$PMCTrack$ es una herramienta muy potente desarrollada principalmente para ayudar al *planificador* del sistema operativo, por lo que aunque da soporte para ser usada por un usuario final, tiene grandes limitaciones en este sentido.
+\label{sec:motivacion}
+Ya hemos podido observar anteriormente que, a pesar del potencial de la herramienta, PMCTrack cuenta con limitaciones al ser usada por un usuario final para llevar a cabo la monitorización de aplicaciones en el espacio de usuario. El principal problema consiste en que la herramienta \texttt{pmctrack} de línea de comandos proporciona tanta información al usuario a través de los PMCs que este no puede interpretar toda esa cantidad de información, siendo necesaria procesarla a posteriori.
 
-En primer lugar, proporciona al usuario el valor de cada contador configurado en determinados instantes de tiempo, por lo que para que el usuario pueda interpretar esos datos es necesario que realice de forma "manual" gráficas con herramientas como $Gnuplot$, teniéndolas que generar una vez PMCTrack ha terminado de extraer toda la información de los contadores.
+Además, tal y como se explicó en el Capítulo 1 de esta memoria, el usuario no puede proporcionar al comando \texttt{pmctrack} el nombre del evento que desea contabilizar en un PMC ("Instrucciones retiradas" por ejemplo). En lugar de ello, debe proporcionar los códigos hexadecimales que se correspondan con el evento en cuestión, siendo estos códigos diferentes según la arquitectura que estemos usando. Esto obliga al usuario a utilizar un manual de la arquitectura que esté usando para buscar los códigos hexadecimales del evento que quiera contabilizar.
 
-Además, para la asignación de eventos a contadores es necesario para el usuario el uso de un manual de la arquitectura de la máquina, ya que deberá buscar el evento que desea contabilizar en un contador e indicar al comando PMCTrack los valores de configuración para los contadores.
+Para solucionar estos dos problemas, es necesario el desarrollo de un interfaz gráfico que facilite al usuario la tarea de monitorización de aplicaciones usando PMCs.
 
-# PMCTrack GUI, una herramienta única
+# Ventajas y características
+\label{sec:caracteristicas}
 
-Como ya hemos visto, PMCTrack posee limitaciones importantes al usarse por un usuario final. Estas limitaciones han sido nuestra motivación para desarrollar PMCTrack GUI, y el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
+PMCTrack-GUI ha sido desarrollado para superar las limitaciones comentadas en la sección anterior, pero el resultado final es una herramienta que no sólo supera estas limitaciones si no que supera grandes limitaciones de las aplicaciones alternativas disponibles en el mercado.
 
-A día de hoy no hay otra herramienta en el mercado como PMCTrack GUI, ya que actualmente es la única aplicación que permite visualizar la monitorización de benchmarks siendo multiarquitectura. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de \cite{Intel} o el *Streamline Performance Analyzer* de \cite{ARM}.
+A la fecha de escritura de estas líneas, PMCTrack-GUI es la única aplicación del mercado que permite visualizar gráficas de rendimiento de aplicaciones en tiempo real en las principales arquitecturas usando PMCs. En el mercado sólo están disponibles las herramientas de monitorización de cada fabricante, como el *Intel Performance Counter Monitor* de Intel \cite{Intel} o el *Streamline Performance Analyzer* de ARM \cite{ARM}. Además, PMCTrack-GUI abstrae al usuario de la arquitectura que esté utilizando, ya que la aplicación proporciona de forma gráfica la lista de PMCs disponibles y permite configurarlos haciendo clic en el evento que se desea asociar con el contador. PMCTrack-GUI se encargará internamente de obtener los códigos hexadecimales asociados a los eventos y a la arquitectura en cuestión. No obstante, la aplicación cuenta con una configuración avanzada en la que se permite al usuario asignar eventos a contadores proporcionando los códigos hexadecimales asociados. Cabe destacar que PMCTrack-GUI también soporta la monitorización de aplicaciones multihilo, de forma que es posible visualizar gráficas en tiempo real de un determinado hilo de la aplicación que se esté monitorizando.
 
-Además, PMCTrack GUI es de código libre y completamente gratuita, mientras que las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
+Para especificar las métricas de alto nivel que serán visualizadas posteriormente en gráficas en tiempo real, el usuario tan sólo debe escribir fórmulas de alto nivel en las cuales las variables serán los nombres de los contadores configurados previamente, como por ejemplo $(pmc0 * 1000) / pmc1$.
 
-# Características de PMCTrack GUI
+Para terminar de justificar que actualmente no hay otra alternativa en el mercado como PMCTrack-GUI, hay que comentar que se trata de una aplicación multiplataforma de código libre y completamente gratuita, mientras que las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
 
-* Visualización de gráficas de monitorización en tiempo real.
-* Multiarquitectura, pudiendo monitorizar benchmarks en máquinas Intel, AMD y ARM.
-* Multiplataforma, pudiéndose ejecutar en GNU/Linux y MacOS X.
-* Selección de eventos sin necesidad de usar ningún manual de arquitectura (aunque se puede usar para especificar opciones avanzadas)
-* Asignación amigable de eventos a los contadores hardware.
-* Generación sencilla de métricas a partir de fórmulas de alto nivel.
-* Posibilidad de monitorización de máquinas remotas, desacoplando la GUI de la propia monitorización.
-* Detección de las dependencias software no satisfechas.
-* Detección automática de la arquitectura de la máquina a monitorizar, cargando los contadores y eventos propios de dicha arquitectura.
-* Permite observar simultáneamente y en tiempo real 2 o más gráficas.
-* Soporta la monitorización de aplicaciones multihilo, pudiendo observar gráficas propias de un hilo concreto de la aplicación.
-* Permite parar y reanudar la ejecución del benchmark que se está monitorizando.
+Aunque ya se han comentado las principales características con las que cuenta PMCTrack-GUI, a continuación destacamos algunas otras que merecen ser mencionadas:
+
+* Permite la monitorización de máquinas remotas accesibles por SSH, desacoplando la GUI de la propia monitorización.
+* Permite observar simultáneamente y en tiempo real dos o más gráficas.
+* Permite parar/reanudar la ejecución de la aplicación que se está monitorizando.
 * Permite realizar una nueva configuración a partir de otra anterior cuya monitorización se está llevando a cabo.
-* Permite personalizar las gráficas a gusto del usuario.
+* Permite personalizar el aspecto visual de las gráficas.
 * Permite realizar capturas de las gráficas.
-* Permite redimensionar las gráficas en tiempo real.
-* Ajuste automático de los ejes de las gráficas en función de los valores y del tamaño de la ventana.
-* Multilenguaje, soportando actualmente los idiomas inglés y español.
 
-# Diseño de PMCTrack GUI
+# Modo de uso
+\label{sec:uso}
 
-PMCTrack GUI ha sido desarrollada en *Python*, eligiéndose este lenguaje principalmente por ser multiplataforma, pudiendo ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python, además de que cuenta con una biblioteca muy potente para la generación de gráficas a partir de datos contenidos en listas o arrays, la biblioteca *Matplotlib*. Esta biblioteca es la que ha permitido en gran parte que PMCTrack GUI cuente con un indudable atractivo visual.
+Al iniciar PMCTrack-GUI se inicia con el idioma que se encuentre configurado en el sistema operativo de la máquina que lo arranca, aunque actualmente se soportan los idiomas español e inglés únicamente, de modo que la aplicación se visualizará en español si el sistema operativo está configurado en español, o inglés en otro caso. El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack-GUI u otra máquina remota accesible por SSH. En cualquiera de los casos PMCTrack-GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requisito software se informará debidamente al usuario.
 
-Ha sido diseñada para ser fácilmente escalable y mantenible. Consta de diversos componentes que podemos dividir en dos grandes grupos según la función que desempeñan: *Frontend* y *Backend*. El Frontend comprende todos los componentes puramente gráficos de la aplicación para su interacción con el usuario; el Backend consta de todos los componentes que proveen de la información para ser mostrada en el Frontend. Los componentes del Backend son muy diferentes entre sí, proveyendo cada uno de ellos información muy diferente, por ello analizaremos cada uno de ellos por separado.
+Si todas las dependencias software están resueltas y se establece correctamente la conexión con la máquina remota (si fuera necesario), aparecerá una nueva ventana donde el usuario podrá configurar los PMCs con los que cuenta la máquina a monitorizar, asignando eventos a dichos contadores. Para realizar dicha asignación, el usuario sólo tiene que hacer clic en el botón "Asignar evento" del contador que quiera configurar, y a continuación, hacer clic en el evento y subevento(s) que quiera asignar de entre todo el listado de eventos y subeventos disponibles que se mostrarán por pantalla. Adicionalmente, se le da la posiblidad a los usuarios avanzados de asignar eventos al contador proporcionando los códigos hexadecimales correspondientes a los eventos en cuestión, a través del cuadro de "Opciones avanzadas". En la imagen *(b)* de la figura \ref{fig:countersConf} se puede visualizar una ventana de configuración de un contador.
 
-## Frontend
+\begin{figure}
+\centering
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfMac}}\vspace{10mm}
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCounterConf}}
+\caption{Ventanas de configuración de contadores y métricas} \label{fig:countersConf}
+\end{figure}
 
-Está compuesto por todos los componentes eminentemente gráficos de la aplicación.
+Una vez configurados los contadores que se quieren utilizar, debajo del cuadro de configuración de contadores el usuario se encontrará con la configuración de métricas. Este cuadro permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1\ldots). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como desee, como por ejemplo $((pmc0 \textasciicircum{} 2) / pmc1 * 1000) * pmc4$. En la imagen *(a)* de la figura \ref{fig:countersConf} se puede observar la ventana de configuración de contadores y métricas donde hay añadidos otros ejemplos de fórmulas.
 
-Para el desarrollo de los frames y diálogos se ha utilizado la biblioteca *WX* de Python. El desarrollo se inició sobre la versión 2.8 aunque hoy en día la aplicación también es compatible con la última versión, la 3.0, esto ha hecho posible que PMCTrack GUI pueda ser ejecutada sobre la interfaz gráfica nativa de $MacOS X$.
+Cabe destacar que es posible crear más de un experimento, esto es, más de un conjunto de contadores y métricas, de tal manera que es posible configurar un contador con un determinado evento y usarlo en una métrica y, en otro experimento, configurar el mismo contador con otro evento distinto y usarlo en otra métrica distinta.
 
-Para la generación de gráficas se ha usado la biblioteca *Matplotlib*, que como ya se ha comentado antes, permite la generación de gráficos de alta calidad y precisión a partir de datos contenidos en listas o arrays, todo esto consumiendo pocos recursos y utilizando una notación muy parecida a la de $MATLAB$.
+\begin{figure}
+\centering
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotFinalConf}}\vspace{10mm}
+\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotStyleGraphConf}}
+\caption{Fase final de la configuración} \label{fig:finalConf}
+\end{figure}
 
-En la figura \ref{fig:frontend} puede observar una vista del frontend en las dos plataformas soportadas por PMCTrack GUI.
+Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón "Siguiente" aparecerá una nueva ventana, en esta ventana se realizan las últimas configuraciones antes de iniciar la monitorización. Permite elegir la aplicación que se desea monitorizar, el tiempo entre cada muestra y la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo). Adicionalmente, en esta ventana también se da la posibilidad al usuario de personalizar el aspecto visual de las gráficas que serán visualizadas posteriormente, pudiéndose elegir un modo ya configurado (modo por defecto, modo de contraste, modo hacker, modo aqua\ldots) o personalizar uno. En la figura \ref{fig:finalConf} se puede ver de forma gráfica lo comentado en este párrafo.
+
+Una vez esté todo configurado y el usuario esté listo para iniciar la monitorización, hará clic en el botón "Iniciar monitorización" de la última ventana de configuración. Al hacer clic se abrirá una nueva ventana donde se visualizará la gráfica en tiempo real de la primera métrica del primer experimento configurado. En el caso de que la aplicación a monitorizar fuera multihilo se mostrará la gráfica del hilo main. En cualquier momento podemos realizar las siguientes acciones:
+
+* *Mostrar otra gráfica distinta.* Seleccionando el experimento, métrica de ese experimento y PID del hilo (en el caso de que la aplicación sea multihilo). El usuario podrá elegir entre mostrar la gráfica en la ventana actual o en una nueva ventana independiente, esto proporciona una gran flexibilidad al poder visualizar simultáneamente tantas gráficas como desee el usuario.
+
+* *Mostrar gráfica acumulada o parcial.* Por defecto el usuario visualiza la última parte de la gráfica, es decir, la parte actual de la monitorización. Sin embargo, es posible cambiar el modo de la gráfica a gráfica acumulada, visualizando la gráfica desde que se inició la monitorización.
+
+* *Hacer captura de la gráfica actual.* El usuario puede hacer en cualquier momento de la monitorización una captura de una gráfica tal y como se está visualizando en ese instante, guardándola con formato de imagen PNG.
+
+* *Ocultar controles.* Para ver una gráfica lo mejor posible se le da la posibilidad al usuario de ocultar todos los controles de la ventana, de esta manera la gráfica ocupa todo el espacio de la ventana.
+
+* *Parar/reanudar la aplicación.* El usuario puede parar la ejecución de la aplicación que se está monitorizando cuando lo desee, pudiéndola reanudar posteriormente. Esto puede servir para realizar capturas de gráficas en un punto escogido de la ejecución con más precisión.
+
+En la figura \ref{fig:monitoring} se puede ver un ejemplo gráfico de lo explicado anteriormente.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.27]{Imagenes/Bitmap/screenshotMonitoring}
+\caption{Monitorización de una aplicación de usuario en la que se están visualizando simultáneamente en tiempo real dos métricas} \label{fig:monitoring}
+\end{figure}
+
+Cabe destacar que mientras se está realizando la monitorización, el usuario puede seguir desplazándose por las ventanas de configuración para preparar una nueva monitorización a partir de la ya existente. No hay ninguna restricción a la hora de cambiar parámetros de configuración, se permite incluso establecer otra máquina distinta accesible por SSH donde llevar a cabo la monitorización, y en ningún momento estos cambios afectarán a la monitorización que se está llevando a cabo. Cuando el usuario tenga lista la nueva configuración, hará clic en el botón "Cancelar monitorización", en el caso de que se esté llevando a cabo una monitorización, para matar el proceso de monitorización en la máquina en cuestión. Al hacerlo, se cerrarán todas las ventanas de monitorización, el botón pasará a llamarse "Iniciar monitorización" y al volver a hacer a clic se pondrá en marcha la nueva monitorización.
+
+Cuando la aplicación que se está monitorizando termina, se le notifica al usuario mediante un cuadro de diálogo, pero en ningún caso se cierran las ventanas de monitorización, de tal modo que el usuario puede seguir realizando las acciones que hemos visto anteriormente.
+
+# Diseño y detalles de implementación
+\label{sec:diseno}
+
+La aplicación PMCTrack-GUI ha sido implementada en Python, eligiéndose este lenguaje principalmente por dos motivos. En primer lugar,  por ser multiplataforma, de tal manera que su código puede ser ejecutado en cualquier sistema que soporte la instalación de un intérprete de Python. Y en segundo lugar, porque cuenta con una librería que permite la generación de gráficos de alta calidad y precisión a partir de datos contenidos en listas o arrays, la denominada librería *matplotlib*. El proceso de generación de gráficas con esta librería consume pocos recursos, de tal manera que aún realizando la monitorización de una aplicación en la misma máquina que ejecuta la GUI apenas se verán afectados los resultados de monitorización por la propia ejecución de PMCTrack-GUI.
+
+Para el desarrollo de las ventanas y diálogos con los que interactúa el usuario se ha utilizado la librería *wxWidgets*. Al igual que Python, esta librería es multiplataforma, y adicionalmente, permite incluir dentro de las ventanas gráficos generados con la librería *matplotlib* antes mencionada. Gracias a que tanto la librería *wxWidgets* como el propio Python son multiplataforma, PMCTrack-GUI también lo es. No obstante, a pesar de que teóricamente PMCTrack-GUI puede ser ejecutado en cualquier sistema con un intérprete de Python, por motivos de implementación internos "sólo" es compatible con las distribuciones GNU/Linux y MacOS X. En la figura \ref{fig:sistema de ventanas} se puede observar una vista de la aplicación en las dos plataformas soportadas.
+
+PMCTrack-GUI ha sido diseñada para ser fácilmente extensible y mantenible. La justificación de esta afirmación es que, puesto que PMCTrack es una herramienta en continuo desarrollo, se ha dado soporte a PMCTrack-GUI para el uso de nuevas funcionalidades de la herramienta PMCTrack que fueron añadidas por desarrolladores externos simultáneamente al desarrollo de nuestro proyecto. Un ejemplo de esto es el soporte al muestreo basado en eventos (EBS) de la herramienta \texttt{pmctrack} de línea de comandos. Además, se ha otorgado a PMCTrack-GUI de funcionalidades que no estaban inicialmente previstas, pero que dado el gran potencial que podían ofrecer a la aplicación, se decidieron incluir. Un ejemplo de ello es la posiblidad de monitorizar máquinas remotas accesibles por SSH.
+
+En las siguientes secciones de este capítulo analizaremos los principales componentes internos con los que cuenta PMCTrack-GUI para proveer al sistema de ventanas de la aplicación los datos necesarios para poder llevar a cabo sus funciones.
 
 \begin{figure}
 \centering
 \subfloat[Interfaz GNOME]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfGnome}}\vspace{10mm}
 \subfloat[GUI nativa de MacOS X]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfMac}}
-\caption{PMCTrack GUI ejecutándose en GNU/Linux y MacOS X} \label{fig:frontend}
+\caption{PMCTrack-GUI ejecutándose en GNU/Linux y MacOS X} \label{fig:sistema de ventanas}
 \end{figure}
 
-## Backend - Objetos de procesamiento
+## Objetos de procesamiento
 
-Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases Python que permiten su procesado y le facilitan dicha información al *frontend* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al frontend usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} se puede encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
+Esta parte consta de información sobre la máquina y los eventos hardware que puede monitorizar, así como de las clases Python que permiten su procesado y le facilitan dicha información al *sistema de ventanas* de la aplicación. Para desacoplar esta parte del resto de la aplicación, la información es servida al sistema de ventanas usando el \glosstex{patrón de diseño} *Fachada*, implementado en la clase `FacadeXML`. En el apéndice \ref{app:UML.XML} se puede encontrar un diagrama \ac{UML} completo del diseño que corresponde a toda esta parte.
 
-Para obtener la información servida por la fachada, en primer lugar, el frontend necesitará construir un objeto fachada y a través de ese objeto podrá obtener la información que quiera haciendo uso de las funciones que dicho objeto provee. La fachada es suficientemente inteligente para obtener la información del modelo que se está usando automáticamente y devolver sus eventos, sin que el frontend tenga que especificar el modelo, si bien éste podría ser especificado si así se desease. Además, la fachada también detectará si estamos en una arquitectura asimétrica o heterogénea \cite{single-isa-perf} en la cual las \ac{CPU} que podemos tener pueden disponer de eventos diferentes y también necesitar de configuraciones diferentes.
+Para obtener la información servida por la fachada, en primer lugar, el sistema de ventanas necesitará construir un objeto fachada y a través de ese objeto podrá obtener la información que quiera haciendo uso de las funciones que dicho objeto provee. La fachada es suficientemente inteligente para obtener la información del modelo que se está usando automáticamente y devolver sus eventos, sin que el sistema de ventanas tenga que especificar el modelo, si bien éste podría ser especificado si así se desease. Además, la fachada también detectará si estamos en una arquitectura asimétrica o heterogénea \cite{single-isa-perf} en la cual las \ac{CPU} que podemos tener pueden disponer de eventos diferentes y también necesitar de configuraciones diferentes.
 
 Muchas veces, los valores de retorno serán objetos Python que encapsulan todos los datos necesarios. Por ejemplo, la fachada provee de la función `getAvailableEvents` que devuelve una lista de objetos `Event` los cuales contienen todos los campos para describir a un evento y ser usado desde la parte gráfica: nombre, descripción, código, flags y subeventos.
 
@@ -158,74 +201,28 @@ Además de los ficheros XML, existen dos ficheros proveídos por el kernel modif
 
 * `/proc/cpuinfo`: De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar. Este fichero está disponible en cualquier versión del kernel Linux.
 
-## Backend - PMC Connect
-
-Es un objeto que, dada una configuración de conexión a una máquina, provee métodos para obtener todo tipo de información de esa máquina. Permite comprobar la conectividad con esa máquina, comprobar la existencia de un fichero, leer contenido de ficheros y determinar si la máquina tiene un determinado paquete instalado.
-
-Este objeto es usado por el frontend para chequear las dependencias software tanto en la máquina donde se está ejecutando la GUI como en la máquina donde se llevará a cabo la monitorización.
-
-Además, es usado por los *Objetos de procesamiento* para leer los archivos en texto plano. Usando este objeto conseguimos una total independencia entre los *Objetos de procesamiento* y la máquina donde se desea llevar a cabo la monitorización, no teniendo por tanto que hacer distinciones en estos objetos dependiendo de si se desea realizar la monitorización en una máquina remota o en la propia máquina en la cual se está ejecutando PMCTrack GUI.
-
-## Backend - User Config
+## Los objetos de configuración de usuario
 
 Es un conjunto de objetos que almacenan toda la configuración del usuario. Son enviados de un frame de configuración a otro y cada uno de estos frames se encarga de almacenar en estos objetos la parte de configuración que le corresponde.
 
-En el apéndice \ref{app:UML.UserConfig} podrá encontrar un diagrama \ac{UML} de este conjunto de objetos.
+Cuando toda la configuración de usuario está almacenada, estos objetos son procesados por el componente *PMCExtract* que comentaremos en una sección posterior.
 
-## Backend - PMC Extract
+En el apéndice \ref{app:UML.UserConfig} se podrá encontrar un diagrama \ac{UML} de este conjunto de objetos.
 
-PMC Extract es el objeto encargado de llevar a cabo la comunicación con la herramienta PMCTrack de interfaz de comandos.
+## El componente PMCConnect
 
-En su inicialización, procesa los objetos de configuración del usuario generando el comando PMCTrack que lanza en la máquina que se haya configurado para monitorizar. Adicionalmente, crea un hilo encargado de extraer toda la información proveniente del comando PMCTrack, guardándola de forma organizada en un array de datos que será utilizado por el frontend para pintar las gráficas en tiempo real. Si durante la lectura el comando PMCTrack genera un error, PMC Extract lo capturará y almacenará, de tal manera que el frontend podrá leer ese error y mostrárselo al usuario mediante un pop-up.
+Es un objeto que, dada una configuración de conexión a una máquina (encapsulada en un objeto de configuración de usuario), provee métodos para obtener todo tipo de información de esa máquina. Permite comprobar si es posible establecer una conexión con la máquina a través de SSH, comprobar la existencia de un fichero, leer el contenido de ficheros y determinar si la máquina tiene un determinado paquete instalado.
 
-PMC Extract cuenta con atributos a los que puede acceder el frontend para saber en cualquier momento el estado del benchmark, así como métodos que permiten enviar señales a dicho benchmark (señal de parada *SIGSTOP*, señal de reanudación *SIGCONT* y señal de matar proceso *SIGKILL*).
+Este objeto es usado por el sistema de ventanas para chequear las dependencias software tanto en la máquina donde se está ejecutando PMCTrack-GUI como en la máquina donde se llevará a cabo la monitorización.
 
-# Modo de uso
+Además, es usado por los *Objetos de procesamiento* para leer los archivos en texto plano.
 
-Al iniciar PMCTrack GUI se inicia con el idioma que hay configurado en la máquina que lo arranca (español si la máquina está en español e inglés en otro caso). El usuario lo primero que debe hacer es seleccionar la máquina que desea monitorizar, pudiéndose elegir la máquina donde se está ejecutando PMCTrack GUI u otra máquina remota. En cualquiera de los casos PMCTrack GUI hará un chequeo para comprobar que está instalado el software necesario tanto en la máquina a monitorizar como en la máquina donde se está ejecutando la GUI, y en caso de que falte algún requerimiento se informará debidamente al usuario.
+Usando este objeto conseguimos una total independencia entre el resto de componentes de PMCTrack-GUI y la máquina donde se desea llevar a cabo la monitorización. Ni los *Objetos de procesamiento* ni el sistema de ventanas conocen la máquina en sí donde se va a llevar a cabo la monitorización. Gracias a esto, no hay que hacer distinciones en estos objetos dependiendo de si se realiza la monitorización en una máquina remota o en la propia máquina en la cual se está ejecutando PMCTrack-GUI. En vez de ello, cada vez que haya que obtener datos de la máquina, los componentes que requieran esos datos usarán este objeto.
 
-Si todas las dependencias software están resueltas (y hay conectividad con la máquina remota si la hubiera), aparecerá una nueva ventana donde el usuario podrá configurar muy fácilmente los contadores hardware con los que cuenta la máquina a monitorizar, asignando eventos de la arquitectura de la máquina a contadores de propósito general, todo de una manera muy sencilla (aunque se permiten hacer configuraciones avanzadas pudiéndose asignar manualmente parámetros como el Umask, Cmask o EBS). En la imagen *(b)* de la figura \ref{fig:countersConf} puede visualizar una ventana de configuración de un contador.
+## El componente PMCExtract
 
-\begin{figure}
-\centering
-\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCountersConfMac}}\vspace{10mm}
-\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotCounterConf}}
-\caption{Ventanas de configuración de contadores y métricas} \label{fig:countersConf}
-\end{figure}
+*PMCExtract* es el objeto encargado de llevar a cabo la comunicación con la herramienta \texttt{pmctrack} de línea de comandos.
 
-Una vez configurados los contadores que se quieren utilizar, debajo de la sección de configuración de contadores el usuario se encontrará con la configuración de métricas. Esta sección permite al usuario configurar métricas de alto nivel que podrán verse posteriormente en forma de gráfica en tiempo real. Para la generación de métricas se usan fórmulas cuyas variables son los contadores que el usuario configuró anteriormente (pmc0, pmc1\ldots). No hay ninguna limitación a la hora de generar las fórmulas, de tal manera que el usuario podrá escribir fórmulas tan complejas como quiera, como por ejemplo $(pmc0 ^ 2) / pmc1 * 1000) * pmc4$. En la imagen *(a)* de la figura \ref{fig:countersConf} puede observar la ventana de configuración de contadores y métricas donde hay añadidos otros ejemplos de fórmulas.
+En su inicialización, procesa los objetos de configuración del usuario generando el comando \texttt{pmctrack} que lanza en la máquina que se haya configurado para monitorizar. Adicionalmente, crea un hilo encargado de extraer toda la información proveniente del comando \texttt{pmctrack}, guardándola de forma organizada en un diccionario de datos a medida que el comando \texttt{pmctrack} va generando nuevas muestras. Este diccionario de datos será utilizado por el sistema de ventanas para generar las gráficas en tiempo real. Si durante la obtención de muestras el comando \texttt{pmctrack} genera un error, el componente *PMCExtract* lo capturará y almacenará, de tal manera que el sistema de ventanas podrá recibir ese error y mostrárselo al usuario mediante un cuadro de diálogo.
 
-Cabe destacar que es posible crear más de un experimento, esto es, más de un conjunto de contadores y métricas, de tal manera que es posible configurar un contador con un determinado evento y usarlo en una métrica y, en otro experimento, configurar el mismo contador con otro evento distinto y usarlo en otra métrica distinta.
-
-\begin{figure}
-\centering
-\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotFinalConf}}\vspace{10mm}
-\subfloat[]{\includegraphics[scale=0.23]{Imagenes/Bitmap/screenshotStyleGraphConf}}
-\caption{Fase final de la configuración} \label{fig:finalConf}
-\end{figure}
-
-Cuando el usuario haya terminado de configurar todos los experimentos que quiera y haya pinchado en el botón Siguiente aparecerá una nueva ventana, esta ventana permite realizar las últimas configuraciones antes de iniciar la monitorización. Permite elegir el benchmark que se desea monitorizar, el tiempo entre cada muestra, la ruta del archivo donde guardar los resultados del comando PMCTrack generado (si es que el usuario quiere guardarlo), y la personalización de las gráficas, pudiéndose elegir un modo ya configurado (modo por defecto, modo hacker, modo aqua... etcétera) o personalizar uno. Véanse las dos imágenes de la figura \ref{fig:finalConf} para ver un ejemplo gráfico de lo comentado en este párrafo.
-
-Una vez esté todo configurado y el usuario esté listo para iniciar la monitorización, pinchará en el botón "Iniciar monitorización" de la última ventana de configuración. Al pinchar se abrirá una nueva ventana donde se visualizará la gráfica en tiempo real de la primera métrica del primer experimento configurado (si el benchmark fuera multihilo se mostrará la gráfica del hilo principal). En cualquier momento podemos realizar las siguientes acciones:
-
-* *Mostrar otra gráfica distinta.* Seleccionando el experimento, métrica de ese experimento y PID del hilo (en el caso de que el benchmark sea multihilo). El usuario podrá elegir entre mostrar la gráfica en la ventana actual o en una nueva ventana independiente, esto proporciona una gran flexibilidad al poder visualizar simultáneamente tantas gráficas como desee el usuario.
-
-* *Mostrar gráfica acumulada o parcial.* Por defecto el usuario visualiza la última parte de la gráfica, es decir, la parte actual de la monitorización, sin embargo, es posible cambiar el modo de la gráfica a gráfica acumulada, visualizando la gráfica desde que se inició la monitorización.
-
-* *Hacer captura de la gráfica actual.* El usuario puede hacer en cualquier momento de la monitorización una captura de una gráfica tal y como se está visualizando en ese instante, guardándola con formato de imagen PNG.
-
-* *Ocultar controles.* Para ver una gráfica lo mejor posible se le da la posibilidad al usuario de ocultar todos los controles de la ventana, de esta manera la gráfica ocupa el tamaño entero de la ventana.
-
-* *Parar el benchmark.* El usuario puede parar la ejecución del benchmark cuando lo desee, pudiéndolo reanudar posteriormente. Esto puede servir para sacar capturas de gráfica más precisas.
-
-En la figura \ref{fig:monitoring} puede ver un ejemplo gráfico de lo explicado anteriormente.
-
-\begin{figure}
-\centering
-\includegraphics[scale=0.27]{Imagenes/Bitmap/screenshotMonitoring}
-\caption{Monitorización de un benchmark, visualizándose simultáneamente en tiempo real dos métricas} \label{fig:monitoring}
-\end{figure}
-
-Cabe destacar que mientras se está realizando la monitorización, el usuario puede seguir desplazándose por las ventanas de configuración para preparar una nueva monitorización. Cuando tenga lista la nueva configuración (se permite incluso monitorizar otra máquina distinta a la que se está monitorizando) el usuario pinchará en el botón "Cancelar monitorización" (en el caso de que se esté llevando a cabo una monitorización) para matar el proceso de monitorización en la máquina, el botón pasará a llamarse "Iniciar monitorización" y al pincharse se pondrá en marcha la nueva monitorización.
-
-Cuando el benchmark termina se le notifica al usuario mediante un pop-up, pero en ningún caso se cierran las gráficas, pudiéndo el usuario seguir realizando las acciones que hemos visto anteriormente.
+*PMCExtract* cuenta con atributos a los que puede acceder el sistema de ventanas para saber en cualquier momento el estado de la aplicación que se está monitorizando, así como métodos que permiten enviar señales a dicha aplicación (señal de parada *SIGSTOP*, señal de reanudación *SIGCONT* y señal de matar proceso *SIGKILL*).
