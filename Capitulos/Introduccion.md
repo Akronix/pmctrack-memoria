@@ -6,7 +6,7 @@
 
 La mayor parte de los procesadores actuales cuentan con una serie de contadores hardware para monitorización o **PMCs** (*Performance Monitoring Counters*). Estos contadores permiten a los usuarios obtener métricas de rendimiento de sus aplicaciones, tales como el número de instrucciones por ciclo (IPC) o la tasa de fallos del último nivel de la cache (*last-level-cache (LLC) miss rate*). Estas métricas ayudan a identificar posibles cuellos de botella en desarrollos software, proporcionando pistas que pueden resultar muy valiosas para programadores y diseñadores de microprocesadores. Sin embargo, el acceso a estos PMCs está normalmente restringido a código que se esté ejecutando en el nivel privilegiado reservado al sistema operativo. Para permitir el acceso a estos contadores desde el espacio del usuario es preciso implementar una herramienta a nivel de kernel, un código integrado en el propio sistema operativo o un driver, que ofrezca una interfaz de alto nivel para el usuario final \cite{perfevents,perfmon2,oprofile}.
 
-Trabajos previos han demostrado que el planificador del sistema operativo (SO) puede beneficiarse de los datos proporcionados por los PMCs, haciendo posible la realización de sofisticadas y efectivas optimizaciones en tiempo de ejecución en sistemas multicore \cite{observations,cache-aware-asplos,merkel-eurosys10,akula,intel-amp,camp,petrucci-tecs15,acfs}. Las herramientas de dominio público que hacen uso de los PMCs permiten monitorizar el rendimiento de aplicaciones desde el espacio del usuario, pero no proporcionan una API independiente de la arquitectura para que el propio sistema operativo pueda utilizar la información de los PMCs para llevar a cabo decisiones de planificación. Ante tal situación, algunos investigadores han recurrido al desarrollo de código *ad-hoc* específico de la arquitectura para acceder a los PMCs, usándolos para realizar implementaciones de distintas estrategias de planificación \cite{observations,intel-amp,camp,acfs}. Sin embargo, esta aproximación deja "atada" la implementación del planificador a una cierta arquitectura o modelo del procesador, y adicionalmente, obliga a los desarrolladores a tratar con las rutinas de bajo nivel que acceden a los PMCs en cada arquitectura soportada por el planificador. Para evitar enfrentarse a estos graves problemas, otros investigadores han recurrido al desarrollo de sencillos prototipos ejecutados en el espacio de usuario \cite{cache-aware-asplos,akula,petrucci-tecs15}. Estos prototipos dependen de herramientas de *PMCs* existentes orientadas a ser utilizadas en el espacio de usuario. 
+Trabajos previos han demostrado que el planificador del sistema operativo (SO) puede beneficiarse de los datos proporcionados por los PMCs, haciendo posible la realización de sofisticadas y efectivas optimizaciones en tiempo de ejecución en sistemas multicore \cite{observations,cache-aware-asplos,merkel-eurosys10,akula,intel-amp,camp,petrucci-tecs15,acfs}. Las herramientas de dominio público que hacen uso de los PMCs permiten monitorizar el rendimiento de aplicaciones desde el espacio del usuario, pero no proporcionan una API independiente de la arquitectura para que el propio sistema operativo pueda utilizar la información de los PMCs para llevar a cabo decisiones de planificación. Ante tal situación, algunos investigadores han recurrido al desarrollo de código *ad-hoc* específico de la arquitectura para acceder a los PMCs, usándolos para realizar implementaciones de distintas estrategias de planificación \cite{observations,intel-amp,camp,acfs}. Sin embargo, esta aproximación deja "atada" la implementación del planificador a una cierta arquitectura o modelo del procesador, y adicionalmente, obliga a los desarrolladores a tratar con las rutinas de bajo nivel que acceden a los PMCs en cada arquitectura soportada por el planificador. Para evitar enfrentarse a estos graves problemas, otros investigadores han recurrido al desarrollo de sencillos prototipos ejecutados en el espacio de usuario \cite{cache-aware-asplos,akula,petrucci-tecs15}. Estos prototipos dependen de herramientas de *PMCs* existentes orientadas a ser utilizadas en el espacio de usuario.
 
 <!--
 # Antecedentes: La herramienta PMCTrack
@@ -25,9 +25,9 @@ A pesar de ser una herramienta diseñada específicamente para ayudar al planifi
 
 Se han creado varias herramientas para el kernel Linux en los últimos años \cite{oprofile,perfmon2,perf,papi,likwid,schedmon}, ocultando la gran diversidad existente de interfaces hardware a los usuarios finales y proporcionando a estos un acceso cómodo a los PMCs en el espacio de usuario. En general, estas herramientas se pueden dividir en dos grandes grupos. El primer grupo incluye herramientas como Oprofile \cite{oprofile}, perfmon2 \cite{perfmon2}, o perf \cite{perf}, los cuales exponen al usuario los contadores de monitorización a través de un conjunto reducido de herramientas de línea de comandos. Estas herramientas no requieren modificar el código fuente de la aplicación que se desea monitorizar, sino que actúan como procesos externos con la capacidad de recibir datos de los PMCs de otra aplicación. El segundo grupo de herramientas provee al usuario librerías para acceder a los contadores desde el código fuente de la aplicación, lo que constituye una potente interfaz de acceso a los PMCs. Las librerías libpfm \cite{perfmon2} y PAPI \cite{papi} siguen este enfoque.
 
-La herramienta perf \cite{perf}, que se basa en el subsistema de *Eventos Perf* \cite{perfevents} del kernel Linux, es posiblemente la herramienta más completa del primer grupo comentado en la actualidad. Aunque perf comenzó como una herramienta de uso de PMCs que soportaba un amplio abanico de arquitecturas, ahora dota a los usuarios de potentes capacidades de monitorización permitiéndoles hacer un seguimiento de las llamadas al sistema de un proceso o de las actividades relacionadas con el planificador. Además, al igual que PMCTrack, perf también tiene la capacidad de exponer al usuario otra información de monitorización hardware presente en procesadores modernos (pero no proporcionada por los PMCs), como por ejemplo la tasa de ocupación de la memoria caché. 
+La herramienta perf \cite{perf}, que se basa en el subsistema de *Eventos Perf* \cite{perfevents} del kernel Linux, es posiblemente la herramienta más completa del primer grupo comentado en la actualidad. Aunque perf comenzó como una herramienta de uso de PMCs que soportaba un amplio abanico de arquitecturas, ahora dota a los usuarios de potentes capacidades de monitorización permitiéndoles hacer un seguimiento de las llamadas al sistema de un proceso o de las actividades relacionadas con el planificador. Además, al igual que PMCTrack, perf también tiene la capacidad de exponer al usuario otra información de monitorización hardware presente en procesadores modernos (pero no proporcionada por los PMCs), como por ejemplo la tasa de ocupación de la memoria caché.
 
-A pesar del potencial de perf y de las otras herramientas relacionadas, ninguna de ellas implementa un mecanismo que proporcione a nivel del kernel una interfaz independiente de la arquitectura que permita al planificador del SO aprovechar la información de los PMCs para sus decisiones internas. Este es el principal propósito de PMCTrack. 
+A pesar del potencial de perf y de las otras herramientas relacionadas, ninguna de ellas implementa un mecanismo que proporcione a nivel del kernel una interfaz independiente de la arquitectura que permita al planificador del SO aprovechar la información de los PMCs para sus decisiones internas. Este es el principal propósito de PMCTrack.
 
 <!--Adicionalmente, creemos que el subsistema de *Eventos Perf* \cite{perfevents} de Linux, en el cual se basa perf,  es demasiado complejo, siendo difícil añadir el soporte necesario. Al contrario, los módulos de monitorización de PMCTrack constituyen una forma más directa de exponer este tipo de métricas a los usuarios y al planificador del sistema operativo.-->
 
@@ -131,7 +131,7 @@ En un sistema con un procesador moderno de Intel, este comando proporcionará al
 
 La opción -c acepta como argumento un _string_ de configuración que sigue el formato de configuración de eventos internos reconocido por el módulo PMCTrack del kernel. El formato de esta línea da flexibilidad a usuarios experimentados permitiéndoles decidir los eventos que contarán cada uno de los contadores, especificando el código hexadecimal que será escrito en los registros de bajo nivel de los PMCs expuestos por el módulo del kernel. Como hemos visto, el string \texttt{pmc0,pmc3=0x2e,umask3=0x41} permite obtener el recuento de eventos mencionados en la mayoría de los procesadores modernos de Intel. En procesadores de la familia ARM Cortex Ax este conjunto de eventos puede representarse mediante el _string_ \texttt{pmc1=0x8,pmc2=0x17}. Si el usuario desconoce los códigos hexadecimales que permiten asociar un evento a un contador es necesario consultar esos códigos en el manual de la arquitectura en cuestión.
 
-Una característica muy destacable del programa `pmctrack` es su capacidad de obtener también los valores de los contadores virtuales que exporta el módulo de monitorización activo. De este modo, es posible contabilizar eventos con los contadores hardware al mismo tiempo que se extrae otro tipo de información de monitorización relevante, como el consumo de potencia media o energía consumida en un intervalo de tiempo prefijado. Para obtener los valores de los contadores virtuales es preciso usar la opción -V seguida de la cadena de caracteres que indica qué contadores virtuales (numerados a partir del 0) se desean consultar. Por ejemplo, la cadena `virt0,virt2` constituiría una cadena válida para consultar el valor de dos contadores virtuales siempre y cuando el módulo de monitorización activo exportase dichos contadores. Para consultar la semántica de los contadores virtuales actualmente exportados es preciso consultar una entrada */proc* gestionada por PMCTrack.  
+Una característica muy destacable del programa `pmctrack` es su capacidad de obtener también los valores de los contadores virtuales que exporta el módulo de monitorización activo. De este modo, es posible contabilizar eventos con los contadores hardware al mismo tiempo que se extrae otro tipo de información de monitorización relevante, como el consumo de potencia media o energía consumida en un intervalo de tiempo prefijado. Para obtener los valores de los contadores virtuales es preciso usar la opción -V seguida de la cadena de caracteres que indica qué contadores virtuales (numerados a partir del 0) se desean consultar. Por ejemplo, la cadena `virt0,virt2` constituiría una cadena válida para consultar el valor de dos contadores virtuales siempre y cuando el módulo de monitorización activo exportase dichos contadores. Para consultar la semántica de los contadores virtuales actualmente exportados es preciso consultar una entrada */proc* gestionada por PMCTrack.
 
 En caso de que un modelo específico del procesador no integre suficientes PMCs como para monitorizar a la vez un conjunto determinado de eventos, el usuario puede activar la función de multiplexación de eventos de PMCTrack. Esto se reduce a especificar varios conjuntos de eventos mediante la inclusión de varias instancias de la opción -c en la línea de comandos. En este caso, en la salida aparecerá un nuevo campo \textit{expid} que indicará al usuario a qué experimento corresponde cada una de las muestras que se imprimen por pantalla.
 
@@ -148,12 +148,12 @@ Para usar EBS desde el espacio de usuario se debe especificar el flag \textit{eb
 \begin{lstlisting}[language=bash,basicstyle=\tt\scriptsize]
 $ pmctrack -c pmc0,pmc3=0x2e,umask3=0x41,ebs0=500000000 ./mcf06
 nsample  event          pmc0          pmc3
-      1    ebs     500000087         10677           
-      2    ebs     500000002         22336           
-      3    ebs     500000004         17131           
-      4    ebs     500000007         12995           
-      5    ebs     500000014          9348           
-      6    ebs     500000010          5804           
+      1    ebs     500000087         10677
+      2    ebs     500000002         22336
+      3    ebs     500000004         17131
+      4    ebs     500000007         12995
+      5    ebs     500000014          9348
+      6    ebs     500000010          5804
 ...
 \end{lstlisting}
 
@@ -165,11 +165,18 @@ La columna \textit{pmc3} muestra el número de fallos de cache por cada 500 mill
 
 # Objetivos del proyecto
 
-La herramienta PMCTrack ofrece grandes funcionalidades y permite que el planificador del SO pueda explotar los contadores hardware para realizar optimizaciones en tiempo de ejecución. Sin embargo, PMCTrack aún cuenta con importantes limitaciones que ensombrecen su gran potencial, sobre todo en lo que respecta a la monitorización de aplicaciones desde modo usuario. En primer lugar, su uso resulta un tanto complicado para un usuario poco experimentado, ya que éste tiene que consultar manuales técnicos de distintas arquitecturas para poder especificar los códigos hexadecimales de los eventos que desea contabilizar en cada uno de los PMCs. En segundo lugar, la obtención del recuento de eventos específicos en los PMCs cada cierto tiempo no proporciona al usuario una visión global acerca de la evolución temporal del valor de esos contadores, y mucho menos de métricas de alto nivel compuestas por la combinación de valores de dos o más PMCs. Esta valiosa información para el usuario puede conseguirse mediante la construcción de gráficas. No obstante, esto requiere (1) procesar los datos proporcionados por el comando \texttt{pmctrack} para obtener los valores de las métricas de alto nivel a lo largo del tiempo y (2) emplear alguna utilidad como *Gnuplot* para la generación de las gráficas finales. Finalmente, otra limitación significativa de la herramienta es el hecho de que el comando \texttt{pmctrack} (y el propio módulo del kernel en el que se basa) no permite la monitorización de aplicaciones multihilo desde el espacio de usuario.
+La herramienta PMCTrack ofrece grandes funcionalidades y permite que el planificador del SO pueda explotar los contadores hardware para realizar optimizaciones en tiempo de ejecución. Sin embargo, PMCTrack aún cuenta con importantes limitaciones que ensombrecen su gran potencial, sobre todo en lo que respecta a la monitorización de aplicaciones desde modo usuario.
+
+En primer lugar, su uso resulta un tanto complicado para un usuario poco experimentado, ya que éste tiene que consultar manuales técnicos de distintas arquitecturas para poder especificar los códigos hexadecimales de los eventos que desea contabilizar en cada uno de los PMCs.
+
+En segundo lugar, la obtención del recuento de eventos específicos en los PMCs cada cierto tiempo no proporciona al usuario una visión global acerca de la evolución temporal del valor de esos contadores, y mucho menos de métricas de alto nivel compuestas por la combinación de valores de dos o más PMCs. Esta valiosa información para el usuario puede conseguirse mediante la construcción de gráficas. No obstante, esto requiere (1) procesar los datos proporcionados por el comando \texttt{pmctrack} para obtener los valores de las métricas de alto nivel a lo largo del tiempo y (2) emplear alguna utilidad como *Gnuplot* para la generación de las gráficas finales. Finalmente, otra limitación significativa de la herramienta es el hecho de que el comando \texttt{pmctrack} (y el propio módulo del kernel en el que se basa) no permite la monitorización de aplicaciones multihilo desde el espacio de usuario.
 
 Para proporcionar una solución a estas y otras limitaciones de PMCTrack, este Trabajo de Fin de Grado persigue los siguientes objetivos:
+
   1. Proporcionar soporte para la monitorización de aplicaciones multihilo desde el espacio de usuario con PMCTrack.
-  2. Diseñar e implementar un _frontend_ gráfico para PMCTrack (llamado PMCTrack-GUI) que permita visualizar en tiempo real el valor de distintas métricas de rendimiento definidas por el usuario
+
+  2. Diseñar e implementar un _frontend_ gráfico para PMCTrack (llamado PMCTrack-GUI) que permita visualizar en tiempo real el valor de distintas métricas de rendimiento definidas por el usuario.
+
   3. Crear _libpmctrack_, una librería que permita la monitorización de fragmentos de código de aplicaciones en el espacio de usuario mediante PMCs.
 
 <!--
@@ -182,15 +189,15 @@ Adicionalmente, se llevarán a cabo tres casos de estudio sobre el comportamient
 
 # Plan de trabajo
 
-Para alcanzar los objetivos del proyecto, presentados en la sección anterior, el desarrollo del proyecto consta de las siguientes 8 etapas:
+Para alcanzar los objetivos del proyecto, presentados en la sección anterior, el desarrollo del proyecto constó de las siguientes etapas:
 
 1. Planificación del trabajo a realizar por cada uno de los dos integrantes del proyecto.
 2. Lectura de documentación acerca de los lenguajes de programación y demás tecnologías utilizadas para llevar a cabo los desarrollos (Python, librería WX, matplotlib\ldots). Esta etapa también conlleva familiarizarse con la arquitectura interna de PMCTrack.
 3. Realización de bocetos o *mockups* de PMCTrack-GUI para estudiar distintas alternativas de diseño y ayudar a llegar a un consenso sobre el diseño definitivo.
-5. Implementación del soporte para la monitorización de aplicaciones multihilo en el espacio de usuario con PMCTrack.
-6. Implementación de PMCTrack-GUI.
-7. Diseño e implementación de _libpmctrack_ y refactorización del código del programa de línea de comandos `pmctrack`.
-8. Realización de casos de estudio poniendo a prueba las herramientas desarrolladas.
+4. Implementación del soporte para la monitorización de aplicaciones multihilo en el espacio de usuario con PMCTrack.
+5. Implementación de PMCTrack-GUI.
+6. Diseño e implementación de _libpmctrack_ y refactorización del código del programa de línea de comandos `pmctrack`.
+7. Realización de casos de estudio poniendo a prueba las herramientas desarrolladas.
 
 Cabe destacar que el orden de estas etapas es meramente orientativo, ya que dichas etapas no se realizaron de forma estrictamente secuencial. En particular, fue necesario realizar planificaciones particulares en cada una de las etapas y distintos componentes de las aplicación PMCTrack-GUI se realizaron de forma simultánea. Adicionalmente, se dio soporte en nuestros desarrollos a funcionalidades de PMCTrack añadidas mientras llevábamos a cabo nuestro proyecto (PMCTrack es una herramienta en continuo desarrollo), y se añadieron nuevas funcionalidades a nuestros desarrollos que no estaban inicialmente previstas (como la inclusión de un modo SSH para PMCTrack-GUI).
 
@@ -198,7 +205,7 @@ Cabe destacar que el orden de estas etapas es meramente orientativo, ya que dich
 
 El resto del contenido de esta memoria se organiza de la siguiente forma:
 
-* **El capítulo 2** explica el desarrollo del soporte a la herramienta PMCTrack para la monitorización de aplicaciones multihilo desde el espacio de usuario. 
+* **El capítulo 2** explica el desarrollo del soporte a la herramienta PMCTrack para la monitorización de aplicaciones multihilo desde el espacio de usuario.
 * **El capítulo 3** presenta la librería libpmctrack. En este capítulo no solo se describen los detalles de la librería sino también se presenta la motivación existente tras la misma.
 * **El capítulo 4** presenta la motivación, el diseño e implementación de PMCTrack-GUI, el _frontend_ gráfico de PMCTrack.
 <!--
