@@ -26,7 +26,7 @@ Para especificar las métricas de alto nivel que serán visualizadas posteriorme
 
 Para terminar de justificar que actualmente no hay otra alternativa en el mercado como PMCTrack-GUI, hay que comentar que se trata de una aplicación multiplataforma de código libre y completamente gratuita, mientras que las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
 
-Aunque ya se han comentado las principales características con las que cuenta PMCTrack-GUI, a continuación destacamos otras características relevantes: 
+Aunque ya se han comentado las principales características con las que cuenta PMCTrack-GUI, a continuación destacamos otras características relevantes:
 
 * Permite la monitorización de máquinas remotas accesibles por SSH, desacoplando la GUI de la propia monitorización.
 * Permite observar simultáneamente y en tiempo real dos o más gráficas de métricas de rendimiento, para el mismo o distintos hilos de ejecución de la aplicación monitorizada.
@@ -114,7 +114,7 @@ Para obtener la información servida por la fachada, en primer lugar, el sistema
 
 Muchas veces, los valores de retorno serán objetos Python que encapsulan todos los datos necesarios. Por ejemplo, la fachada provee de la función `getAvailableEvents` que devuelve una lista de objetos `Event` los cuales contienen todos los campos para describir a un evento y ser usado desde la parte gráfica: nombre, descripción, código, flags y subeventos.
 
-Internamente, cuando se le solicita información a la fachada, ésta crea las estructuras de datos necesarias, procesa los argumentos, hace diversas llamadas a las funciones necesarias para obtener la información deseada y devuelve la información procesada como valores de retorno. En particular, disponemos de una clase `Parser que es la encargada de tratar con los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los ficheros \ac{DTD} (*Document Type Definition*). En la figura \ref{fig:objproc} se muestra un pequeño esquema que ilustra el flujo de acceso a los objetos de procesamiento.
+Internamente, cuando se le solicita información a la fachada, ésta crea las estructuras de datos necesarias, procesa los argumentos, hace diversas llamadas a las funciones necesarias para obtener la información deseada y devuelve la información procesada como valores de retorno. En particular, disponemos de una clase `Parser` que es la encargada de tratar con los archivos \ac{XML}, siguiendo su formato de entrada bien definido por los ficheros \ac{DTD} (*Document Type Definition*). En la figura \ref{fig:objproc} se muestra un pequeño esquema que ilustra el flujo de acceso a los objetos de procesamiento.
 
 \begin{figure}
 \centering
@@ -206,7 +206,7 @@ Además de los ficheros XML, existen dos ficheros de texto plano que resultan re
 
 * `/proc/cpuinfo`: De este fichero se obtiene el número de *cores* que hay en la máquina que se quiere monitorizar. Este fichero está disponible en cualquier versión del kernel Linux.
 
-## Los objetos de configuración de usuario
+## Objetos de configuración de usuario
 
 Es un conjunto de objetos que almacenan toda la configuración del usuario. Son enviados de un _frame_ de configuración a otro y cada uno de estos frames se encarga de almacenar en estos objetos la parte de configuración que le corresponde.
 
