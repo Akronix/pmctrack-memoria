@@ -41,6 +41,7 @@ Esta sección describe la arquitectura interna de PMCTrack tal y como era antes 
 \centering
 \selectlanguage{english}
 \input{Imagenes/Fuentes/architecture}
+\selectlanguage{spanish}
 \caption{Arquitectura de PMCTrack}
 \label{fig:arch}
 \end{figure}
