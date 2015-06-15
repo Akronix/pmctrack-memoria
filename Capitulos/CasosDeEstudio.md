@@ -86,13 +86,16 @@ Los resultados obtenidos se encuentran en las tablas \ref{tab:gloBin} y \ref{tab
 
 * 0.4 millones de fallos a memoria caché de último nivel por el montículo binario y 10.5 millones por el montículo de Fibonacci. Aquí podemos comprobar como, efectivamente, la diferencia de fallos de acceso a la memoria caché es abismal, más de 20 veces más fallos en la memoria caché tiene el montículo de Fibonacci frente al montículo binario.
 
-Resulta también de gran relevancia calcular la tasa de fallos por acceso a datos, esta sería de un 5,33\% en el caso del montículo binario, y de un 42\% en el caso del montículo de Fibonacci. De nuevo, una muy grande diferencia.
+Resulta también de gran relevancia calcular la tasa de fallos de la memoria caché, esta sería de un 5,33\% en el caso del montículo binario, y de un 42\% en el caso del montículo de Fibonacci. De nuevo, una muy grande diferencia.
 
 Por tanto, todo apunta a que esta gran diferencia en la cantidad del acceso a memoria caché y, sobre todo, en sus porcentajes de aciertos, hace muy superior en la práctica al montículo binario frente al montículo de Fibonacci, a pesar de que la teoría predijera lo contrario.
 
 ### Segundo análisis
 
-No obstante, podemos afinar aún más y obtener mayor información. Revisando el análisis anterior, observamos que la primera muestra del montículo de fibonacci no está equilibrada con el resto de muestras: ejecuta el doble de instrucciones que el resto, y, sin embargo, hace muchos menos accesos a memoria; lo que nos lleva a pensar que podría haber una fase inicial en las que el montículo invierta menos tiempo y menos acceso a recursos que el resto. Para comprobar esto, también mediante libpmctrack podemos monitorizar fragmentos de código aislados. Para ello, situamos tres bloques start y stop counters entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción del millón de números y un tercero para la eliminación de éstos. Los resultados los podemos ver en las tablas \ref{tab:fragsBin} y \ref{tab:fragsFib}.
+No obstante, podemos afinar aún más y obtener mayor información. Revisando el análisis anterior, observamos que la primera muestra del montículo de fibonacci no está equilibrada con el resto de muestras: ejecuta el doble de instrucciones que el resto, y, sin embargo, hace muchos menos accesos a memoria; lo que nos lleva a pensar que podría haber una fase inicial en las que el montículo invierta menos tiempo y menos acceso a recursos que el resto. Para comprobar esto, también mediante libpmctrack podemos monitorizar fragmentos de código aislados.
+
+Para ello, situamos tres bloques start y stop counters entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción del millón de números y un tercero para la eliminación de éstos. Estas tres partes se corresponderían con tres fases o etapas diferentes de operaciones con la estructura de datos. Además, puesto que las franjas de start y stop ahora son suficientemente pequeñas, también cambiamos la configuración para que no se haga captura de muestras por tiempo, fijando el timeout a 0, y tener de esta manera todos los datos de cada fase en una sola muestra.\newline
+Los resultados los podemos ver en las tablas \ref{tab:fragsBin} y \ref{tab:fragsFib}.
 
 \begin{table}[h]
 \caption{Resultados monitorización por fases montículo binario}
@@ -131,7 +134,11 @@ No obstante, podemos afinar aún más y obtener mayor información. Revisando el
 \end{tabular}
 \end{table}
 
-Con estos nuevos datos, podemos ver claramente que la fase de inicialización y reserva inicial de memoria es prácticamente la misma para ambas estructuras en cuanto a número de instrucciones y acceso a memoria. En la fase de inserción, la diferencia tampoco es demasiado grande, de hecho, aunque el montículo de Fibonacci realiza más instrucciones, efectivamente cumple su teoría en cuanto a que realiza menos accesos a memoria y éstos son más exitosos que el montículo bibario. La gran diferencia llega en la última fase, la fase de borrado de elementos, en ésta el número de instrucciones ejecutadas es mucho mayor para ambos montículos. Es en esta fase cuando el montículo de Fibonacci se dispara en cuanto a número de accesos a memoria y la tasa de fallos es del tan alta como el 40\% mencionado anteriormente, eclipsando cualquier buen resultado que se podía haber obtenido en fases anteriores; mientras que el montículo binario, mantiene una buena tasa de fallos y un número de accesos relativamente mucho menor.
+Con estos nuevos datos, podemos ver claramente que la fase de inicialización y reserva inicial de memoria es prácticamente la misma para ambas estructuras en cuanto a número de instrucciones y acceso a memoria.
+
+En la fase de inserción, la diferencia tampoco es demasiado grande, de hecho, aunque el montículo de Fibonacci realiza más instrucciones, efectivamente cumple su teoría en cuanto a que realiza menos accesos a memoria y éstos son más exitosos que el montículo bibario.
+
+La gran diferencia llega en la última fase, la fase de borrado de elementos, en ésta el número de instrucciones ejecutadas es mucho mayor para ambos montículos. Es en esta fase cuando el montículo de Fibonacci se dispara en cuanto a número de accesos a memoria y la tasa de fallos es del tan alta como el 40\% mencionado anteriormente, eclipsando cualquier buen resultado que se podía haber obtenido en fases anteriores; mientras que el montículo binario, mantiene una buena tasa de fallos y un número de accesos relativamente mucho menor.
 
 ### Conclusiones
 
