@@ -30,7 +30,7 @@ Ahora vamos a comprobar si en la práctica se confirman los costes que predice l
 
 \subsection{Primer análisis}
 
-La ejecución se realiza en un sistema con un procesador Intel Core i7-3520M a 2.9GHz y 8GB de RAM. Después de ejecutar el benchmark una primera vez con cada montículo, obtenemos los siguientes tiempos: $232,859ms$ para el montículo binario y $1690.336ms$ para el montículo de Fibonacci. Es decir, el montículo de Fibonacci es siete veces más lento que el montículo binario.
+La ejecución se realiza en un sistema con un procesador Intel Core i7-3520M a 2.9GHz y 8GB de RAM. Después de ejecutar el benchmark una primera vez con cada montículo, obtenemos los siguientes tiempos: $232.859ms$ para el montículo binario y $1690.336ms$ para el montículo de Fibonacci. Es decir, el montículo de Fibonacci es siete veces más lento que el montículo binario.
 
 Para ver si esta gran diferencia de tiempo es debido a la memoria caché, necesitamos alguna forma de monitorizar directamente cómo se está comportando. Ésta es una situación donde libpmctrack resulta tremendamente útil, ya que nos permite obtener información del hardware e incluso analizar diferentes fragmentos de código de forma aislada.
 
