@@ -6,17 +6,16 @@
 
 Después de la realización de este proyecto, PMCTrack cuenta con tres nuevas características: Soporte de monitorización para aplicaciones multihilo; Una librería, libpmctrack, que permite la monitorización de fragmentos de código directamente insertando llamadas a la librería dentro de código fuente; y finalmente, una interfaz gráfica, PMCTrack-GUI, que facilita su uso y genera gráficas con métricas personalizadas a partir de los datos de monitorización obtenidos. En los capítulos 2, 3 y 4, hemos pretendido explicar con detalle cómo hemos realizado y cómo funcionan cada una de estas características; y, en el capítulo 5, hemos querido mostrar ejemplos de su funcionamiento y utilidad con algunos casos de estudio. Para finalizar, en este capítulo queremos a analizar a fondo el impacto holístico de cada una de estas nuevas características.
 
-\begin{figure}
-\centering
-\caption{Diagramas arquitectura PMCTrack antes y después del TFG}
-\label{fig:antesydespues}
+\begin{figure}%
 \selectlanguage{english}
-\input{Imagenes/Fuentes/architecture}
-\input{Imagenes/Fuentes/architecture-new}
+    \centering
+    \subfloat[Antes del TFG]{{ \input{Imagenes/Fuentes/architecture} }}%
+    \qquad
+    \subfloat[Después del TFG]{{ \input{Imagenes/Fuentes/architecture-new} }}%
 \selectlanguage{spanish}
+\caption{Diagramas arquitectura PMCTrack}%
+\label{fig:antesydespues}%
 \end{figure}
-
-
 
 En la figura \ref{fig:antesydespues} podemos ver dos diagramas. El primero es el que ya presentamos en el capítulo de Introducción en este mismo documento y corresponde al estado de PMCTrack antes de este TFG, el segundo corresponde al estado de PMCTrack al finalizar este proyecto. Podemos observar como los cambios han afectado a todos los niveles de PMCTrack: desde el nivel del kernel al modificar y rediseñar el módulo para que permita obtener valores desde varios procesos, pasando por el nivel del espacio de usuario con libpmctrack, hasta finalmente llegar al nivel más alto de aplicaciones que se comunican directamente con el usuario como PMCTrack-GUI.
 
