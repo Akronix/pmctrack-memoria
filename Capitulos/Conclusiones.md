@@ -4,7 +4,7 @@
 
 # Conclusiones
 
-Después de la realización de este proyecto, PMCTrack cuenta con tres nuevas características: Soporte de monitorización para aplicaciones multihilo; Una librería, libpmctrack, que permite la monitorización de fragmentos de código directamente insertando llamadas a la librería dentro de código fuente; y finalmente, una interfaz gráfica, PMCTrack-GUI, que facilita su uso y genera gráficas con métricas personalizadas a partir de los datos de monitorización obtenidos. En los capítulos 2, 3 y 4, hemos pretendido explicar con detalle cómo hemos realizado y cómo funcionan cada una de estas características; y, en el capítulo 5, hemos querido mostrar ejemplos de su funcionamiento y utilidad con algunos casos de estudio. Para finalizar, en este capítulo queremos a analizar a fondo el impacto holístico de cada una de estas nuevas características.
+Después de la realización de este proyecto, PMCTrack cuenta con tres nuevas características: Soporte de monitorización para aplicaciones multihilo; Una librería, libpmctrack, que permite la monitorización de fragmentos de código directamente insertando llamadas a la librería dentro de código fuente; y finalmente, una interfaz gráfica, PMCTrack-GUI, que facilita su uso y permite obtener gráficas en tiempo real de métricas de alto nivel configuradas por el usuario. En los capítulos 2, 3 y 4, hemos pretendido explicar con detalle cómo hemos realizado y cómo funcionan cada una de estas características; y, en el capítulo 5, hemos querido poner a prueba su funcionamiento y mostrar su utilidad con algunos casos de estudio. Para finalizar, en este capítulo queremos a analizar a fondo el impacto holístico de cada una de estas nuevas características.
 
 \begin{figure}
 \centering
@@ -26,14 +26,14 @@ En segundo lugar, la nueva librería libpmctrack provee a los programadores de t
 
 En tercer lugar, la interfaz gráfica PMCTrack-GUI facilita en gran medida el uso de PMCTrack y, además, incorpora el soporte de gráficas que pueden resultar de gran interés para el usuario.\newline
 El comando `pmctrack` requiere de la especificación de muchos detalles tremendamente tediosos y poco portables a diversas máquinas. En particular, la identificación de la máquina, su número de contadores y tipo; la búsqueda y configuración de cada evento, la creación de una métrica personalizada, como el *CPI* o el *cache rate*; y, en definitiva, la selección de todos los parámetros correctos para la monitorización mediante `pmctrack`. Aún siendo la temática de la monitorización por hardware ciertamente no apta para todo tipo de usuario, con PMCTrack-GUI esperamos haber resuelto, o, al menos, rebajado ese obstáculo y conseguir que un usuario, con ciertas nociones mínimas del funcionamiento del hardware en una computadora, se centre en su objetivo principal: monitorizar el hardware.\newline
-Con mucha frecuencia, se requerían tener gráficas a partir de los datos obtenidos de la monitorización por hardware. PMCTrack-GUI también ha facilitado enormemente esta tarea. Creando no solamente gráficas de la monitorización en tiemo real, si no también permitiendo la visualización de múltiples gráficas al mismo tiempo, posterior guardado de los resultados y hasta la personalización de los colores y el tamaño de línea de cada gráfica.\newline
+Con mucha frecuencia, se requerían tener gráficas a partir de los datos obtenidos de la monitorización por hardware. PMCTrack-GUI también ha facilitado enormemente esta tarea. Creando no solamente gráficas de la monitorización en tiempo real, si no también permitiendo la visualización de múltiples gráficas al mismo tiempo, posterior guardado de los resultados y hasta la personalización de los colores y el tamaño de línea de cada gráfica.\newline
 Finalmente, la herramienta además provee de soporte de monitorización de máquinas a través de acceso \ac{SSH}. Esta característica no fue planteada inicialmente, pero que fue de gran utilidad para nosotros mismo durante el desarrollo del proyecto y que, sin duda, lo será para una gran cantidad de usuarios de PMCTrack-GUI.
 
 # Valoración del TFG
 
 Para la realización de este TFG hemos tenido que trabajar en tres niveles muy distintos. Programando unas veces en C, al nivel del kernel del sistema operativo; otras veces en C, a nivel de usuario cuando estuvimos desarrollando libpmctrack; y otras en Python al más alto nivel de interfaz gráfica.
 
-La particularidad de haber sido un proyecto muy transversal, con esta gran variedad de niveles de abstraccion, creemos que ha aumentado especialmente su dificultad. De hecho, durante el transcurso del proyecto, hemos tenido que aprender y entender diversos temas para cada uno de estos niveles.
+La particularidad de haber sido un proyecto muy transversal, con esta gran variedad de niveles de abstraccion, creemos que ha aumentado sensiblemente su dificultad. De hecho, durante el transcurso del proyecto, hemos tenido que aprender y entender diversos temas para cada uno de estos niveles.
 
 A continuación, listamos los que nos han resultado más relevantes:
 
@@ -42,7 +42,7 @@ A continuación, listamos los que nos han resultado más relevantes:
 * El funcionamiento de la herramienta PMCTrack, tanto en su parte en el espacio de usuario con `pmctrack` como en sus parte relacionada con la modificación del kernel y de los módulos para cada arquitectura.
 * El lenguaje de programación Python.
 * Los lenguajes de marcado XML y DTD, cómo realizar la lectura ficheros con este formato y cómo generarlos a partir de otros ficheros CSV.
-* Diversas librerías externas en Python para aplicar en la interfaz gráfica: wx, matplotlib, pmcconnect,\ldots
+* Diversas librerías externas en Python para aplicar en la interfaz gráfica: wx, matplotlib,\ldots
 
 Para conseguir que todo esto funcionase, este proyecto nos ha supuesto la inversión de una gran parte de nuestro tiempo y esfuerzo, fines de semana sin salir de la biblioteca, noches sin dormir, dejar algún trabajo o examen de lado,\ldots No obstante, al fin podemos estar satisfechos por haber logrado los objetivos marcados por el proyecto.
 
