@@ -36,38 +36,49 @@ La ejecución se realiza en un procesador intel core i7-3520M a 2.9GHz con 8GB d
 
 Para ver si esta gran diferencia de tiempo es debido a la memoria caché, necesitamos alguna forma de monitorizar directamente cómo se está comportando la memoria caché. Esta es una situación donde libpmctrack resulta tremendamente útil, ya que nos permite obtener información del hardware e incluso analizar diferentes fragmentos de código de forma aislada.
 
-De modo que ahora añadimos al benchmark anterior la librería pmctrack, inicializamos el descriptor con espacio para 15 samples, fijamos el intervalo para obtener samples en $250ms$ y configuramos los contadores. Nos interesa que los contadores nos den información acerca del número de instrucciones retiradas, y los accesos y los fallos de la caché de último nivel (Nivel 3 en nuestro caso). De modo que activamos el contadore fijo pmc0, que cuenta el número de instrucciones, y asignamos a los contadores configurables pmc3 y pmc4 los eventos de contar accesos a caché y fallos de caché respectivamente.
+De modo que ahora añadimos al benchmark anterior la librería pmctrack, inicializamos el descriptor con espacio para 15 samples, fijamos el intervalo para obtener samples en $250ms$ y configuramos los contadores. Nos interesa que los contadores nos den información acerca del número de instrucciones retiradas, y los accesos y los fallos de la caché de último nivel (Nivel 3 en nuestro caso). De modo que activamos el contadore fijo pmc0, que cuenta el número de instrucciones, y asignamos a los contadores configurables pmc3 y pmc4 los eventos de contar accesos a caché y fallos de caché respectivamente. Comenzaremos situando los start y stop counters al principio y al final del benchmark.
 
-\begin{figure}
+\begin{table}[h]
 \caption{Resultados monitorización global montículo binario}
-Elapsed time: 476022 microseconds
-Profiling data extracted from PMCs every 250ms:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1   7377       tick     561444260       3966742        339785
-      2   7377       self     549334613       4032294        151245
-\end{figure}
+\label{tab:gloBin}
+\centering
+%Elapsed time: 476022 microseconds
+%Profiling data extracted from PMCs every 250ms:
+\begin{tabular} {|r|r|r|r|r|r|}
+\hline
+\multicolumn{1}{|c|}{nsample} & \multicolumn{1}{c|}{pid} & \multicolumn{1}{c|}{event} & \multicolumn{1}{c|}{pmc0} & \multicolumn{1}{c|}{pmc3}  & \multicolumn{1}{c|}{pmc4} \\ \hline
+%nsample  &  pid   &   event     &     pmc0     &     pmc3     &     pmc4 \\ \hline
+      1  & 7377   &    tick   &  561444260     &  3966742     &   339785 \\ \hline
+      2  & 7377   &    self   &  549334613    &   4032294     &   151245 \\ \hline
+\end{tabular}
+\end{table}
 
-\begin{figure}
+\begin{table}[h]
 \caption{Resultados monitorización global montículo Fibonacci}
-Elapsed time: 3178255 microseconds
-Profiling data extracted from PMCs every 250ms:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1   7558       tick     629554817        555265        339547
-      2   7558       tick     365243640       2111969        967323
-      3   7558       tick     363263873       2174515        943288
-      4   7558       tick     366034887       2190378        888714
-      5   7558       tick     361822568       2208562        914895
-      6   7558       tick     361998147       2201110        893159
-      7   7558       tick     358977538       2206190        879025
-      8   7558       tick     376751462       2220617        815036
-      9   7558       tick     371586535       2229520        828087
-     10   7558       tick     371069310       2196560        795315
-     11   7558       tick     376280116       2186783        740499
-     12   7558       tick     388247900       2161197        641935
-     13   7558       self     341342501       1586504        322759
-\end{figure}
+\label{tab:gloFib}
+\centering
+% Elapsed time: 3178255 microseconds
+% Profiling data extracted from PMCs every 250ms:
+\begin{tabular} {|r|r|r|r|r|r|}
+\hline
+\multicolumn{1}{|c|}{nsample} & \multicolumn{1}{c|}{pid} & \multicolumn{1}{c|}{event} & \multicolumn{1}{c|}{pmc0} & \multicolumn{1}{c|}{pmc3}  & \multicolumn{1}{c|}{pmc4} \\ \hline
+      1  & 7558    &   tick  &   629554817    &    555265    &    339547 \\ \hline
+      2  & 7558    &   tick  &   365243640    &   2111969    &    967323 \\ \hline
+      3  & 7558    &   tick  &   363263873    &   2174515    &    943288 \\ \hline
+      4  & 7558    &   tick  &   366034887    &   2190378    &    888714 \\ \hline
+      5  & 7558    &   tick  &   361822568    &   2208562    &    914895 \\ \hline
+      6  & 7558    &   tick  &   361998147    &   2201110    &    893159 \\ \hline
+      7  & 7558    &   tick  &   358977538    &   2206190    &    879025 \\ \hline
+      8  & 7558    &   tick  &   376751462    &   2220617    &    815036 \\ \hline
+      9  & 7558    &   tick  &   371586535    &   2229520    &    828087 \\ \hline
+     10  & 7558    &   tick  &   371069310    &   2196560    &    795315 \\ \hline
+     11  & 7558    &   tick  &   376280116    &   2186783    &    740499 \\ \hline
+     12  & 7558    &   tick  &   388247900    &   2161197    &    641935 \\ \hline
+     13  & 7558    &   self  &   341342501    &   1586504    &    322759 \\ \hline
+\end{tabular}
+\end{table}
 
-Empezamos situando los start y stop counters al principio y al final del benchmark y obtenemos los resultados de las tablas \ref{} y \ref{}. Lo primero que vemos es que el montículo de Fibonacci tiene 13 entradas o *ticks* y el binario solo dos puesto que, como dijimos antes, el montículo binario es siete veces más rápido. Si sumamos los valores de todas las muestras, aproximadamente obtenemos los siguientes datos:
+Los resultados obtenidos se encuentran en las tablas \ref{tab:gloBin} y \ref{tab:gloFib}. Lo primero que podemos apreciar es que el montículo de Fibonacci tiene 13 entradas o *ticks* y el binario solo dos puesto que, como dijimos antes, el montículo binario es siete veces más rápido. Si sumamos los valores de todas las muestras, aproximadamente obtenemos los siguientes datos:
 
 * 1150 millones de instrucciones el montículo binario y 5000 el de Fibonacci (casi cinco veces más instrucciones el montículo de Fibonacci). Probablemente debido a la mayor complejidad de las operaciones que realiza el montículo de Fibonacci.
 
@@ -81,37 +92,44 @@ Por tanto, todo apunta a que esta gran diferencia en la cantidad del acceso a me
 
 ### Segundo análisis
 
-No obstante, podemos afinar aún más y obtener mayor información. Revisando el análisis anterior, observamos que la primera muestra del montículo de fibonacci no está equilibrada con el resto de muestras: ejecuta el doble de instrucciones que el resto, y, sin embargo, hace muchos menos accesos a memoria; lo que nos lleva a pensar que podría haber una fase inicial en las que el montículo invierta menos tiempo y menos acceso a recursos que el resto. Para comprobar esto, también mediante libpmctrack podemos monitorizar fragmentos de código aislados. Para ello, situamos tres bloques start y stop counters entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción del millón de números y un tercero para la eliminación de éstos. Los resultados los podemos ver en las tablas \ref{} y \ref{}.
+No obstante, podemos afinar aún más y obtener mayor información. Revisando el análisis anterior, observamos que la primera muestra del montículo de fibonacci no está equilibrada con el resto de muestras: ejecuta el doble de instrucciones que el resto, y, sin embargo, hace muchos menos accesos a memoria; lo que nos lleva a pensar que podría haber una fase inicial en las que el montículo invierta menos tiempo y menos acceso a recursos que el resto. Para comprobar esto, también mediante libpmctrack podemos monitorizar fragmentos de código aislados. Para ello, situamos tres bloques start y stop counters entorno a tres partes clave de nuestro pequeño benchmark: Uno para la inicialización del montículo, otro para la inserción del millón de números y un tercero para la eliminación de éstos. Los resultados los podemos ver en las tablas \ref{tab:fragsBin} y \ref{tab:fragsFib}.
 
-\begin{figure}
+\begin{table}[h]
 \caption{Resultados monitorización por fases montículo binario}
-Profiling, through libpmctrack, cache behaviour when using a William's heap.
-Profiling data for initializing the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13464       self           833            10             7
-Profiling data for inserting into the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13464       self     194528249         19764         17205
-Profiling data for deleting from the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13464       self     916232599       7383241        467662
-Elapsed time: 229741 microseconds
-\end{figure}
+\label{tab:fragsBin}
+\centering
+\begin{tabular} {|c|r|r|r|r|r|r|}
+\hline
 
-\begin{figure}
+%Profiling, through libpmctrack, cache behaviour when using a William's heap.
+
+\multicolumn{1}{|c|}{stage} & \multicolumn{1}{c|}{nsample} & \multicolumn{1}{c|}{pid} & \multicolumn{1}{c|}{event} & \multicolumn{1}{c|}{pmc0} & \multicolumn{1}{c|}{pmc3}  & \multicolumn{1}{c|}{pmc4} \\ \hline
+%stage    nsample    pid      event          pmc0          pmc3          pmc4
+  initialization  &  1  & 13464   &    self     &      833     &       10      &       7 \\ \hline
+  insertion  &  1 & 13464    &   self   &  194528249       &  19764     &    17205 \\ \hline
+  deletion & 1 & 13464   &    self   &  916232599   &    7383241     &   467662 \\ \hline
+%Elapsed time: 229741 microseconds
+\end{tabular}
+\end{table}
+
+
+\begin{table}[h]
 \caption{Resultados monitorización por fases montículo Fibonacci}
-Profiling, through libpmctrack, cache behaviour when using a Fibonacci heap.
-Profiling data for initializing the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13271       self           835            11            10
-Profiling data for inserting into the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13271       self     377048052         15204          9962
-Profiling data for deleting from the heap:
-nsample    pid      event          pmc0          pmc3          pmc4
-      1  13271       self    4655118486      37307044      14266564
-Elapsed time: 1692031 microseconds
-\end{figure}
+\label{tab:fragsFib}
+\centering
+
+%Profiling, through libpmctrack, cache behaviour when using a Fibonacci's heap.
+
+\begin{tabular} {|c|r|r|r|r|r|r|}
+\hline
+\multicolumn{1}{|c|}{stage} & \multicolumn{1}{c|}{nsample} & \multicolumn{1}{c|}{pid} & \multicolumn{1}{c|}{event} & \multicolumn{1}{c|}{pmc0} & \multicolumn{1}{c|}{pmc3}  & \multicolumn{1}{c|}{pmc4} \\ \hline
+%stage nsample    pid      event          pmc0          pmc3          pmc4
+  initialization &  1 & 13271    &   self     &      835      &      11     &       10 \\ \hline
+  insertion &  1 & 13271    &   self   &  377048052    &     15204      &    9962 \\ \hline
+  deletion  &  1 & 13271    &   self   & 4655118486    &  37307044  &    14266564 \\ \hline
+%Elapsed time: 1692031 microseconds
+\end{tabular}
+\end{table}
 
 Con estos nuevos datos, podemos ver claramente que la fase de inicialización y reserva inicial de memoria es prácticamente la misma para ambas estructuras en cuanto a número de instrucciones y acceso a memoria. En la fase de inserción, la diferencia tampoco es demasiado grande, de hecho, aunque el montículo de Fibonacci realiza más instrucciones, efectivamente cumple su teoría en cuanto a que realiza menos accesos a memoria y éstos son más exitosos que el montículo bibario. La gran diferencia llega en la última fase, la fase de borrado de elementos, en ésta el número de instrucciones ejecutadas es mucho mayor para ambos montículos. Es en esta fase cuando el montículo de Fibonacci se dispara en cuanto a número de accesos a memoria y la tasa de fallos es del tan alta como el 40\% mencionado anteriormente, eclipsando cualquier buen resultado que se podía haber obtenido en fases anteriores; mientras que el montículo binario, mantiene una buena tasa de fallos y un número de accesos relativamente mucho menor.
 
