@@ -17,7 +17,7 @@ En este apéndice cada participante indicará su contribución al proyecto en su re
 
 De entre los dos miembros del grupo, yo he sido el encargado de especializarme en la parte de más bajo nivel del proyecto. En particular, esto comprendía, entre otros, la lectura de documentación sobre contadores hardware, el estudio profundo de la herramienta PMCTrack, el desarrollo y refactorización del código con libpmctrack, el soporte de los eventos de bajo nivel para la interfaz gráfica,\ldots
 
-En las siguientes subsecciones desarrollaré de forma más detallada mis contribuciones, agrupándolas en los siguientes puntos:
+En las siguientes subsecciones desarrollaré de forma más detallada mis contribuciones, agrupándolas en las siguientes puntos:
 \begin{enumerate}
   \item Estudio de documentación
   \item Participación en el diseño de PMCTrack-GUI
@@ -32,11 +32,27 @@ Dichos puntos no están ordenados de forma estrictamente cronológica, puesto que 
 
 \subsection{Estudio de documentación}
 
+El estudio de documentación estuvo presente a lo largo de todo el proyecto; puesto que éste constó del trabajo a muy distintos niveles y con diferentes tecnologías.
 
+En un primer momento, la documentación que estudié fue la relativa a familiarizarme con la monitorización mediante contadores hardware o PMCs y con la herramienta PMCTrack.\newline
+Comencé con la lectura de la memoria del proyecto precedente al nuestro, del año 2012, dónde se introducía por primera vez la herramienta PMCTrack. A continuación, leí más documentación acerca de herramientas que cumplían funcionalidades parecidas a las de PMCTrack, como OProfile y perf. Adicionalmente, forma parte de esta primera fase de documentación, la lectura de los diversos manuales para desarrolladores de los distintos fabricantes de microprocesadores: AMD, Intel y ARM. En estos manuales, se presenta información muy detallada y particular de cómo usar los PMC para cada fabricante, junto con los códigos y la descripción de cada uno de los eventos que éstos pueden monitorizar.
+
+En lo que podríamos llamar una segunda fase del estudio de documentación, me dediqué al aprendizaje del lenguaje de programación Python. Para ello, me leí un tutorial de Python 2.7 y realicé un pequeño curso online gratuito facilitado por Google. Esta fase se corresponde con la implementación de los objetos de procesamiento para PMCTrack-GUI (apartado \ref{app:contr_abel_objs} de este apéndice).
+
+Por último, la última fase de mi estudio de documentación se corresponde con mis contribuciones de más bajo nivel: Implementación conjunta del soporte \textit{multithreading} y Diseño e implementación de libpmtrack, apartados \ref{app:contr_abel_mult} y \ref{app:contr_abel_lib} respectivamente. En esta fase, la documentación fue sobre todo alrededor de la lectura del código C que existía previamente en la herramienta PMCTrack, incluyendo los relativos al kernel Linux modificado, a los módulos para el kernel y a la herramienta de línea de comandos \texttt{pmctrack}.
 
 \subsection{Participación en el diseño de PMCTrack-GUI}
+
+
+
 \subsection{Implementación de la parte de objetos de procesamiento para PMCTrack-GUI}
+\label{app:contr_abel_objs}
+
 \subsection{Implementación conjunta del soporte \textit{multithreading}}
+\label{app:contr_abel_mult}
+
 \subsection{Diseño e implementación de libpmtrack}
+\label{app:contr_abel_lib}
+
 \subsection{Refactorización de \texttt{pmctrack}}
 \subsection{Realización del caso de estudio para libpmctrack}
