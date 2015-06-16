@@ -44,20 +44,36 @@ Comencé con la lectura de la memoria del proyecto precedente al nuestro, del año
 
 En lo que podríamos llamar una segunda fase del estudio de documentación, me dediqué al aprendizaje del lenguaje de programación Python. Para ello, me leí un tutorial de Python 2.7 y realicé un pequeño curso online gratuito facilitado por Google. Esta fase se corresponde con la implementación de los objetos de procesamiento para PMCTrack-GUI (apartado \ref{app:contr_abel_objs} de este apéndice).
 
-Por último, la última fase de mi estudio de documentación se corresponde con mis contribuciones de más bajo nivel: Implementación conjunta del soporte \textit{multithreading} y Diseño e implementación de libpmtrack, apartados \ref{app:contr_abel_mult} y \ref{app:contr_abel_lib} respectivamente. En esta fase, la documentación fue sobre todo alrededor de la lectura del código C que existía previamente en la herramienta PMCTrack, incluyendo los relativos al kernel Linux modificado, a los módulos para el kernel y a la herramienta de línea de comandos \texttt{pmctrack}.
+Por último, la última fase de mi estudio de documentación se corresponde con mis contribuciones de más bajo nivel: Implementación conjunta del soporte \textit{multithreading} y Diseño e implementación de libpmtrack, apartados \ref{app:contr_abel_mult} y \ref{app:contr_abel_lib} respectivamente.\newline
+En esta fase, la documentación fue sobre todo alrededor de la lectura del código C que existía previamente en la herramienta PMCTrack, incluyendo los relativos al kernel Linux modificado, a los módulos para el kernel y a la herramienta de línea de comandos \texttt{pmctrack}.
 
 \subsection{Participación en el diseño de PMCTrack-GUI}
 
+En la etapa de realización de bocetos de la interfaz para PMCTrack-GUI, realicé varios de los bocetos sobre los que discutimos para llegar al diseño final de la interfaz. Dichos bocetos los realicé mediante la herramienta \textit{Balsamiq Mockups}, cuyo uso había aprendido en la asignatura ``Diseño de Sistemas Interactivos'' en el primer semestre de este curso.
+Los bocetos fueron al principio de baja fidelidad, y, fueron aumentando su nivel de fidelidad y detalle según fuimos discutiendo e iterando en el proceso de diseño.\newline
+Por supuesto, también participé en las reuniones que tuvimos para el debate de estos bocetos.
 
-
-\subsection{Implementación de la parte de objetos de procesamiento para PMCTrack-GUI}
+\subsection{Implementación de los objetos de procesamiento para PMCTrack-GUI}
 \label{app:contr_abel_objs}
+
+Inicialmente para el desarrollo de PMCTrack-GUI hicimos una división del trabajo. Yo me encargaba de la parte que más tendría que ver con las cuestiones a bajo nivel, tales como la encapsulación de la información relevante de la máquina en un objeto Python o la modelización de los eventos hardware que pueden contar los PMCs; mientras que Jorge se encargaba de la implementación de los componentes gráficos con wxPython según los diseños realizados en la fase anterior.
+
+Para realizar esta tarea, comencé haciendo un diagrama UML inicial. Debatimos e iteramos repetidas veces sobre ese diagrama.
+El diseño final al que llegamos consiste, principalmente, en una interfaz fachada para comunicarse con el resto de la interfaz gráfica y de varias clases para encapsular los eventos y la información de la máquina que se quiere monitorizar.\newline
+Además, necesitaba guardar de forma persistente los datos relativos a los eventos de cada modelo y a la configuración de los contadores de cada fabricante, de modo que elegí entre varias opciones la de usar ficheros XML por su sencillez de editar y su claridad en su lectura.
+
+Así pues, mi contribución en esta parte del proyecto fue la implementación en Python de todo lo expuesto en el párrafo anterior, junto con el \textit{parser} para los ficheros XML. Además de esto, también realicé los ficheros DTD que servirían para verificar la correctitud de los ficheros XML, escribí algunos ficheros XML a mano y programé el script en Bash encargado de generar el resto de archivos XML a partir de sus correspondientes archivos CSV.
 
 \subsection{Implementación conjunta del soporte \textit{multithreading}}
 \label{app:contr_abel_mult}
+
+Para la implementación del soporte multithreading en el kernel de PMCTrack, fue necesario primero un cuidadoso estudio de cómo funcionaba la herramienta anteriormente. Después de este estudio, tuvimos una reunión en la que discutimos varias posibilidades hasta dar con un diseño adecuado para conseguir una buena solución al problema.
+
+Con este diseño ya planteado, Jorge y yo realizamos diversas jornadas de trabajo conjuntas para la implementación completa de esta parte del proyecto. Posteriormente, realizamos un conjunto de pruebas mediante la herramienta \texttt{pmctrack}, usando benchmarks de \ref{JORGE-PON-AQUÍ-NOMBRE-DE-BENCHMARKS} y contrastamos sus resultados con otras fuentes para verificar si eran correctas.
 
 \subsection{Diseño e implementación de libpmtrack}
 \label{app:contr_abel_lib}
 
 \subsection{Refactorización de \texttt{pmctrack}}
+
 \subsection{Realización del caso de estudio para libpmctrack}
