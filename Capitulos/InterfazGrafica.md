@@ -20,11 +20,13 @@ PMCTrack-GUI ha sido desarrollado para superar las limitaciones comentadas en la
 
 A la fecha de escritura de estas líneas, PMCTrack-GUI es la única aplicación que permite visualizar gráficas de rendimiento de aplicaciones en tiempo real en múltiples arquitecturas usando PMCs. Actualmente distintos fabricantes de microprocesadores como Intel y ARM proporcionan herramientas gráficas compatibles únicamente con sus modelos de procesador. Ejemplos destacados de estas herramientas, son el *Intel Performance Counter Monitor* \cite{Intel} y el *Streamline Performance Analyzer* de ARM \cite{ARM}.
 
-PMCTrack-GUI, por el contrario, no solo ofrece soporte múltiarquitectura sino que abstrae completamente al usuario de la arquitectura que esté utilizando. Esencialmente la aplicación proporciona de forma visual y totalmente automática la lista de PMCs disponibles y permite configurarlos haciendo clic en el evento que se desea asociar con cada contador hardware. PMCTrack-GUI se encargará internamente de obtener los códigos hexadecimales asociados a los eventos y a la arquitectura en cuestión. No obstante, la aplicación cuenta con una configuración avanzada en la que se permite al usuario asignar eventos a contadores proporcionando los códigos hexadecimales asociados. Cabe destacar que PMCTrack-GUI también soporta la monitorización de aplicaciones multihilo, de forma que es posible visualizar gráficas en tiempo real de un determinado hilo de la aplicación que se esté monitorizando.
+PMCTrack-GUI, por el contrario, no solo ofrece soporte multiarquitectura sino que abstrae completamente al usuario de la arquitectura que esté utilizando. Esencialmente la aplicación proporciona de forma visual y totalmente automática la lista de PMCs disponibles y permite configurarlos haciendo clic en el evento que se desea asociar con cada contador hardware. PMCTrack-GUI se encargará internamente de obtener los códigos hexadecimales asociados a los eventos y a la arquitectura en cuestión. No obstante, la aplicación cuenta con una configuración avanzada en la que se permite al usuario asignar eventos a contadores proporcionando los códigos hexadecimales asociados. Cabe destacar que PMCTrack-GUI también soporta la monitorización de aplicaciones multihilo, de forma que es posible visualizar gráficas en tiempo real de un determinado hilo de la aplicación que se esté monitorizando.
 
 Para especificar las métricas de alto nivel que serán visualizadas posteriormente en gráficas en tiempo real, el usuario tan sólo debe escribir fórmulas de alto nivel en las cuales las variables serán los nombres de los contadores configurados previamente (_pmc0_, _pmc1_, _pmc2_, ...). Por ejemplo si el contador 0 lleva la cuenta del número de instrucciones retiradas y el contador 3 contabiliza el número de fallos de último nivel de caché (LLC), la fórmula $(pmc3 * 1000) / pmc0$ define la métrica de rendimento "_Número de fallos de LLC por cada 1K instrucciones_".
 
 Para terminar de justificar que actualmente no hay otra alternativa en el mercado como PMCTrack-GUI, hay que comentar que se trata de una aplicación multiplataforma de código libre y completamente gratuita, mientras que las aplicaciones alternativas disponibles en el mercado no son libres y las licencias de uso son de un alto coste económico.
+
+El código fuente de PMCTrack-GUI será liberado en los próximos meses con licencia GPL, junto con el resto del código de la herramienta PMCTrack, estando disponible para todo el mundo de forma gratuita. Esto proporciona otra ventaja sobre la mayoría de aplicaciones alternativas, ya que estas no suelen ser libres y sus licencias de uso suelen ser de un alto coste económico.
 
 Aunque ya se han comentado las principales características con las que cuenta PMCTrack-GUI, a continuación destacamos otras características relevantes:
 
@@ -134,7 +136,7 @@ Los objetos de procesamiento se pueden dividir según su formato, en dos grupos:
 En los siguientes apartados, profundizaremos más detalladamente sobre qué información contienen y cómo están estructurados cada uno de estos elementos.
 
 ### XML
-Los ficheros XML son archivos escritos con la información organizada por etiquetas y permiten el almacenaje y procesado de la información de una manera sencilla y rápida. Además, son fáciles de leer y de editar manualmente. Por estas razones, hemos escogido almacenar toda la información sobre los eventos y los \ac{PMC} que necesitábamos para la interfaz en este formato.\newline
+Los ficheros XML son archivos escritos con la información organizada por etiquetas y permiten el almacenaje y procesado de la información de una manera sencilla y rápida. Además, son fáciles de leer y de editar manualmente. Por estas razones, hemos escogido almacenar toda la información sobre los eventos y los PMCs que necesitábamos para la interfaz en este formato.\newline
 Para mantener una definición formal del formato de XML que queremos leer como entrada y así también poder verificar que los datos del fichero XML son sintácticamente correctos, hemos creado un fichero \ac{DTD} para cada tipo de XML que queremos usar.\newline
 
 En particular, los tipos de fichero XML que necesitamos son dos:
@@ -143,7 +145,7 @@ En particular, los tipos de fichero XML que necesitamos son dos:
 
 2. `{nombre_modelo}.xml`: Este fichero contiene información relativa a los eventos, subeventos y contadores fijos de un modelo en particular. Aunque modelos del mismo fabricante tienen algunos eventos en común, sucede que muchos eventos cambian de modelo en modelo o de contadores fijos, de modo que se debe tener un xml por cada modelo de \ac{CPU} que queramos soportar en la interfaz gráfica. Su definición se puede ver en el DTD de la figura \ref{fig:dtdevents}.
 
-Estos ficheros XML han sido generados de dos maneras diferentes. Los de tipo layout para cada fabricante y para algunos de los eventos de cada modelo han sido escritos manualmente. Para otros modelos de procesador, sobre los que el grupo \ac{ArTeCS} estaba investigando con la herramienta PMCTrack, ya existían unos ficheros \ac{CSV} que describían los eventos y PMC de esos modelos. Para reutilizar éstos ficheros, escribimos un script Bash que genera automáticamente los XML equivalentes a esos ficheros CSV dados.
+Estos ficheros XML han sido generados de dos maneras diferentes. Los de tipo layout para cada fabricante y para algunos de los eventos de cada modelo han sido escritos manualmente. Para otros modelos de procesador, sobre los que el grupo \ac{ArTeCS} estaba investigando con la herramienta PMCTrack, ya existían unos ficheros \ac{CSV} que describían los eventos y PMCs de esos modelos. Para reutilizar éstos ficheros, escribimos un script Bash que genera automáticamente los XML equivalentes a esos ficheros CSV dados.
 
 \lstset{
   language=XML,
@@ -151,7 +153,7 @@ Estos ficheros XML han sido generados de dos maneras diferentes. Los de tipo lay
 }
 
 \begin{figure}
-\caption{Fichero de definición DTD para los ficheros XML que definen el layout de los PMC}
+\caption{Fichero de definición DTD para los ficheros XML que definen el layout de los PMCs}
 \label{fig:dtdlayout}
 \begin{lstlisting}[frame=single]
 <!ELEMENT layout (field*)>
