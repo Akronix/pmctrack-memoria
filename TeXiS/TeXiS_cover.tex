@@ -355,16 +355,45 @@ cara.
 \end{small}
 
 %%%
-% Página autorización
+% Segunda portada
 %%%
 
 \newpage
 
 \thispagestyle{empty}
 
-%\begin{left}
-{\Large \textbf{Autorización de difusión y utilización}}
-%\end{left}
+\mbox{ }
+
+\begin{Huge}
+\begin{center}
+\tituloPortadaVal
+\end{center}
+\end{Huge}
+
+\vfill
+
+\begin{large}
+\begin{center}
+\textoPrimerSubtituloPortadaVal
+\\ \mbox{ } \\ \mbox{ } \\
+\textoSegundoSubtituloPortadaVal \\ [0.3em]
+\end{center}
+\end{large}
+
+\vfill
+
+\begin{large}
+\begin{center}
+\textbf{\institucionVal}\\[0.2em]
+    \mbox{ }  \\
+\textbf{\fechaPublicacionVal}
+\end{center}
+\end{large}
+
+
+\newpage
+\thispagestyle{empty}
+\mbox{ }
 
 % Información del ISBN y copyright
 \vskip 13cm
@@ -381,3 +410,11 @@ ISBN \isbnVal
 \fi
 
 } % \newcommand{\makeCover}
+
+% Variable local para emacs, para que encuentre el fichero
+% maestro de compilación
+%%%
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../Tesis.tex"
+%%% End:
