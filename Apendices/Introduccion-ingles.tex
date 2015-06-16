@@ -212,7 +212,7 @@ Augmenting a recent version of the Linux kernel (2.6.38 and above) to support PM
 
 \subsection{PMCTrack Usage Models}\label{pmctrack-usage-models}
 
-Before the beginning of our thesis development, PMCTrack supported three
+Before the beginning of our project, PMCTrack supported three
 usage models: scheduler mode, time-based sampling and event-based
 sampling.
 
@@ -413,16 +413,15 @@ windows are used.
 \section{Project goals}\label{project-goals}
 
 The PMCTrack tool provides great features and empowers the OS scheduler
-to take advantage of the hardware counters to make optimizations at
-runtime. However, PMCTrack still has important limitations that cast a
+to take advantage of hardware counters to make optimizations at
+run time. However, PMCTrack still has important limitations that cast a
 shadow over its great possibilities, especially when it comes to monitoring application performance from user space.
 
 First, its use turns out a bit complicated for inexperienced
 users, since they have to have access to technical manuals of different
-architectures to look up the appropriate hexadecimal codes for the events they want to monitor with the various PMCs.
+architectures to look up the appropriate hex codes for the events they want to monitor with the various PMCs.
 
-Second, getting the specific events count on the PMCs every certain
-time does not provide the user the big picture on the evolution over time of the values for the different counters, let alone high level metrics made up by the
+Second, getting the specific events count on the PMCs on a timely basis does not provide the user the big picture on the evolution over time of the values for the different counters, let alone high level metrics made up by the
 combination of two or more PMC values. This valuable information for the
 user can be provided by means of charts. Nevertheless, this entails to go through various steps: (1) processing the data provided by the \texttt{pmctrack} command to
 get the high level metrics values over time, and (2) using some helper utility, such as \emph{Gnuplot} to generate the final charts. Finally, another significant limitation of the tool is the fact that the \texttt{pmctrack} command (and the kernel module itself on which it relies) does not allow monitoring multithreaded applications from user space.
