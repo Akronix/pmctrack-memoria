@@ -141,6 +141,7 @@ La gran diferencia llega en la última fase, la fase de borrado de elementos, en
 
 \subsection{Conclusiones}
 
-Después de un primer análisis global y, posteriormente, un segundo análisis pormenorizando el benchmark en tres fases clave. Hemos comprobado, gracias a la librería libpmctrack, que la teoría de la computación puede fallar a la hora de predecir los tiempos de computación de las estructuras de datos que hacen uso de la memoria dinámica, al pasar por alto la jerarquía en el acceso a memoria que existe en las computadoras actuales.
+Después de un primer análisis global y, posteriormente, un segundo análisis pormenorizando el benchmark en tres fases clave. Hemos comprobado, gracias a la librería libpmctrack, como la estructura de datos montículo o *heap* puede tener un rendimiento muy diferente en el borrado, según si la implementación hace uso de memoria dinámica o, por el contrario, hace uso de memoria estática.
 
-En particular, hemos observado cómo la implementación del montículo de Fibonacci, que teóricamente tiene un coste amortizado constante en el borrado, se comporta peor en la práctica que una implementación con memoria estática como es el montículo binario, cuyo coste en tiempo en el borrado es siempre logarítmico.
+En general, con este caso de estudio observamos que el uso de memoria dinámica para la implementación de estructuras de datos puede perjudicar en gran medida sus tiempos de ejecución, debido a la jerarquía de acceso a la memoria que existe en las computadoras actuales.\newline
+Debemos de aclarar, no obstante, que este análisis se ha realizado con tipos primitivos (enteros) como elementos contenidos en la estructura de datos. Los resultados tendrían que ser revisados si dichos elementos fuesen objetos o punteros a otras estructuras, lo cual estropearía la ventaja que tiene el montículo binario gracias a la localidad espacial de sus elementos.
