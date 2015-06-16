@@ -21,10 +21,9 @@ En las siguientes subsecciones desarrollaré de forma más detallada mis contribuc
 \begin{enumerate}
   \item Estudio de documentación
   \item Participación en el diseño de PMCTrack-GUI
-  \item Implementación de los Objetos de Procesamiento para PMCTrack-GUI
+  \item Implementación de los objetos de procesamiento para PMCTrack-GUI
   \item Implementación conjunta del soporte \textit{multithreading} en PMCTrack
-  \item Diseño e implementación de libpmtrack
-  \item Refactorización de \texttt{pmctrack}
+  \item Diseño e implementación de libpmtrack. Refactorización de \texttt{pmctrack}
   \item Realización del caso de estudio para libpmctrack
 \end{enumerate}
 
@@ -39,7 +38,7 @@ Comencé con la lectura de la memoria del proyecto precedente al nuestro, del año
 
 En lo que podríamos llamar una segunda fase del estudio de documentación, me dediqué al aprendizaje del lenguaje de programación Python. Para ello, me leí un tutorial de Python 2.7 y realicé un pequeño curso online gratuito facilitado por Google. Esta fase se corresponde con la implementación de los objetos de procesamiento para PMCTrack-GUI (apartado \ref{app:contr_abel_objs} de este apéndice).
 
-Por último, la última fase de mi estudio de documentación se corresponde con mis contribuciones de más bajo nivel: Implementación conjunta del soporte \textit{multithreading} y Diseño e implementación de libpmtrack, apartados \ref{app:contr_abel_mult} y \ref{app:contr_abel_lib} respectivamente.\newline
+Por último, la última fase de mi estudio de documentación se corresponde con las contribuciones de más bajo nivel: ``Implementación conjunta del soporte \textit{multithreading}'' y ``Diseño e implementación de libpmtrack'', apartados \ref{app:contr_abel_mult} y \ref{app:contr_abel_lib} respectivamente.\newline
 En esta fase, la documentación fue sobre todo alrededor de la lectura del código C que existía previamente en la herramienta PMCTrack, incluyendo los relativos al kernel Linux modificado, a los módulos para el kernel y a la herramienta de línea de comandos \texttt{pmctrack}.
 
 \subsection{Participación en el diseño de PMCTrack-GUI}
@@ -69,6 +68,13 @@ Con este diseño ya planteado, Jorge y yo realizamos diversas jornadas de trabajo
 \subsection{Diseño e implementación de libpmtrack}
 \label{app:contr_abel_lib}
 
-\subsection{Refactorización de \texttt{pmctrack}}
+Para el diseño de la librería libpmctrack tuvimos varias reuniones conjuntas en las que decidimos las funciones que constituirían la interfaz básica y la interfaz avanzada.
+Con las interfaces ya definidas, yo fuí el encargado de implementar todas estas funciones en lenguaje de programación C.
+
+Con la implementación de la librería casi terminada, nos dimos cuenta que había mucho código repetido y que se podría hacer que \texttt{pmctrack} hiciera uso de la librería en lugar de acceder directamente a PMCTrack. De modo que corrió a mi cargo también la refactorización del código de la herramienta \texttt{pmctrack} para que hiciese solamente llamadas a la librería en lugar de comunicarse directamente con el kernel.
+
+% Versión inicial de este apéndice (por Abel):
+%  Para el diseño de la librería libpmctrack, primero tuvimos una reunión conjunta en la que pensamos las funciones que tendría que tener la API para que un usuario pudiera monitorizar su código de forma sencilla.
+%  Después de una temporada de trabajo durante la cual estuve implementando dicha API, tuvimos una segunda reunión en la que pensamos en añadir funciones más avanzadas que permitieran la comunicación directa con el kernel de PMCTrack. Para separar estas funciones de las anteriores, decidimos crear una segunda API o interfaz de C, con las cabeceras de las funciones que permitían un nivel de abstracción más bajo.
 
 \subsection{Realización del caso de estudio para libpmctrack}
