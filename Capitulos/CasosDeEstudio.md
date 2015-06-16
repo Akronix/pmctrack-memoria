@@ -7,10 +7,11 @@ En este capítulo evaluamos las nuevas extensiones de PMCTrack realizadas en est
 \input{Capitulos/CasoDeEstudio-multiarch}
 
 # Análisis de aplicaciones multihilo con PMCTrack-GUI
-
+\label{sec:case-multithreading}
 \input{Capitulos/CasoDeEstudio-multihilo}
 
 \section[Análisis de fragmentos de código con libpmctrack]{Análisis de fragmentos de código con libpmctrack: comportamiento de la memoria caché en estructuras de datos con memoria dinámica}
+\label{sec:case-libpmctrack}
 
 En esta sección empleamos la librería *libpmctrack* para analizar el comportamiento del hardware en distintos fragmentos de código.
 
