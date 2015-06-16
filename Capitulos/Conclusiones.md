@@ -43,8 +43,6 @@ A continuación, listamos los aspectos que nos han resultado más relevantes:
 * Los lenguajes de marcado XML y DTD, cómo realizar la lectura ficheros con este formato y cómo generarlos a partir de otros ficheros CSV.
 * Diversas librerías externas de Python usadas en el desarrollo de la interfaz gráfica: wx, matplotlib,\ldots
 
-Para conseguir que todo esto funcionase, este proyecto nos ha supuesto la inversión de una gran parte de nuestro tiempo y esfuerzo**, fines de semana sin salir de la biblioteca, noches sin dormir, dejar algún trabajo o examen de lado,**\ldots No obstante, al fin podemos estar satisfechos por haber logrado los objetivos marcados por el proyecto.
-
 Para concluir, creemos que hemos hecho una importante aportación a la herramienta PMCTrack y esperamos que resulte de gran utilidad tanto dentro como fuera de nuestra universidad.
 
 # Trabajo futuro
