@@ -9,11 +9,11 @@ Después de la realización de este proyecto, PMCTrack cuenta con tres nuevas ca
 \begin{figure}%
 \selectlanguage{english}
     \centering
-    \subfloat[]{{ \input{Imagenes/Fuentes/architecture} }}%
+    \subfloat[Antes del comienzo del TFG]{{ \input{Imagenes/Fuentes/architecture} }}%
     \qquad
-    \subfloat[]{{ \input{Imagenes/Fuentes/architecture-new} }}%
+    \subfloat[Después de la finalización del TFG]{{ \input{Imagenes/Fuentes/architecture-new} }}%
 \selectlanguage{spanish}
-\caption{Arquitectura de PMCTrack antes (arriba) y después (abajo) de la finalización del TFG.}%
+\caption{Arquitectura de PMCTrack}%
 \label{fig:antesydespues}%
 \end{figure}
 
