@@ -2,8 +2,8 @@
 
 \selectlanguage{english}
 
-\section{PMCTrack: management of the hardware performance monitoring
-counters}\label{pmctrack-management-of-the-hardware-performance-monitoring-counters}
+\section{PMCTrack: delivering hardware performance monitoring
+counter support}\label{pmctrack-management-of-the-hardware-performance-monitoring-counters}
 
 Most modern complex computing systems are equipped with hardware
 Performance Monitoring Counters (PMCs) that enable users to collect
@@ -38,14 +38,8 @@ userspace scheduling prototypes
 userspace-oriented PMC tools.
 
 In order to overcome these limitations, it was proposed the development
-of PMCTrack, a hardware counters management tool for the Linux kernel,
-basically designed for the OS to use the counters for performing
-internal tasks, such as process scheduling. This tool was originally
-developed as a Computing Systems project by students of this university
-department, in 2012 \cite{MSDTFG12}. Currently, several members of the
-Architecture and Technology on Computing Systems Research Group (ArTeCS)
-of this university take on the development and support of PMCTrack. In
-fact, simultaneously to the development of our Degree Thesis, new
+of PMCTrack, a hardware-counter management tool for the Linux kernel. This tool was specifically designed to make it possible for the OS to use the counters for its internal tasks, such as process scheduling. This tool was originally
+developed as a project carried out by students of the Computer Science School at the Complutense University of Madrid, back in 2012 \cite{MSDTFG12}. Today, several members of the Architecture and Technology on Computing Systems Research Group (ArTeCS) of the Complutense University take on the development and support of PMCTrack. In fact, simultaneously to the development of our Degree Thesis, new
 features have been added to this tool beyond the extensions proposed in
 the DT.
 
@@ -61,7 +55,7 @@ importantly, because PMCTrack offers an architecture-independent
 interface to easily configure events and gather PMC data, the monitoring
 module developer does not have to deal with the platform-specific
 low-level code to access PMCs on a given architecture, which greatly
-simplifies the design process.
+simplifies the implementation.
 
 Despite being a tool specifically designed to aid the OS scheduler,
 PMCTrack is also equipped with a set of command line tools and userspace
@@ -129,9 +123,8 @@ encapsulated in a loadable kernel module.
 
 \section{PMCTrack design}\label{pmctrack-design}
 
-This section describes the internal architecture of PMCTrack just as it
-was before our DT began, aswell as the different use modes that it
-suppoted.
+This section describes the internal architecture of PMCTrack, just as it
+was before our DT started. We also present the different use modes originally supported by the tool.
 
 \begin{figure}[tbp]
 \centering
@@ -143,8 +136,7 @@ suppoted.
 
 \subsection{Architecture}\label{architecture}
 
-The figure \ref{fig:arch} represents the internal architecture of
-PMCTrack before the beginning of our thesis development. The tool
+Figure \ref{fig:arch} depicts PMCTrack's internal architecture. The tool
 consists of a set of user and kernel space components. At a high level,
 the end user and the applications interact with PMCTrack using the
 available command line tools. These components communicate with
@@ -189,6 +181,7 @@ typedef struct pmc_ops{
 } pmc_ops_t;
 \end{lstlisting}
 
+
 Most of these notifications get engaged only when PMCTrack's kernel
 module is loaded and the user (or the scheduler itself) is using the
 tool to monitor the performance of a specific application.
@@ -210,10 +203,12 @@ platform-specific \textit{monitoring modules}. The primary purpose of a
 monitoring module is to provide a scheduling algorithm implemented in
 the kernel with high-level performance metrics.
 
-To provide support for PMCTrack to the Linux kernel implies the
-inclusion of two new files in the kernel itself, and the addition of
-less than 20 code lines to the kernel source. These changes can be
-easily applied to different kernel versions from version 2.6.38.
+%To provide support for PMCTrack to the Linux kernel implies the
+%inclusion of two new files in the kernel itself, and the addition of
+%less than 20 code lines to the kernel source. These changes can be
+%easily applied to different kernel versions from version 2.6.38.
+
+Augmenting a recent version of the Linux kernel (2.6.38 and above) to support PMCTrack entails including two new source files to the kernel tree (API for the module), and adding less than 20 extra lines of code. These changes can be easily applied to different kernel versions.
 
 \subsection{PMCTrack Usage Models}\label{pmctrack-usage-models}
 
@@ -420,80 +415,61 @@ windows are used.
 The PMCTrack tool provides great features and empowers the OS scheduler
 to take advantage of the hardware counters to make optimizations at
 runtime. However, PMCTrack still has important limitations that cast a
-shadow over its great possibilities, especially regarding the monitoring
-of applications im user mode.
+shadow over its great possibilities, especially when it comes to monitoring application performance from user space.
 
-Firstly, its use appears to be a bit complicated for an inexperienced
-user, since he has to lookup up in technical manuals of different
-architectures in order to specify the hexadecimal codes of the events he
-wants to count in every PMC.
+First, its use turns out a bit complicated for inexperienced
+users, since they have to have access to technical manuals of different
+architectures to look up the appropriate hexadecimal codes for the events they want to monitor with the various PMCs.
 
-Secondly, getting the specific events count on the PMCs every certain
-time does not provide the user a global vision about the evolution in
-time of the counters value, let alone high level metrics made up by the
+Second, getting the specific events count on the PMCs every certain
+time does not provide the user the big picture on the evolution over time of the values for the different counters, let alone high level metrics made up by the
 combination of two or more PMC values. This valuable information for the
-user can be achieved by chart building. Nevertheless, this will require
-(1) processing the data provided by the i\texttt{pmctrack} command to
-get the high level metrics values over time, and (2) using some utility
-as \emph{Gnuplot} for generating the final charts. Finally, another
-significant limitation of the tool is the fact that the
-\texttt{pmctrack} command (and the kernel module itself in which it is
-based) does not allow the monitoring of multithreading applications from
-the user space.
+user can be provided by means of charts. Nevertheless, this entails to go through various steps: (1) processing the data provided by the \texttt{pmctrack} command to
+get the high level metrics values over time, and (2) using some helper utility, such as \emph{Gnuplot} to generate the final charts. Finally, another significant limitation of the tool is the fact that the \texttt{pmctrack} command (and the kernel module itself on which it relies) does not allow monitoring multithreaded applications from user space.
 
-To provide a solution to these and other PMCTrack applications, this DT
-pursues the following goals:
+To address these and other related problems, this project pursues the following goals:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  Provide support for the monitorization of multithreading applications
-  from the user space with PMCTrack.
+  Provide support for monitoring multithreaded applications
+  from user space with PMCTrack.
 \item
-  Design and implement a graphical front end for PMCTrack (called
-  PMCTrack-GUI) that enables the visualization in real time of the value
-  of different performance metrics defined by the user.
+  Design and implement a graphical frontend for PMCTrack (referred to as 
+  PMCTrack-GUI) that enables real-time visualization of high-level performance metrics defined by the user.
 \item
-  Create \emph{libpmctrack}, a library that enables the monitorization
-  of code fragments of applications in user space by means of PMCs.
+  Create \emph{libpmctrack}, a library that makes it possible to monitor code fragments of application programs by means of PMCs.
 \end{enumerate}
 
-\section{Workplan}\label{workplan}
+\section{Work plan}\label{workplan}
 
-To achieve the project goals, described in the above section, the
+To achieve the project goals, described above, the
 project development consisted of the following steps:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \itemsep1pt\parskip0pt\parsep0pt
 \item
-  Planning of the work to do by every of the two project members.
+  Divide work into individual tasks for the various members of the work group
 \item
-  Reading of documentation about programming languages and other
-  technologies used to carry out the developments (Python, WX library,
-  matplotlib, \ldots). This step also implies getting familiar with the
-  PMCTrack internal architecture.
+  Reading documentation about programming languages and other
+  technologies used to carry out the development (Python, wxPython,
+  matplotlib, \ldots). This step also entails getting familiar with PMCTrack internal architecture.
 \item
   Making PMCTrack-GUI mockups to study different design alternatives and
-  help reaching an agreement over the final design.
+  help reaching an agreement on the final design.
 \item
-  Implementation of the support for monitoring multithreading
-  applications in user space by PMCTrack.
+  Augmenting PMCTrack with support for monitoring multithreaded applications from user space.
 \item
   Implementation of PMCTrack-GUI.
 \item
   Design and implementation of \emph{libpmctrack} and refactoring the
-  code of command line program \texttt{pmctrack}.
+  code of the \texttt{pmctrack} command-line tool.
 \item
-  Making of the case studies for testing the developed tools.
+  Developing the various case studies to test the different extensions incorporated into PMCTrack.
 \end{enumerate}
 
-It must be highlighted that the order of these steps is merely
-illustrative, since such steps were not made in a strictly sequential
-way. Particularly, it was necessary to make its own planifications in
-every step and different PMCTrack-GUI application components were made
-simultaneously. In addition, support was given in our development to the
-new PMCTrack features added while developing our project (PMCTrack is a
-tool in continous development), and new features were added to our
-developments that they were not initially planned. (such as the
-inclusion of a SSH mode for PMCTrack-GUI). \selectlanguage{spanish}
+It is worth noting that the order of these steps is merely
+illustrative, since such steps were completed in a strictly sequential
+way. Specifically, the development of the various components of PMCTrack required crafting a separate schedule, since we implemented diferent components simultaneously. In addition, changes in PMCTrack were made during our project due to maintainance issues (PMCTrack is a
+tool in continous development), and new features not initially planned were implemented at the end, such as the inclusion of an SSH mode for PMCTrack-GUI. \selectlanguage{spanish}
