@@ -20,18 +20,18 @@ Se redacta en pasado y no debe incluir abreviaturas, referencias a figuras o tab
 \chapter{Resumen}
 \cabeceraEspecial{Resumen}
 
-Nuestro proyecto consiste en ampliar la herramienta PMCtrack, cuyo fin
-es monitorizar el rendimiento de un programa mediante el uso de
+Nuestro proyecto consiste en ampliar la herramienta PMCTrack, cuyo fin
+es permitir la monitorización del rendimiento de un programa mediante el uso de
 contadores hardware integrados en el procesador.
 
-Esta ampliación añade tres nuevas características: 1. Dotar a la
-herramienta de una Interfaz Gráfica de Usuario o \emph{Graphical User
-Interface}, que simplifique la configuración de eventos hardware y
-permita visualizar gráficas de los datos obtenidos en tiempo real. 2.
-Una librería, libpmctrack, que provee de una API para monitorizar
-fragmentos de código con PMCTrack o para que otros programas hagan uso
-de forma sencilla de la monitorización de contadores integrada en el
-kernel. 3. Incluir soporte para programas multihilo.
+Esta ampliación está formada por tres nuevas características.
+La primera consiste en modificar la parte interna de PMCTrack para incluir soporte de programas multihilo.
+La segunda se trata de implementar una librería, *libpmctrack*, que provea de una API para que los desarroladores puedan monitorizar fragmentos de código haciendo uso de los contadores hardware.
+La tercera es la construcción de una Interfaz Gráfica de Usuario o \emph{Graphical User
+Interface}, que simplifica la configuración de eventos hardware y
+permita visualizar gráficas de los datos obtenidos en tiempo real.
+
+En este documento, además de la explicación detallada de cada una de estas características, hemos realizado diversos casos de estudio para comprobar y mostrar la utilidad de nuestra aportación a PMCTrack.
 
 \emph{Palabras clave}: , Kernel Linux, Monitorización rendimiento,
 
