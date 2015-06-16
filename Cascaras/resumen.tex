@@ -20,20 +20,13 @@ Se redacta en pasado y no debe incluir abreviaturas, referencias a figuras o tab
 \chapter{Resumen}
 \cabeceraEspecial{Resumen}
 
-Nuestro proyecto consiste en ampliar la herramienta PMCTrack, cuyo fin
-es permitir la monitorización del rendimiento de un programa mediante el uso de
-contadores hardware integrados en el procesador.
+Nuestro proyecto ha consistido en la ampliación de la herramienta PMCTrack, cuyo fin
+es permitir la monitorización del rendimiento de un programa mediante el uso de los
+contadores hardware del procesador. Esta ampliación ha supuesto la inclusión de tres nuevas características. La primera  ha consistido en la modificación de PMCTrack para dar soporte a la monitorización de programas multihilo desde espacio de usuario. En segundo lugar se ha dotado a PMCTrack de una interfaz de programación para la monitorización del rendimiento en fragmentos de código específicos. Por último, se ha procedido al diseño e implementación de una Interfaz Gráfica de Usuario o GUI (\emph{Graphical User Interface}), que simplifica la configuración de eventos hardware y permite visualizar gráficas de los datos obtenidos en tiempo real. 
 
-Esta ampliación está formada por tres nuevas características.
-La primera consiste en modificar la parte interna de PMCTrack para incluir soporte de programas multihilo.
-La segunda se trata de implementar una librería, *libpmctrack*, que provea de una API para que los desarroladores puedan monitorizar fragmentos de código haciendo uso de los contadores hardware.
-La tercera es la construcción de una Interfaz Gráfica de Usuario o \emph{Graphical User
-Interface}, que simplifica la configuración de eventos hardware y
-permita visualizar gráficas de los datos obtenidos en tiempo real.
+Para para poner a prueba las distintas extensiones de PMCTrack desarrolladas en este proyecto y mostrar la utilidad de nuestras aportaciones se han llevado a cabo diversos casos de estudio.
 
-En este documento, además de la explicación detallada de cada una de estas características, hemos realizado diversos casos de estudio para comprobar y mostrar la utilidad de nuestra aportación a PMCTrack.
-
-\emph{Palabras clave}: , Kernel Linux, Monitorización rendimiento,
+\emph{Palabras clave}: Kernel Linux, Monitorización rendimiento,
 
 \cabeceraEspecial{Abstract}
 
