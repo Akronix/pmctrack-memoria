@@ -33,11 +33,9 @@ Para para poner a prueba estas tres nuevas características y mostrar la utilidad
 \chapter{Abstract}
 \cabeceraEspecial{Abstract}
 
-Our project involved extending the PMCTrack tool, whose purpose is to enable performance monitoring of a program by using processor hardware counters.
+Our project focused on augmenting the PMCTrack tool for the Linux kernel, whose purpose is to enable monitoring application performance via hardware monitoring counters. The enhancement process entailed the inclusion of three new features in PMCTrack. First, we augmented the tool with support for performance monitoring of multithreaded programs from user space. Second, a programming interface was built on top of PMCTrack's kernel module making it possible to monitor the performance of specific code fragments with hardware counters. Third, we designed and implemented PMCTrack-GUI, a graphical frontend for PMCTrack enabling real-time visualization of high-level performance metrics and specifically designed to simplify the configuration of hardware events to the end user.
 
-This expansion resulted in the inclusion of three new features. The first involved the modification of PMCTrack to support multithreaded programs monitoring from userspace. Second, a programming interface was provided to PMCTrack for performance monitoring specific code fragments. Finally, we proceeded to design and implement a Graphical User Interface (GUI), which simplifies hardware configuration events and displays monitoring data graphs in real time.
-
-To test the various PMCTrack extensions developed in this project and show the usefulness of our contributions, several case studies were carried out.
+To demonstrate the effectiveness of our contributions, we test the functionality of the various PMCTrack extensions carried out in this project by means of several case studies.
 
 \emph{Keywords}: Hardware Profiling, Profiling tools, Performance monitoring counters, Linux kernel, Source code analysis, Multithreaded applications, Cache Monitoring.
 
