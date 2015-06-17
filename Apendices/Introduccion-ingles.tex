@@ -128,7 +128,6 @@ was before our DT started. We also present the different use modes originally su
 
 \begin{figure}[tbp]
 \centering
-\selectlanguage{english}
 \input{Imagenes/Fuentes/architecture}
 \caption{Architecture of PMCTrack}
 \label{fig:arch}
@@ -155,31 +154,33 @@ classes are implemented entirely in the kernel, making PMCTrack's kernel
 module aware of these events and requests requires some minor
 modifications to the Linux kernel itself. These modifications, referred
 to as PMCTrack kernel API in Figure \ref{fig:arch}, comprise a set of
-notifications issued from the core scheduler to the module. To receive
-key notifications PMCTrack's kernel module implements the following
-interface:
+notifications issued from the core scheduler to the module.
 
-\begin{lstlisting}[backgroundcolor=,basicstyle=\tt\footnotesize]
-typedef struct pmc_ops{
-  /* invoked when a new thread is created */
-  void* (*pmcs_alloc_per_thread_data)(unsigned long,struct task_struct*);
-  /* invoked when thread leaves the CPU */
-  void (*pmcs_save_callback)(void*, int);
-  /* invoked when thread enters the CPU */
-  void (*pmcs_restore_callback)(void*, int);
-  /* invoked every clock tick on a per-thread basis */
-  void (*pmcs_tbs_tick)(void*, int);
-  /* invoked when a process invokes exec() */
-  void (*pmcs_exec_thread)(struct task_struct*);
-  /* invoked when a thread exists the system */
-  void (*pmcs_exit_thread)(struct task_struct*);
-  /* invoked when a thread descriptor is freed up */
-  void(*pmcs_free_per_thread_data)(struct task_struct*);
-  /* invoked when the scheduler requests per-thread
-        monitoring information  */
-  int  (*pmcs_get_current_metric_value)(struct task_struct* task, int key, uint64_t* value);
-} pmc_ops_t;
-\end{lstlisting}
+To receive key notifications PMCTrack's kernel module implements the following interface:
+
+\begin{minipage}{\linewidth}
+  \begin{lstlisting}[frame=single,language=C]
+  typedef struct pmc_ops{
+    /* invoked when a new thread is created */
+    void* (*pmcs_alloc_per_thread_data)(unsigned long,struct task_struct*);
+    /* invoked when thread leaves the CPU */
+    void (*pmcs_save_callback)(void*, int);
+    /* invoked when thread enters the CPU */
+    void (*pmcs_restore_callback)(void*, int);
+    /* invoked every clock tick on a per-thread basis */
+    void (*pmcs_tbs_tick)(void*, int);
+    /* invoked when a process invokes exec() */
+    void (*pmcs_exec_thread)(struct task_struct*);
+    /* invoked when a thread exists the system */
+    void (*pmcs_exit_thread)(struct task_struct*);
+    /* invoked when a thread descriptor is freed up */
+    void(*pmcs_free_per_thread_data)(struct task_struct*);
+    /* invoked when the scheduler requests per-thread
+          monitoring information  */
+    int  (*pmcs_get_current_metric_value)(struct task_struct* task, int key, uint64_t* value);
+  } pmc_ops_t;
+  \end{lstlisting}
+\end{minipage}
 
 
 Most of these notifications get engaged only when PMCTrack's kernel
@@ -434,7 +435,7 @@ To address these and other related problems, this project pursues the following 
   Provide support for monitoring multithreaded applications
   from user space with PMCTrack.
 \item
-  Design and implement a graphical frontend for PMCTrack (referred to as 
+  Design and implement a graphical frontend for PMCTrack (referred to as
   PMCTrack-GUI) that enables real-time visualization of high-level performance metrics defined by the user.
 \item
   Create \emph{libpmctrack}, a library that makes it possible to monitor code fragments of application programs by means of PMCs.
