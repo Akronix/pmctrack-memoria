@@ -147,15 +147,10 @@ En particular, los tipos de fichero XML que necesitamos son dos:
 
 Estos ficheros XML han sido generados de dos maneras diferentes. Los de tipo layout para cada fabricante y para algunos de los eventos de cada modelo han sido escritos manualmente. Para otros modelos de procesador, sobre los que el grupo \ac{ArTeCS} estaba investigando con la herramienta PMCTrack, ya existían unos ficheros \ac{CSV} que describían los eventos y PMCs de esos modelos. Para reutilizar éstos ficheros, escribimos un script Bash que genera automáticamente los XML equivalentes a esos ficheros CSV dados.
 
-\lstset{
-  language=XML,
-  deletekeywords={version,default}
-}
-
 \begin{figure}
 \caption{Fichero de definición DTD para los ficheros XML que definen el layout de los PMCs}
 \label{fig:dtdlayout}
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[language=XML,deletekeywords={version,default},frame=single]
 <!ELEMENT layout (field*)>
 <!ATTLIST layout
 vendor (intel|amd|arm|undefined) #IMPLIED
@@ -173,7 +168,7 @@ version CDATA #IMPLIED>
 \begin{figure}
 \caption{Fichero de definición DTD para los ficheros XML que definen los contadores fijos y los eventos de cada modelo}
 \label{fig:dtdevents}
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[language=XML,deletekeywords={version,default},frame=single]
 <!ELEMENT pmcs_and_events (pmcs?,events)>
 
 <!ELEMENT pmcs (pmc*)>
@@ -214,7 +209,7 @@ Es un conjunto de objetos que almacenan toda la configuración del usuario. Son 
 
 Cuando toda la configuración de usuario está almacenada, estos objetos son procesados por el componente *PMCExtract* que comentaremos en una sección posterior.
 
-En el apéndice \ref{app:UML.UserConfig} se podrá encontrar un diagrama \ac{UML} de este conjunto de objetos.
+En el apéndice \ref{app:UML.UserConfig} se puede encontrar un diagrama \ac{UML} de este conjunto de objetos.
 
 ## El componente PMCConnect
 
