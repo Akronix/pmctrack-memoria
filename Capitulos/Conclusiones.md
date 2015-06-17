@@ -23,7 +23,7 @@ En primer lugar, el soporte multihilo o *multithreading* permite extender consid
 Además, con esta incorporación aprovechamos para cambiar el diseño que se usaba para guardar los datos de las muestras obtenidos con los contadores hardware. Tras este cambio, el diseño interno del módulo del kernel de PMCTrack ha mejorado sustancialmente en cuanto a claridad y robustez.
 
 En segundo lugar, la nueva librería *libpmctrack* provee a los programadores de todas las capacidades de la monitorización mediante contadores hardware que ofrece PMCTrack. Con libpmctrack, un desarrollador puede evaluar y comparar las implementaciones de sus programas a partir de datos muy específicos del hardware, como puede ser los accesos a memoria caché o los fallos de predicción de saltos.\newline
-Asímismo, libpmctrack permite una monitorización de grano más fino que la que permite la herramienta de línea de comandos `pmctrack`: libpmctrack permite la monitorización individualizada de fragmentos de código seleccionados por el programador. Esto es especialmente útil para aislar partes del código cuyo análisis sea relevante por alguna razón como, por ejemplo, tratarse de un cuello de botella del programa.\newline
+Asimismo, libpmctrack permite una monitorización de grano más fino que la que permite la herramienta de línea de comandos `pmctrack`: libpmctrack permite la monitorización individualizada de fragmentos de código seleccionados por el programador. Esto es especialmente útil para aislar partes del código cuyo análisis sea relevante por alguna razón como, por ejemplo, tratarse de un cuello de botella del programa.\newline
 Además, de nuevo la implementación de una nueva característica en el proyecto permitió la mejora del código existente en PMCTrack. Concretamente, libpmctrack sirvió para realizar una refactorización completa del programa `pmctrack`, dando lugar a un código mucho más sencillo y completamente desacoplado de la interfaz exportada por el módulo del kernel de PMCTrack.
 
 En tercer lugar, la interfaz gráfica PMCTrack-GUI facilita en gran medida el uso de PMCTrack y, además, incorpora el soporte de gráficas que pueden resultar de gran interés para el usuario final.\newline
@@ -53,9 +53,9 @@ Seguidamente, presentamos una lista de posibles ampliaciones de PMCTrack que se 
 
 * Soporte de PMCTrack en Android.
 * Diseño de nuevos algoritmos de planificación en el kernel Linux que realicen optimizaciones en tiempo de ejecución en base en las medidas de los contadores que ofrece PMCTrack.
-* Inclusión de una nueva opción en el comando `pmctrack` para permitir la monitorización de varias CPU al mismo tiempo y separar su salida
+* Inclusión de una nueva opción en el comando `pmctrack` para permitir la monitorización de varias CPU al mismo tiempo y separar su salida.
 * Soporte para otras arquitecturas hardware (más allá de x86 y ARM)
 * Soporte para uso de contadores virtuales en PMCTrack-GUI.
 * Capacidad para salvar configuraciones de contadores en ficheros para su carga posterior en PMCTrack-GUI.
-* Soporte para almacenar no sólo la salida de `pmctrack` en un fichero sino también incorporar en éste los valores de las métricas de rendimiento que el usuario de PMCTrack-GUI ha solicitado mostrar gráficamente.
+* Soporte para almacenar no sólo la salida de `pmctrack` en un fichero, sino también incorporar en éste los valores de las métricas de rendimiento que el usuario de PMCTrack-GUI ha solicitado mostrar gráficamente.
 * Soporte de arquitecturas asimétricas o heterogéneas en PMCTrack-GUI.

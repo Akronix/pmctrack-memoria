@@ -1,4 +1,4 @@
-\chapter{Conclusions and future plans}
+\chapter{Conclusions and future work}
 
 \selectlanguage{english}
 
@@ -11,7 +11,7 @@ After the completion of this project, PMCTrack has got three new features: (1) s
     \subfloat[Before the start of this project]{{ \input{Imagenes/Fuentes/architecture} }}%
     \qquad
     \subfloat[After the completion of this project]{{ \input{Imagenes/Fuentes/architecture-new} }}%
-\caption{Arquitectura de PMCTrack}%
+\caption{Architecture of PMCTrack}%
 \label{fig:beforeandafter}%
 \end{figure}
 
@@ -35,7 +35,7 @@ This project has involved to work on three very different levels. We had to prog
 
 This particularity makes this a very transversal project and we think that this has been the greatest difficulty. Therefore, we had to read documentation for all these levels and we had to study carefully all the interactions between them.
 
-Following, we list the most relevant aspects we had to study about:
+We list below the most relevant aspects we had to study about:
 \begin{itemize}
   \item The internal behavior of PMCs and the documentation of them for each vendor.
   \item The structure and code of Linux kernel.
@@ -46,5 +46,18 @@ Following, we list the most relevant aspects we had to study about:
 \end{itemize}
 
 In summary, we think that we have done important improvements and additions to the PMCTrack tool and we hope this work will be useful inside and outside of our university.
+
+\section{Future work}
+Following, we present a list of all possible extensions that could be added in the future to PMCTrack:
+\begin{itemize}
+  \item To add support to PMCTrack for Android.
+  \item To design of new scheduling algorithms in the Linux kernel that perform optimizations in run time based on the data obtained from the PMCs through PMCTrack.
+  \item To extend the command \texttt{pmctrack} with a time-based sampling per-CPU mode.
+  \item To add support for additional CPU architectures.
+  \item To add support for virtual counters in PMCTrack-GUI.
+  \item To allow saving and loading configurations for PMCTrack-GUI.
+  \item To allow saving the output for the custom metrics defined by the user in PMCTrack-GUI. Right now, it saves the standard output of \texttt{pmctrack} only.
+  \item To support asymmetric architectures in PMCTrack-GUI.
+\end{itemize}
 
 \selectlanguage{spanish}
