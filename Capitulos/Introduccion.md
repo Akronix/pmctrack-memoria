@@ -90,6 +90,7 @@ Antes de iniciar el desarrollo de este TFG, PMCTrack soportaba tres modos de uso
 \centering
 \selectlanguage{english}
 \input{Imagenes/Fuentes/mmon}
+\selectlanguage{spanish}
 \caption{Módulos de monitorización de PMCTrack}
 \label{fig:mmon}
 \end{figure}

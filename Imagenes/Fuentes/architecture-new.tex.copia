@@ -43,20 +43,20 @@ flecha/.style={>=stealth',black,semithick,solid}]
 
 
 %% Associated Backgrounds
-%\begin{pgfonlayer}{background}
-%\node (user) [bgbox,fit=(eu) (ua)(cmdtools) (libpmctrack)] {};
-%\node (kernel) [bgbox,fit=(proc) (kernelAPI)] {};
-%\node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {};
-%\end{pgfonlayer}
+\begin{pgfonlayer}{background}
+\node (user) [bgbox,fit=(eu) (ua)(cmdtools) (libpmctrack)] {};
+\node (kernel) [bgbox,fit=(proc) (kernelAPI)] {};
+\node (kernelModule) [bgbox,fit=(archIndep) (monmod)] {};
+\end{pgfonlayer}
 
 
 %% Per level tags...
-\draw [<->,thick] ($(eu.north west)  +(-0.3cm,0)$) -- ($(libpmctrack.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {user space};
+\draw [<->,thick] ($(user.north west)  +(-0.3cm,0)$) -- ($(user.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {user space};
 %
 
-\draw [<->,thick] ($(proc.north west)  +(-0.3cm,0)$) -- ($(kernelAPI.south west)  +(-2.6cm,0)$) node [midway,above,rotate=90] {Linux kernel};
+\draw [<->,thick] ($(kernel.north west)  +(-0.3cm,0)$) -- ($(kernel.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90] {Linux kernel};
 
-\draw [<->,thick] ($(archIndep.north west)  +(-0.3cm,0)$) -- ($(monmod.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90,align=center] {PMCTrack \\ kernel module};
+\draw [<->,thick] ($(kernelModule.north west)  +(-0.3cm,0)$) -- ($(kernelModule.south west)  +(-0.3cm,0)$) node [midway,above,rotate=90,align=center] {PMCTrack \\ kernel module};
 
 
 
