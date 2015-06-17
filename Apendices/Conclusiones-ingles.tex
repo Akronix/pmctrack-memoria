@@ -1,0 +1,50 @@
+\chapter{Conclusions and future plans}
+
+\selectlanguage{english}
+
+\section{Conclusions}
+
+After the completion of this project, PMCTrack has got three new features: (1) support for multithreaded applications, (2) the libpmctrack library --which allows to analyze particular fragments of code through PMCs--, and (3) the frontend interface PMCTrack-GUI --a Graphical User Interface which eases its use and produces real-time graphs of user-defined high level metrics--. In chapters 2, 3 and 4, we have discussed in detail the inner working, the design process and the implementation for each of these featues. In chapter 5, we have tried to illustrate their capabilities and effectiveness by analyzing some case studies. Lastly, we will study how has been impact of our project, as a whole, on PMCTrack.
+
+\begin{figure}%
+    \centering
+    \subfloat[Before the start of this project]{{ \input{Imagenes/Fuentes/architecture} }}%
+    \qquad
+    \subfloat[After the completion of this project]{{ \input{Imagenes/Fuentes/architecture-new} }}%
+\caption{Arquitectura de PMCTrack}%
+\label{fig:beforeandafter}%
+\end{figure}
+
+In the figure \ref{fig:beforeandafter} we can appreciate two diagrams representing the before and after situation of PMCTrack's architecture. We can see how the changes have affected to every level of PMCTrack: from the kernel level --modifying and redesigning the kernel module to allow get samples from several threads using a shared buffer--, through the userspace level with libpmctrack, to the uppest level with PMCTrack-GUI --where we have worked in the graphical interface level--.
+
+First, multithreading support has extended significantly the PMCTrack functionality. We can use this new feature to profile multithreaded applications; or, also, we can use it to see the outcome of parralleling algorithms, comparing the performance of sequential implementations versus concurrent implementations. This feature was definitely needed to have, because it makes PMCTrack capable to monitor any type of program executing on a modern x86 or ARM microprocessor.\\%
+In addition, with this new feature we were able to redesign the proccess of saving the samples data obtained from the PMCs. Thank to this change, the internal design of the PMCTrack's kernel module has improved substantially in clarity and sturdiness.
+
+Second, the new library \textit{libpmctrack} gives to the programmers all the possibilities of profiling provided by PMCTrack. Now, a developer can use libpmctrack to evaluate hers different programs implementations, using very hardware-specific data as Last Level Cache Accesses or Mispredicted Branch Instructions.\\%
+The tool \texttt{pmctrack} sometimes can get too general data of the program and the developer can be rather more interested in specific parts, for example looking for a bottle neck in hers program. Our new library, libpmctrack, provides to the programmer of a easy way for analyzing particular fragments of code separately.\\%
+Again the implementation of a new feature introduced an improvement in the preexistent code of PMCTrack. Specifically, we completely refactored the code of \texttt{pmctrack} command-line tool, drawing upon libpmctrack for the communications between it and the kernel module. This leads a much simpler code and entirely decoupled from the interface exported by the PMCTrack's kernel module.
+
+Third, the Graphical User Interface (GUI) PMCTrack GUI allows a straightforward use of the tool PMCTrack and, also, support the generation of real-time custom graphs.\\
+The command-line tool \texttt{pmctrack} requires of the specification of many details, for example: the number of PMCs and type, the hexadecimal code for each event, the creation of custom metrics like CPI or cache rate. Also, all these details are also highly dependent on the model of the machine wanted to be monitored. PMCTrack-gui accomplishes the task of easing this process, it abstracts to the user of all these particular considerations which depends on differents models and gets the user directly to hers main goal: profile applications through the profiling monitoring counters. Nevertheless, this topic is still restricted to users with a minimum knowledge of the computer internal architecture and its way of working.\\
+Additionally, often the user wants to get graphs to see the profiling outcomes. PMCTrack-GUI fills this gap generating directly real-time graphs based on the metrics configuration made by the user. Furthermore, PMCTrack-GUI allows to widely customize the displaying options of the graphs, supports the visualization of multiples graphs simultaneously and gives an easy way to save the results achieved during the profiling process.\\
+Finally, this graphical tool provides of the ability to monitor remote machines through SSH. This feature was not in the initial plans, but it turned out to be very useful for us upon the development of the project and we think that many PMCTrack-GUI users will find it useful too.
+
+\section{Evaluation of the project}
+
+This project has involved to work on three very different levels. We had to program sometimes in C at kernel level, sometimes also in C but at user level, and some other times in Python at graphical level.
+
+This particularity makes this a very transversal project and we think that this has been the greatest difficulty. Therefore, we had to read documentation for all these levels and we had to study carefully all the interactions between them.
+
+Following, we list the most relevant aspects we had to study about:
+\begin{itemize}
+  \item The internal behavior of PMCs and the documentation of them for each vendor.
+  \item The structure and code of Linux kernel.
+  \item The internal architecture of PMCTrack, both the userspace part, upon \texttt{pmctrack}, and the kernel space part, upon the kernel modifications and kernel modules.
+  \item The Python programming language.
+  \item The Markup languages: XML and DTD, how to read files of these formats and how to generate them from other DTD files.
+  \item Several external Python libraries used on the development of PMCTrack-GUI: wx, matplotlib,\ldots
+\end{itemize}
+
+In summary, we think that we have done important improvements and additions to the PMCTrack tool and we hope this work will be useful inside and outside of our university.
+
+\selectlanguage{spanish}
