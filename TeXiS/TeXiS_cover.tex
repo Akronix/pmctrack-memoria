@@ -327,32 +327,9 @@
 
 \newpage
 
-% Página que en la cara de detrás del folio de la portada.
-% Ponemos que el documento esta maquetado con TeXiS y la
-% aclaración de que debe imprimirse a doble cara.
+% página en blanco después de la portada
 \thispagestyle{empty}
 \mbox{ }
-\vfill%space*{4cm}
-\begin{small}
-\begin{center}
-\ifx\noTeXiSCreditsVal\undefined
-  Documento maquetado con \texis\ v.\texisVer.
-\else
-\mbox{ }
-\fi
-\end{center}
-\end{small}
-\vspace*{2cm}
-\begin{small}
-\begin{center}
-\ifx\explicacionDobleCaraVal\undefined
-\mbox{ }
-\else
-\noindent Este documento está preparado para ser imprimido a doble
-cara.
-\fi
-\end{center}
-\end{small}
 
 %%%
 % Segunda portada
@@ -395,19 +372,46 @@ cara.
 \thispagestyle{empty}
 \mbox{ }
 
+% Página que en la cara de detrás del folio de la 2ª portada.
+% Ponemos que el documento esta maquetado con TeXiS y la
+% aclaración de que debe imprimirse a doble cara.
 % Información del ISBN y copyright
-\vskip 13cm
+
+\begin{center}
+\vskip 10cm
 \ifx\copyrightInfoVal\undefined
 \mbox{ }
 \else
 Copyright \textcopyright\ \copyrightInfoVal
 \fi
-\vskip 3cm
+\vskip 5cm
 \ifx\isbnVal\undefined
 \mbox{ }
 \else
 ISBN \isbnVal
 \fi
+\end{center}
+
+\begin{small}
+\begin{center}
+\ifx\noTeXiSCreditsVal\undefined
+  Documento maquetado con \texis\ v.\texisVer.
+\else
+\mbox{ }
+\fi
+\end{center}
+\end{small}
+\vspace*{2cm}
+\begin{small}
+\begin{center}
+\ifx\explicacionDobleCaraVal\undefined
+\mbox{ }
+\else
+\noindent Este documento está preparado para ser imprimido a doble
+cara.
+\fi
+\end{center}
+\end{small}
 
 } % \newcommand{\makeCover}
 
