@@ -173,7 +173,7 @@ typedef struct pmc_ops{
   void (*pmcs_exec_thread)(struct task_struct*);
   /* invoked when a thread exists the system */
   void (*pmcs_exit_thread)(struct task_struct*);
-  /* invoked when a thread's descriptor is freed up */
+  /* invoked when a thread descriptor is freed up */
   void(*pmcs_free_per_thread_data)(struct task_struct*);
   /* invoked when the scheduler requests per-thread
         monitoring information  */
