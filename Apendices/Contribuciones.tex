@@ -57,7 +57,7 @@ Por supuesto, también participé en las reuniones que tuvimos para el debate de e
 \subsection{Implementación de los objetos de procesamiento para PMCTrack-GUI}
 \label{app:contr-abel-objs}
 
-Inicialmente para el desarrollo de PMCTrack-GUI hicimos una división del trabajo. Yo me encargaba de la parte que más tendría que ver con las cuestiones a bajo nivel, tales como la encapsulación de la información relevante de la máquina en un objeto Python o la modelización de los eventos hardware que pueden contar los PMCs; mientras que Jorge se encargaba de la implementación de los componentes gráficos con wxPython según los diseños realizados en la fase anterior.
+Inicialmente para el desarrollo de PMCTrack-GUI hicimos una división del trabajo. Yo me encargaría de la parte que más tiene que ver con las cuestiones a bajo nivel, tales como la encapsulación de la información relevante de la máquina en un objeto Python o la modelización de los eventos hardware que pueden contar los PMCs; mientras, mi compañero de proyecto se encargaría de la implementación de los componentes gráficos con wxPython según los diseños realizados en la fase anterior.
 
 Para realizar esta tarea, comencé haciendo un diagrama UML inicial. Debatimos e iteramos repetidas veces sobre ese diagrama.
 El diseño final al que llegamos consiste, principalmente, en una interfaz fachada para comunicarse con el resto de la interfaz gráfica y de varias clases para encapsular los eventos y la información de la máquina que se quiere monitorizar.\newline
@@ -70,7 +70,7 @@ Así pues, mi contribución en esta parte del proyecto fue la implementación en Py
 
 Para la implementación del soporte multithreading en el kernel de PMCTrack, fue necesario primero un cuidadoso estudio de cómo funcionaba la herramienta anteriormente. Después de este estudio, tuvimos una reunión en la que discutimos varias posibilidades hasta dar con un diseño adecuado para conseguir una buena solución al problema.
 
-Con este diseño ya planteado, Jorge y yo realizamos diversas jornadas de trabajo conjuntas para la implementación completa de esta parte del proyecto. Posteriormente, realizamos un conjunto de pruebas mediante la herramienta \texttt{pmctrack}, usando benchmarks multihilo de la suite PARSEC y contrastamos sus resultados con otras fuentes para verificar si eran correctas. Posteriormente estos son los benchmarks que usaríamos para el caso de estudio del soporte multihilo en PMCTrack, comentados detalladamente en la sección \ref{sec:case-multithreading} de este documento.
+Con este diseño ya planteado, mi compañero Jorge y yo realizamos diversas jornadas de trabajo conjuntas para la implementación completa de esta parte del proyecto. Posteriormente, realizamos un conjunto de pruebas mediante la herramienta \texttt{pmctrack}, usando benchmarks multihilo de la suite PARSEC y contrastamos sus resultados con otras fuentes para verificar si eran correctas. Posteriormente estos son los benchmarks que usaríamos para el caso de estudio del soporte multihilo en PMCTrack, comentados detalladamente en la sección \ref{sec:case-multithreading} de este documento.
 
 \subsection[Diseño e implementación de libpmtrack]{Diseño e implementación de libpmtrack.\newline
 Refactorización de \texttt{pmctrack}
