@@ -220,4 +220,4 @@ El resto del contenido de esta memoria se organiza de la siguiente forma:
 * **El capítulo 6** enumera las principales aportaciones al proyecto efectuadas por cada miembro del equipo.
 -->
 * **El capítulo 6** expone las conclusiones finales de este Trabajo de Fin de Grado y presenta el trabajo futuro.
-* Finalmente, se proporcionan varios apéndices. En ellos se incluye: (1) Introducción y conclusiones del proyecto en inglés, (2) bocetos iniciales del aspecto visual de PMCTrack-GUI, (3) diagramas de diseño UML con detalles concretos del diseño de PMCTrack-GUI, (4) pequeño manual de instalación de las dependencias software de PMCTrack-GUI en Debian/Ubuntu y MacOS X, y (5) contribuciones de cada participante al proyecto.
+* Finalmente, se proporcionan varios apéndices. En ellos se incluye: (1) Introducción y conclusiones del proyecto traducidos al inglés, (2) bocetos iniciales del aspecto visual de PMCTrack-GUI, (3) diagramas de diseño UML con detalles concretos del diseño de PMCTrack-GUI, (4) pequeño manual de instalación de las dependencias software de PMCTrack-GUI en Debian/Ubuntu y MacOS X, y (5) contribuciones de cada participante al proyecto.
